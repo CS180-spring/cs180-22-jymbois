@@ -8,14 +8,13 @@ import LoginScreen from "./screens/LoginScreen";
 const Stack = createNativeStackNavigator();
 
 const StackNavigator = () => {
-	const user = true; // placeholder for when we actually implement login
+	const user = false; // placeholder for when we actually implement login
 	return (
 		<Stack.Navigator>
 			{user ? (
 				<>
 					<Stack.Screen name="Home" component={HomeScreen} />
 					<Stack.Screen name="Calender" component={CalenderScreen} />
-					<Stack.Screen name="Login" component={LoginScreen} />
 				</>
 			) : (
 				<Stack.Screen name="Login" component={LoginScreen} />
