@@ -13,3 +13,16 @@
     - Start a workout
     - Log a workout
     - Log macros/calories.
+
+    # How to run 
+    ## On your phone
+    - The easiest thing to do is download the Expo Go app on your device
+    - After downloading the app, run the command ```expo start``` 
+      - This will show a bar code. Scan the bar code. This will open our app '
+
+    ## On Mac 
+    - Download xcode if you haven't already. 
+      - We need xcode becuase this has an ios emulator
+      - You do not need to use or open xcode from here on
+    - In your terminal inside the project directory, run the command ```expo start```
+    - After this you will get multiple options to press. Simply enter ```i``` into the terminal
