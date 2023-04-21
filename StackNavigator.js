@@ -17,7 +17,14 @@ const StackNavigator = () => {
 					<Stack.Screen name="Calender" component={CalenderScreen} />
 				</>
 			) : (
-				<Stack.Screen name="Login" component={LoginScreen} />
+				<Stack.Screen
+					name="Login"
+					component={LoginScreen}
+					options={{
+						headerStyle: { backgroundColor: "#286086" },
+						headerTintColor: "#fff",
+					}}
+				/>
 			)}
 		</Stack.Navigator>
 	);

@@ -22,7 +22,7 @@ const LoginScreen = () => {
 	return (
 		<View style={styles.container}>
 			<View style={styles.content}>
-				<Text style={styles.heading}>Login</Text>
+				{/* <Text style={styles.heading}>Login</Text> */}
 				<TextInput
 					style={styles.input}
 					placeholder="Enter email"
@@ -43,7 +43,7 @@ const LoginScreen = () => {
 					style={styles.registerButton}
 					onPress={() => navigation.navigate("Register")}
 				>
-					<Text style={styles.registerButtonText}>Register</Text>
+					<Text style={styles.registerButtonText}>Dont't have an account?</Text>
 				</TouchableOpacity>
 			</View>
 		</View>
@@ -55,17 +55,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: "#fff",
 	},
-	navBar: {
-		height: 60,
-		backgroundColor: "#1e90ff",
-		justifyContent: "center",
-		alignItems: "center",
-	},
-	navBarTitle: {
-		color: "#fff",
-		fontSize: 20,
-		fontWeight: "bold",
-	},
+
 	content: {
 		flex: 1,
 		justifyContent: "center",
@@ -87,24 +77,38 @@ const styles = StyleSheet.create({
 		fontSize: 24,
 		marginBottom: 20,
 		textAlign: "center",
+		color: "#333",
 	},
 	input: {
-		width: "60%",
+		width: "70%",
 		height: 50,
-		borderWidth: 1,
+		borderWidth: 0,
+		borderBottomWidth: 1,
 		borderColor: "#ccc",
-		borderRadius: 18,
-		padding: 10,
-		marginBottom: 15,
+		paddingVertical: 10,
+		paddingHorizontal: 20,
+		marginBottom: 18,
+		color: "#333",
+		fontSize: 16,
+		shadowColor: "#000",
+		shadowOffset: {
+			width: 0,
+			height: 2,
+		},
+		shadowOpacity: 0.1,
+		shadowRadius: 1,
+		elevation: 3,
+		backgroundColor: "#F5F5F5",
+		borderRadius: 15,
 	},
 	button: {
 		width: "35%",
-		height: 40,
+		height: 50,
 		backgroundColor: "#286086",
 		justifyContent: "center",
 		alignItems: "center",
-		borderRadius: 20,
-		marginBottom: 10,
+		borderRadius: 25,
+		marginBottom: 15,
 	},
 	buttonText: {
 		color: "#fff",
@@ -112,15 +116,14 @@ const styles = StyleSheet.create({
 		fontWeight: "bold",
 	},
 	registerButton: {
-		width: "35%",
-		height: 40,
-		backgroundColor: "#286086",
+		width: "100%",
+		height: 50,
+		backgroundColor: "#fff",
 		justifyContent: "center",
 		alignItems: "center",
-		borderRadius: 20,
 	},
 	registerButtonText: {
-		color: "#ffff",
+		color: "#286086",
 		fontSize: 16,
 		fontWeight: "bold",
 	},
