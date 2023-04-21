@@ -4,11 +4,12 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import HomeScreen from './screens/HomeScreen';
 import CalenderScreen from './screens/CalenderScreen';
 import LoginScreen from './screens/LoginScreen';
+import RegisterScreen from './screens/RegisterScreen';
 
 const Stack = createNativeStackNavigator();
 
 const StackNavigator = () => {
-    const user = true; // placeholder for when we actually implement login 
+    const user = false; // placeholder for when we actually implement login 
     return (
         <Stack.Navigator>
             {user ? (
@@ -17,7 +18,11 @@ const StackNavigator = () => {
                     <Stack.Screen name="Calender" component={CalenderScreen} />
                 </>
             ) : (
+                <>
                 <Stack.Screen name="LogIn" component={LoginScreen} />
+                <Stack.Screen name="Register" component={RegisterScreen} />
+                </>
+                
             )}
         </Stack.Navigator>
     );
