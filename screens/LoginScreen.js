@@ -5,6 +5,7 @@ import {
 	TextInput,
 	TouchableOpacity,
 	StyleSheet,
+	Image,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
@@ -13,6 +14,13 @@ const LoginScreen = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 
+	const [isEmailFocused, setIsEmailFocused] = useState(false);
+	const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+
+	const handleEmailFocus = () => setIsEmailFocused(true);
+	const handleEmailBlur = () => setIsEmailFocused(false);
+	const handlePasswordFocus = () => setIsPasswordFocused(true);
+	const handlePasswordBlur = () => setIsPasswordFocused(false);
 	const handleLogin = () => {
 		// TODO: Implement login logic
 		console.log("Email:", email);
@@ -22,20 +30,48 @@ const LoginScreen = () => {
 	return (
 		<View style={styles.container}>
 			<View style={styles.content}>
-				{/* <Text style={styles.heading}>Login</Text> */}
-				<TextInput
-					style={styles.input}
-					placeholder="Enter email"
-					value={email}
-					onChangeText={(text) => setEmail(text)}
-				/>
-				<TextInput
-					style={styles.input}
-					placeholder="Enter password"
-					secureTextEntry
-					value={password}
-					onChangeText={(text) => setPassword(text)}
-				/>
+				{/* <Text st
+
+				yle={styles.heading}>Login</Text> */}
+				<View style={styles.inputContainer}>
+					<Image
+						source={require("./images/profilepic.jpeg")}
+						style={styles.icon}
+					/>
+					<TextInput
+						style={[
+							styles.input,
+							isEmailFocused || email
+								? styles.inputFocused
+								: styles.inputInactive,
+						]}
+						placeholder="Enter email"
+						value={email}
+						onChangeText={setEmail}
+						onFocus={handleEmailFocus}
+						onBlur={handleEmailBlur}
+					/>
+				</View>
+				<View style={styles.inputContainer}>
+					<Image
+						source={require("./images/passwordpic.png")}
+						style={styles.icon}
+					/>
+					<TextInput
+						style={[
+							styles.input,
+							isPasswordFocused || password
+								? styles.inputFocused
+								: styles.inputInactive,
+						]}
+						placeholder="Enter password"
+						secureTextEntry
+						value={password}
+						onChangeText={setPassword}
+						onFocus={handlePasswordFocus}
+						onBlur={handlePasswordBlur}
+					/>
+				</View>
 				<TouchableOpacity style={styles.button} onPress={handleLogin}>
 					<Text style={styles.buttonText}>Login</Text>
 				</TouchableOpacity>
@@ -73,6 +109,16 @@ const styles = StyleSheet.create({
 		shadowRadius: 3.84,
 		elevation: 5,
 	},
+	inputContainer: {
+		flexDirection: "row",
+		alignItems: "center",
+	},
+	icon: {
+		width: 35,
+		height: 35,
+		marginRight: 15,
+		marginBottom: 14,
+	},
 	heading: {
 		fontSize: 24,
 		marginBottom: 20,
@@ -80,27 +126,25 @@ const styles = StyleSheet.create({
 		color: "#333",
 	},
 	input: {
-		width: "70%",
+		justifyContent: "center",
+		width: "65%",
 		height: 50,
-		borderWidth: 0,
-		borderBottomWidth: 1,
-		borderColor: "#ccc",
-		paddingVertical: 10,
-		paddingHorizontal: 20,
+
+		paddingHorizontal: 1,
 		marginBottom: 18,
-		color: "#333",
+
 		fontSize: 16,
-		shadowColor: "#000",
-		shadowOffset: {
-			width: 0,
-			height: 2,
-		},
-		shadowOpacity: 0.1,
-		shadowRadius: 1,
-		elevation: 3,
-		backgroundColor: "#F5F5F5",
-		borderRadius: 15,
+		borderBottomWidth: 2,
+		borderBottomColor: "#ccc",
+		marginRight: 44,
 	},
+	inputInactive: {
+		borderBottomColor: "#ccc",
+	},
+	inputFocused: {
+		borderBottomColor: "#286086",
+	},
+
 	button: {
 		width: "35%",
 		height: 50,
