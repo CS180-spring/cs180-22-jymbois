@@ -23,8 +23,14 @@ const StackNavigator = () => {
                 </>
             ) : (
                 <>
-                <Stack.Screen name="Log In" component={LoginScreen} />
-                <Stack.Screen name="Register" component={RegisterScreen} />
+                    <Stack.Screen
+					    name="Login"
+					    component={LoginScreen}
+                        options={{
+                            headerTintColor: "#d2b48c",
+                        }}
+				    />
+                    <Stack.Screen name="Register" component={RegisterScreen} />
                 </>
                 
             )}
