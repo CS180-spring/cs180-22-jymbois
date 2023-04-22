@@ -17,6 +17,17 @@ const RegisterScreen = () => {
   const [confirmPasscode, setConfirmPasscode] = useState("");
   const [emailError, setEmailError] = useState("");
 
+  const [isUserNameFocused, setIsUserNameFocused] = useState(false);
+  const [isEmailFocused, setIsEmailFocused] = useState(false);
+	const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+  
+  const handleUserNameFocus = () => setIsUserNameFocused(true);
+  const handleUserNameBlur = () => setIsUserNameFocused(false);
+  const handleEmailFocus = () => setIsEmailFocused(true);
+	const handleEmailBlur = () => setIsEmailFocused(false);
+	const handlePasswordFocus = () => setIsPasswordFocused(true);
+	const handlePasswordBlur = () => setIsPasswordFocused(false);
+
   const registerButton = () => {
     console.log("Username", username);
     console.log("Email", email);
@@ -50,32 +61,48 @@ const RegisterScreen = () => {
       <View style={styles.content}>
       <Text style={styles.welcome}>You're almost a JYM BRO!</Text>
       <Text style={styles.subheading}>See you in the JYM!</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Username"
-          value={username}
-          onChangeText={(text) => setUsername(text)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          value={email}
-          onChangeText={handleEmailChange}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          secureTextEntry
-          value={password}
-          onChangeText={(text) => setPassword(text)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Confirm Password"
-          secureTextEntry
-          value={confirmPasscode}
-          onChangeText={(text) => setConfirmPasscode(text)}
-        />
+      
+      <View style={styles.inputContainer}>
+         <Image source={require("./images/profilepic.jpeg")} style={styles.icon} />
+             <TextInput
+              style={styles.input}
+              placeholder="Username"
+              value={username}
+              onChangeText={(text) => setUsername(text)}
+             />
+      </View>
+
+      <View style={styles.inputContainer}>
+         <Image source={require("./images/email.png")} style={styles.icon} />
+              <TextInput
+              style={styles.input}
+              placeholder="Email"
+              value={email}
+              onChangeText={handleEmailChange}
+              />
+      </View>
+        
+      <View style={styles.inputContainer}>
+         <Image source={require("./images/passwordpic.png")} style={styles.icon} />  
+              <TextInput
+              style={styles.input}
+              placeholder="Password"
+              secureTextEntry
+              value={password}
+              onChangeText={(text) => setPassword(text)}
+              />
+      </View>
+
+      <View style={styles.inputContainer}>
+         <Image source={require("./images/passwordpic.png")} style={styles.icon} />
+              <TextInput
+              style={styles.input}
+              placeholder="Confirm Password"
+              secureTextEntry
+              value={confirmPasscode}
+              onChangeText={(text) => setConfirmPasscode(text)}
+              />
+      </View>
     
         {emailError ? <Text style={styles.errorMessage}>{emailError}</Text> : null}
         {passwordMatch ? null : (
@@ -145,7 +172,7 @@ const styles = StyleSheet.create({
 		
 	},
 	button: {
-		width: "35%",
+		width: "70%",
 		height: 50,
 		backgroundColor: "#d2b48c",
 		justifyContent: "center",
@@ -200,10 +227,22 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 5,
   },
-  logo: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
+  icon: {
+		width: 35,
+		height: 35,
+		marginRight: 15,
+		marginBottom: 14,
+	},
+  inputInactive: {
+		borderBottomColor: "#ccc",
+	},
+	inputFocused: {
+		borderBottomColor: "#d2b48c",
+	},
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
   },
 
 }
