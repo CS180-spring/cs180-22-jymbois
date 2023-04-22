@@ -22,14 +22,16 @@ const StackNavigator = () => {
                     <Stack.Screen name="Calender" component={CalenderScreen} />
                 </>
             ) : (
-                <Stack.Screen
-					name="Login"
-					component={LoginScreen}
-					options={{
-						headerStyle: { backgroundColor: "#d2b48c" },
-						headerTintColor: "#d2b48c",
-					}}
-				/>
+                <>
+                    <Stack.Screen
+					    name="Login"
+					    component={LoginScreen}
+                        options={{
+                            headerTintColor: "#d2b48c",
+                        }}
+				    />
+                    <Stack.Screen name="Register" component={RegisterScreen} />
+                </>
                 
             )}
         </Stack.Navigator>
