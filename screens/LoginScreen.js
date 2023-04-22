@@ -79,7 +79,7 @@ const LoginScreen = () => {
 					style={styles.registerButton}
 					onPress={() => navigation.navigate("Register")}
 				>
-					<Text style={styles.registerButtonText}>Dont't have an account?</Text>
+					<Text style={styles.registerButtonText}>Don't have an account?</Text>
 				</TouchableOpacity>
 			</View>
 		</View>
@@ -142,16 +142,16 @@ const styles = StyleSheet.create({
 		borderBottomColor: "#ccc",
 	},
 	inputFocused: {
-		borderBottomColor: "#286086",
+		borderBottomColor: "#d2b48c",
 	},
 
 	button: {
-		width: "35%",
+		width: "70%",
 		height: 50,
-		backgroundColor: "#286086",
+		backgroundColor: "#d2b48c",
 		justifyContent: "center",
 		alignItems: "center",
-		borderRadius: 25,
+		borderRadius: 20,
 		marginBottom: 15,
 	},
 	buttonText: {
@@ -167,9 +167,8 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	registerButtonText: {
-		color: "#286086",
+		color: "black",
 		fontSize: 16,
-		fontWeight: "bold",
 	},
 });
 

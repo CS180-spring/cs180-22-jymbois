@@ -21,7 +21,7 @@ const StackNavigator = () => {
 					name="Login"
 					component={LoginScreen}
 					options={{
-						headerStyle: { backgroundColor: "#286086" },
+						headerStyle: { backgroundColor: "#d2b48c" },
 						headerTintColor: "#fff",
 					}}
 				/>
