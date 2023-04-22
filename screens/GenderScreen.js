@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 
-const GenderSelectionScreen = () => {
+const GenderScreen = () => {
   const [gender, setGender] = useState(null);
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
 
@@ -24,7 +24,7 @@ const GenderSelectionScreen = () => {
             <Image style={styles.genderImage} source={require("./images/male.jpg")} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => handleGenderSelection("female")}>
-            <Image style={styles.genderImage} source={require("./images/female.jpg")} />
+            <Image style={styles.genderImage} source={require("./images/male.jpg")} />
           </TouchableOpacity>
         </View>
         <View style={styles.imageWrapperBot}>
@@ -114,4 +114,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GenderSelectionScreen;
+export default GenderScreen;

@@ -5,7 +5,7 @@ import HomeScreen from './screens/HomeScreen';
 import CalenderScreen from './screens/CalenderScreen';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
-
+import GenderScreen from './screens/GenderScreen';
 const Stack = createNativeStackNavigator();
 
 const StackNavigator = () => {
