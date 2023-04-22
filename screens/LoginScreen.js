@@ -33,6 +33,7 @@ const LoginScreen = () => {
 				{/* <Text st
 
 				yle={styles.heading}>Login</Text> */}
+				<Image source={require("./images/RealLogo.png")} style={styles.logo} />
 				<View style={styles.inputContainer}>
 					<Image
 						source={require("./images/profilepic.jpeg")}
@@ -118,6 +119,12 @@ const styles = StyleSheet.create({
 		height: 35,
 		marginRight: 15,
 		marginBottom: 14,
+	},
+	logo: {
+		width: 240,
+		height: 240,
+		marginTop: -100,
+		marginBottom: 20,
 	},
 	heading: {
 		fontSize: 24,
