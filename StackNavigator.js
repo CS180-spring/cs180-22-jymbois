@@ -5,7 +5,6 @@ import HomeScreen from './screens/HomeScreen';
 import CalenderScreen from './screens/CalenderScreen';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
-import GenderScreen from './screens/GenderScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,13 +20,22 @@ const StackNavigator = () => {
                 <>
                     <Stack.Screen name="Home" component={HomeScreen} />
                     <Stack.Screen name="Calender" component={CalenderScreen} />
-
                 </>
             ) : (
                 <>
-                <Stack.Screen name="Log In" component={LoginScreen} />
-                <Stack.Screen name="Register" component={RegisterScreen} />
-                <Stack.Screen name="Gender" component={GenderScreen} />
+                    <Stack.Screen
+					    name="Login"
+					    component={LoginScreen}
+                        options={{
+                            headerTintColor: "#d2b48c",
+                        }}
+				    />
+                    <Stack.Screen name="Register" component={RegisterScreen} options={{
+                            headerTintColor: "#d2b48c",
+                        }}/>
+                    <Stack.Screen name="Gender" component={GenderScreen} options={{
+                            headerTintColor: "#d2b48c",
+                        }}/>/>
                 </>
                 
             )}
