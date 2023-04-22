@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
 	View,
 	Text,
@@ -19,21 +19,67 @@ const LoginScreen = () => {
 	const [isEmailFocused, setIsEmailFocused] = useState(false);
 	const [isPasswordFocused, setIsPasswordFocused] = useState(false);
 
-	const handleEmailFocus = () => setIsEmailFocused(true);
+	const [emailInputPosition, setEmailInputPosition] = useState({ x: 0, y: 0 });
+	const [passwordInputPosition, setPasswordInputPosition] = useState({
+		x: 0,
+		y: 0,
+	});
+
+	const handleEmailLayout = (event) => {
+		setEmailInputPosition({
+			x: event.nativeEvent.layout.x,
+			y: event.nativeEvent.layout.y,
+		});
+	};
+
+	const handlePasswordLayout = (event) => {
+		setPasswordInputPosition({
+			x: event.nativeEvent.layout.x,
+			y: event.nativeEvent.layout.y,
+		});
+	};
+
+	const handleEmailFocus = () => {
+		setIsEmailFocused(true);
+		setTimeout(() => {
+			scrollViewRef.current.scrollTo({
+				x: 0,
+				y: emailInputPosition.y - 100,
+				animated: true,
+			});
+		}, 50);
+	};
+
 	const handleEmailBlur = () => setIsEmailFocused(false);
-	const handlePasswordFocus = () => setIsPasswordFocused(true);
+
+	const handlePasswordFocus = () => {
+		setIsPasswordFocused(true);
+		setTimeout(() => {
+			scrollViewRef.current.scrollTo({
+				x: 0,
+				y: passwordInputPosition.y - 100,
+				animated: true,
+			});
+		}, 50);
+	};
+
 	const handlePasswordBlur = () => setIsPasswordFocused(false);
+
 	const handleLogin = () => {
 		// TODO: Implement login logic
 		console.log("Email:", email);
 		console.log("Password:", password);
 	};
 
+	const scrollViewRef = useRef(null);
+
 	return (
 		<ScrollView
 			contentContainerStyle={styles.container}
 			keyboardShouldPersistTaps="handled"
 			onScroll={() => Keyboard.dismiss()}
+			ref={scrollViewRef}
+			scrollEventThrottle={16}
 		>
 			<View style={styles.content}>
 				<Image source={require("./images/RealLogo.png")} style={styles.logo} />
@@ -126,7 +172,7 @@ const styles = StyleSheet.create({
 	logo: {
 		width: 240,
 		height: 240,
-		marginTop: -160,
+		marginTop: -190,
 		marginBottom: 20,
 	},
 	heading: {
@@ -141,7 +187,7 @@ const styles = StyleSheet.create({
 		height: 50,
 
 		paddingHorizontal: 1,
-		marginBottom: 18,
+		marginBottom: 23,
 
 		fontSize: 16,
 		borderBottomWidth: 2,
