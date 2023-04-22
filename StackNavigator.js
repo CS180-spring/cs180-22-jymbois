@@ -30,7 +30,9 @@ const StackNavigator = () => {
                             headerTintColor: "#d2b48c",
                         }}
 				    />
-                    <Stack.Screen name="Register" component={RegisterScreen} />
+                    <Stack.Screen name="Register" component={RegisterScreen} options={{
+                            headerTintColor: "#d2b48c",
+                        }}/>
                 </>
                 
             )}
