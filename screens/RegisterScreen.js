@@ -20,6 +20,7 @@ const RegisterScreen = () => {
   const [isUserNameFocused, setIsUserNameFocused] = useState(false);
   const [isEmailFocused, setIsEmailFocused] = useState(false);
 	const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+  const [isConfirmPasswordFocused, setIsConfirmPasswordFocused] = useState(false);
   
   const handleUserNameFocus = () => setIsUserNameFocused(true);
   const handleUserNameBlur = () => setIsUserNameFocused(false);
@@ -27,6 +28,9 @@ const RegisterScreen = () => {
 	const handleEmailBlur = () => setIsEmailFocused(false);
 	const handlePasswordFocus = () => setIsPasswordFocused(true);
 	const handlePasswordBlur = () => setIsPasswordFocused(false);
+  const handleConfirmPasswordFocus = () => setIsConfirmPasswordFocused(true);
+	const handleConfirmPasswordBlur = () => setIsConfirmPasswordFocused(false);
+
 
   const registerButton = () => {
     console.log("Username", username);
@@ -44,7 +48,7 @@ const RegisterScreen = () => {
 
   const signUpDisabled = !passwordMatch || !fieldsFilled;
   //152 working
-  const emailRegex = new RegExp('^[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z0-9]+$');
+  const emailRegex = new RegExp('^[a-zA-Z0-9_.]+@[a-zA-Z0-9]+\\.[a-zA-Z0-9]+$');
   //will throw invalid if email is not valid 
   const handleEmailChange = (text) => {
     setEmail(text);
@@ -65,42 +69,70 @@ const RegisterScreen = () => {
       <View style={styles.inputContainer}>
          <Image source={require("./images/profilepic.jpeg")} style={styles.icon} />
              <TextInput
-              style={styles.input}
+              style={[
+                styles.input,
+                isUserNameFocused || username
+                  ? styles.inputFocused
+                  : styles.inputInactive,
+              ]}
               placeholder="Username"
               value={username}
               onChangeText={(text) => setUsername(text)}
+              onFocus={handleUserNameFocus}
+						  onBlur={handleUserNameBlur}
              />
       </View>
 
       <View style={styles.inputContainer}>
          <Image source={require("./images/email.png")} style={styles.icon} />
               <TextInput
-              style={styles.input}
+              style={[
+                styles.input,
+                isEmailFocused || email
+                  ? styles.inputFocused
+                  : styles.inputInactive,
+              ]}
               placeholder="Email"
               value={email}
               onChangeText={handleEmailChange}
+              onFocus={handleEmailFocus}
+						  onBlur={handleEmailBlur}
               />
       </View>
         
       <View style={styles.inputContainer}>
          <Image source={require("./images/passwordpic.png")} style={styles.icon} />  
               <TextInput
-              style={styles.input}
+              style={[
+                styles.input,
+                isPasswordFocused || password
+                  ? styles.inputFocused
+                  : styles.inputInactive,
+              ]}
               placeholder="Password"
               secureTextEntry
               value={password}
               onChangeText={(text) => setPassword(text)}
+              onFocus={handlePasswordFocus}
+						  onBlur={handlePasswordBlur}
               />
       </View>
 
       <View style={styles.inputContainer}>
          <Image source={require("./images/passwordpic.png")} style={styles.icon} />
               <TextInput
-              style={styles.input}
+              style={[
+                styles.input,
+                isConfirmPasswordFocused || confirmPasscode
+                  ? styles.inputFocused
+                  : styles.inputInactive,
+              ]}
               placeholder="Confirm Password"
               secureTextEntry
               value={confirmPasscode}
               onChangeText={(text) => setConfirmPasscode(text)}
+              onFocus={handleConfirmPasswordFocus}
+						  onBlur={handleConfirmPasswordBlur}
               />
       </View>
     
@@ -204,12 +236,7 @@ const styles = StyleSheet.create({
     marginBottom:50,
     marginTop:5,
     marginRight:170,
-  },
-  image: {
-    width: 100,
-    height: 100,
-    resizeMode: "contain",
-  },
+  }, 
 
   errorMessage: {
     color: "red",
@@ -233,6 +260,7 @@ const styles = StyleSheet.create({
 		marginRight: 15,
 		marginBottom: 14,
 	},
+  
   inputInactive: {
 		borderBottomColor: "#ccc",
 	},
