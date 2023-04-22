@@ -14,10 +14,11 @@ const HomeScreen = () => {
 			/>
 			<Button
 				title="Go to Login"
-				onPress={() => navigation.navigate("Login")}
+				onPress={() => navigation.navigate("Log in")}
 			/>
 		</View>
 	);
 };
 
 export default HomeScreen;
+
