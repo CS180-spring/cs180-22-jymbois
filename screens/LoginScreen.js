@@ -45,7 +45,7 @@ const LoginScreen = () => {
 								? styles.inputFocused
 								: styles.inputInactive,
 						]}
-						placeholder="Enter email"
+						placeholder="Enter Username"
 						value={email}
 						onChangeText={setEmail}
 						onFocus={handleEmailFocus}
