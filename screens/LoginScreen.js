@@ -6,6 +6,8 @@ import {
 	TouchableOpacity,
 	StyleSheet,
 	Image,
+	ScrollView,
+	Keyboard,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
@@ -28,11 +30,12 @@ const LoginScreen = () => {
 	};
 
 	return (
-		<View style={styles.container}>
+		<ScrollView
+			contentContainerStyle={styles.container}
+			keyboardShouldPersistTaps="handled"
+			onScroll={() => Keyboard.dismiss()}
+		>
 			<View style={styles.content}>
-				{/* <Text st
-
-				yle={styles.heading}>Login</Text> */}
 				<Image source={require("./images/RealLogo.png")} style={styles.logo} />
 				<View style={styles.inputContainer}>
 					<Image
@@ -83,7 +86,7 @@ const LoginScreen = () => {
 					<Text style={styles.registerButtonText}>Don't have an account?</Text>
 				</TouchableOpacity>
 			</View>
-		</View>
+		</ScrollView>
 	);
 };
 
@@ -123,7 +126,7 @@ const styles = StyleSheet.create({
 	logo: {
 		width: 240,
 		height: 240,
-		marginTop: -100,
+		marginTop: -160,
 		marginBottom: 20,
 	},
 	heading: {
