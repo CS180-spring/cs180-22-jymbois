@@ -5,7 +5,6 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Image,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
@@ -22,7 +21,7 @@ const RegisterScreen = () => {
     console.log("Email", email);
     console.log("Password", password);
     console.log("Confirm Password", confirmPasscode);
-    navigation.navigate("Log In"); // navigate to Log In screen
+    navigation.navigate("Gender"); 
   };
 
   //making sure that everything is filed and that password matches
@@ -86,7 +85,8 @@ const RegisterScreen = () => {
 
         <TouchableOpacity
           style={[styles.button, signUpDisabled && styles.disabledButton]}
-          disabled={signUpDisabled} >
+          disabled={signUpDisabled} 
+          onPress={registerButton}>
           <Text style={styles.buttonText}>SIGN UP</Text>
         </TouchableOpacity>
         <View View style={styles.footer}>
