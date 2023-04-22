@@ -11,7 +11,11 @@ const Stack = createNativeStackNavigator();
 const StackNavigator = () => {
     const user = false; // placeholder for when we actually implement login 
     return (
-        <Stack.Navigator>
+        <Stack.Navigator 
+          screenOptions={{
+            headerStyle: { backgroundColor: 'tan' }
+          }}
+        >
             {user ? (
                 <>
                     <Stack.Screen name="Home" component={HomeScreen} />
@@ -19,7 +23,7 @@ const StackNavigator = () => {
                 </>
             ) : (
                 <>
-                <Stack.Screen name="LogIn" component={LoginScreen} />
+                <Stack.Screen name="Log In" component={LoginScreen} />
                 <Stack.Screen name="Register" component={RegisterScreen} />
                 </>
                 
@@ -28,4 +32,4 @@ const StackNavigator = () => {
     );
 };
 
-export default StackNavigator
+export default StackNavigator;
