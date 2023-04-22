@@ -15,15 +15,15 @@ const GenderSelectionScreen = () => {
       <View style={styles.genderContainer}>
         <View style={styles.imageWrapper}>
           <TouchableOpacity onPress={() => handleGenderSelection("male")}>
-            <Image style={styles.genderImage} source={require("./male.jpg")} />
+            <Image style={styles.genderImage} source={require("./images/male.jpg")} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => handleGenderSelection("female")}>
-            <Image style={styles.genderImage} source={require("./female.jpg")} />
+            <Image style={styles.genderImage} source={require("./images/female.jpg")} />
           </TouchableOpacity>
         </View>
         <View style={styles.imageWrapperBot}>
           <TouchableOpacity onPress={() => handleGenderSelection("other")}>
-            <Image style={styles.genderImage} source={require("./other.jpg")} />
+            <Image style={styles.genderImage} source={require("./images/other.jpg")} />
           </TouchableOpacity>
         </View>
       </View>
