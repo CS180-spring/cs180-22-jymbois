@@ -18,12 +18,7 @@ const StackNavigator = () => {
             headerStyle: { backgroundColor: 'tan' }
           }}
         >
-            {user ? (
-                <>
-                    
-                </>
-            ) : (
-                <>
+            <>
                     <Stack.Screen
 					    name="Login"
 					    component={LoginScreen}
@@ -40,8 +35,6 @@ const StackNavigator = () => {
                     <Stack.Screen name="Home" component={HomeScreen} />
                     <Stack.Screen name="Calender" component={CalenderScreen} />
                 </>
-                
-            )}
         </Stack.Navigator>
     );
 };
