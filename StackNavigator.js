@@ -6,6 +6,7 @@ import CalenderScreen from './screens/CalenderScreen';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import GenderScreen from './screens/GenderScreen';
+import AgeScreen from './screens/AgeScreen';
 const Stack = createNativeStackNavigator();
 
 const StackNavigator = () => {
@@ -35,6 +36,9 @@ const StackNavigator = () => {
                         }}/>
                     <Stack.Screen name="Gender" component={GenderScreen} options={{
                             headerTintColor: "#d2b48c",
+                        }}/>
+                    <Stack.Screen name="Age" component={AgeScreen} options={{
+                            headerTintColor: "#fff",
                         }}/>
                 </>
                 

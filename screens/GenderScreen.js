@@ -1,18 +1,26 @@
 import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 const GenderScreen = () => {
+  const navigation = useNavigation();
   const [gender, setGender] = useState(null);
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
 
   const handleGenderSelection = (selectedGender) => {
     setGender(selectedGender);
+    setIsButtonEnabled(true);
   };
 
   const handleNextButtonPress = () => {
-    navigation.navigate("-_____");
-    setIsButtonEnabled(true);
+    if (gender) {
+      navigation.navigate("Age");
+    } else {
+      // Show error message
+      alert("Please select a gender to proceed");
+    }
   };
+  
 
   return (
     <View style={styles.container}>
@@ -96,13 +104,13 @@ const styles = StyleSheet.create({
     color: "tan",
   },
   nextButton: {
-    backgroundColor: "blue",
+    backgroundColor: "tan",
     padding: 10,
     borderRadius: 5,
     marginTop: 20,
   },
   disabledNextButton: {
-    backgroundColor: "tan",
+    backgroundColor: "red",
     padding: 10,
     borderRadius: 5,
     marginTop: 20,
