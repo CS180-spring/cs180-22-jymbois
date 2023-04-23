@@ -8,21 +8,17 @@ import RegisterScreen from './screens/RegisterScreen';
 import GenderScreen from './screens/GenderScreen';
 const Stack = createNativeStackNavigator();
 
+
+
 const StackNavigator = () => {
-    const user = false; // placeholder for when we actually implement login 
+    const user = false;
     return (
         <Stack.Navigator 
           screenOptions={{
             headerStyle: { backgroundColor: 'tan' }
           }}
         >
-            {user ? (
-                <>
-                    <Stack.Screen name="Home" component={HomeScreen} />
-                    <Stack.Screen name="Calender" component={CalenderScreen} />
-                </>
-            ) : (
-                <>
+            <>
                     <Stack.Screen
 					    name="Login"
 					    component={LoginScreen}
@@ -36,9 +32,9 @@ const StackNavigator = () => {
                     <Stack.Screen name="Gender" component={GenderScreen} options={{
                             headerTintColor: "#d2b48c",
                         }}/>
+                    <Stack.Screen name="Home" component={HomeScreen} />
+                    <Stack.Screen name="Calender" component={CalenderScreen} />
                 </>
-                
-            )}
         </Stack.Navigator>
     );
 };
