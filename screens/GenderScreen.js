@@ -28,16 +28,16 @@ const GenderScreen = () => {
       <Text style={styles.subheading}>Pick one:</Text>
       <View style={styles.genderContainer}>
         <View style={styles.imageWrapper}>
-          <TouchableOpacity onPress={() => handleGenderSelection("male")}>
-            <Image style={styles.genderImage} source={require("./images/male.jpg")} />
+          <TouchableOpacity onPress={() => handleGenderSelection("Male")}>
+            <Image style={styles.genderImageM} source={require("./images/male.png")} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleGenderSelection("female")}>
-            <Image style={styles.genderImage} source={require("./images/male.jpg")} />
+          <TouchableOpacity onPress={() => handleGenderSelection("Female")}>
+            <Image style={styles.genderImageF} source={require("./images/female.png")} />
           </TouchableOpacity>
         </View>
         <View style={styles.imageWrapperBot}>
-          <TouchableOpacity onPress={() => handleGenderSelection("other")}>
-            <Image style={styles.genderImage} source={require("./images/other.jpg")} />
+          <TouchableOpacity onPress={() => handleGenderSelection("Prefer Not To Say")}>
+            <Image style={styles.genderImage} source={require("./images/other.png")} />
           </TouchableOpacity>
         </View>
       </View>
@@ -62,19 +62,22 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   heading: {
-    fontSize: 50,
-    marginBottom: 50,
-    textAlign: "left",
-    marginRight: 50,
-    color: "tan",
-    padding: 0,
+    fontSize:50,
+    fontWeight: '500',
+    fontFamily: 'Helvetica',
+    color: '#333',
+    marginBottom: 5,
+    marginTop:20,
+    marginBottom: 20,
+    color: "black",
   },
   subheading:{
     fontSize:20,
     fontWeight: "500",
     color: '#333',
     textAlign: 'left',
-    color:"tan",
+    color:"black",
+    marginBottom: 15,
   },
   genderContainer: {
     alignItems: "center",
@@ -96,7 +99,15 @@ const styles = StyleSheet.create({
   },
   genderImage: {
     width: 150,
-    height: 150,
+    height: 170,
+  },
+  genderImageM: {
+    width: 150,
+    height: 140,
+  },
+  genderImageF: {
+    width: 170,
+    height: 140,
   },
   selectedGenderText: {
     fontSize: 18,
@@ -110,7 +121,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   disabledNextButton: {
-    backgroundColor: "red",
+    backgroundColor: "grey",
     padding: 10,
     borderRadius: 5,
     marginTop: 20,

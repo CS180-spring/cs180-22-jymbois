@@ -57,7 +57,7 @@ import BottomTabNavigator from './BottomTabNavigator';
 const Stack = createNativeStackNavigator();
 
 const StackNavigator = () => {
-    const user = true; // placeholder for when we actually implement login 
+    const user = false; // placeholder for when we actually implement login 
     return (
         <Stack.Navigator 
           screenOptions={{
@@ -88,6 +88,7 @@ const StackNavigator = () => {
                     <Stack.Screen name="Age" component={AgeScreen} options={{
                             headerTintColor: "#fff",
                         }}/>
+                        
                 </>
                 
             )}
