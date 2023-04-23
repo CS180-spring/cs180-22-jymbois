@@ -24,7 +24,7 @@ const GenderScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>What is your gender?</Text>
+      <Text style={styles.welcome}>What is your gender?</Text>
       <Text style={styles.subheading}>Pick one:</Text>
       <View style={styles.genderContainer}>
         <View style={styles.imageWrapper}>
@@ -59,18 +59,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "top",
-    padding: 20,
+    alignItems: "center",
+    marginTop: 60,
   },
-  heading: {
+  welcome: {
     fontSize:50,
     fontWeight: '500',
     fontFamily: 'Helvetica',
     color: '#333',
-    marginBottom: 5,
-    marginTop:20,
-    marginBottom: 20,
-    color: "black",
-  },
+    marginBottom: 15,
+    color: "tan",
+},
   subheading:{
     fontSize:20,
     fontWeight: "500",
@@ -78,6 +77,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     color:"black",
     marginBottom: 15,
+    marginRight: 225,
   },
   genderContainer: {
     alignItems: "center",
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     width: "100%",
     paddingBottom: 10,
-    paddingHorizontal: 10,
+    paddingHorizontal: 30,
   },
   genderImage: {
     width: 150,
@@ -112,23 +112,29 @@ const styles = StyleSheet.create({
   selectedGenderText: {
     fontSize: 18,
     marginTop: 20,
+    marginBottom: 10,
     color: "tan",
   },
   nextButton: {
-    backgroundColor: "tan",
-    padding: 10,
-    borderRadius: 5,
-    marginTop: 20,
+    width: "70%",
+		height: 50,
+		backgroundColor: "#d2b48c",
+		justifyContent: "center",
+		borderRadius: 25,
+		marginBottom: 15,
   },
   disabledNextButton: {
-    backgroundColor: "grey",
-    padding: 10,
-    borderRadius: 5,
-    marginTop: 20,
+    width: "70%",
+		height: 50,
+		backgroundColor: "#d2b48c",
+		justifyContent: "center",
+		borderRadius: 25,
+		marginBottom: 15,
   },
   nextButtonText: {
     color: "white",
-    fontSize: 16,
+    fontSize: 25,
+    fontWeight: 'bold',
     textAlign: "center",
   },
 });

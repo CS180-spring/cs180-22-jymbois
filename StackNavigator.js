@@ -51,6 +51,8 @@ import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import GenderScreen from './screens/GenderScreen';
 import AgeScreen from './screens/AgeScreen';
+import HeightScreen from './screens/HeightScreen';
+import PageDots from './screens/PageDots';
 import BottomTabNavigator from './BottomTabNavigator';
 
 
@@ -86,9 +88,11 @@ const StackNavigator = () => {
                             headerTintColor: "#d2b48c",
                         }}/>
                     <Stack.Screen name="Age" component={AgeScreen} options={{
-                            headerTintColor: "#fff",
+                            headerTintColor: "#d2b48c",
                         }}/>
-                        
+                    <Stack.Screen name="Height" component={HeightScreen} options={{
+                            headerTintColor: "#d2b48c",
+                        }}/>    
                 </>
                 
             )}
