@@ -2281,16 +2281,16 @@
 
 "@react-native-firebase/auth@^17.4.2":
   version "17.4.2"
-<<<<<<< HEAD
-  resolved "https://registry.npmjs.org/@react-native-firebase/database/-/database-17.4.2.tgz"
-  integrity sha512-RNVzdRueRIm6tOLI5EYPlA56MHigva0U60HvZwRV7ObHHZ6wxmQBAFRI7K6vNk/tNg4YnI5FPbLCts3XA1behA==
-=======
   resolved "https://registry.npmjs.org/@react-native-firebase/auth/-/auth-17.4.2.tgz"
   integrity sha512-JF6e7vMdHJelos42DqtlPurzzhFBb3OtYeCjhaOmyWwToD1tvCGGO1GkiXbWZcZIOuL6SCXBwvtvCHac+9YZXA==
   dependencies:
     "@expo/config-plugins" "^5.0.4"
     plist "^3.0.5"
->>>>>>> main
+
+"@react-native-firebase/database@^17.4.2":
+  version "17.4.2"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/database/-/database-17.4.2.tgz#a291c044e77c1b6941d144a1f3b37ed7042ec270"
+  integrity sha512-RNVzdRueRIm6tOLI5EYPlA56MHigva0U60HvZwRV7ObHHZ6wxmQBAFRI7K6vNk/tNg4YnI5FPbLCts3XA1behA==
 
 "@react-native-picker/picker@^2.4.10":
   version "2.4.10"
@@ -6708,30 +6708,10 @@ protobufjs@^6.11.3:
     "@types/node" ">=13.7.0"
     long "^4.0.0"
 
-<<<<<<< HEAD
-protobufjs@^7.0.0:
-  version "7.2.3"
-  resolved "https://registry.npmjs.org/protobufjs/-/protobufjs-7.2.3.tgz"
-  integrity sha512-TtpvOqwB5Gdz/PQmOjgsrGH1nHjAQVCN7JG4A6r1sXRWESL5rNMAiRcBQlCAdKxZcAbstExQePYG8xof/JVRgg==
-  dependencies:
-    "@protobufjs/aspromise" "^1.1.2"
-    "@protobufjs/base64" "^1.1.2"
-    "@protobufjs/codegen" "^2.0.4"
-    "@protobufjs/eventemitter" "^1.1.0"
-    "@protobufjs/fetch" "^1.1.0"
-    "@protobufjs/float" "^1.0.2"
-    "@protobufjs/inquire" "^1.1.0"
-    "@protobufjs/path" "^1.1.2"
-    "@protobufjs/pool" "^1.1.0"
-    "@protobufjs/utf8" "^1.1.0"
-    "@types/node" ">=13.7.0"
-    long "^5.0.0"
-=======
 pseudomap@^1.0.1:
   version "1.0.2"
   resolved "https://registry.npmjs.org/pseudomap/-/pseudomap-1.0.2.tgz"
   integrity sha512-b/YwNhb8lk1Zz2+bXXpS/LK9OisiZZ1SNsSLxN1x2OXVEhW2Ckr/7mWE5vrC1ZTiJlD9g19jWszTmJsB+oEpFQ==
->>>>>>> main
 
 pump@^3.0.0:
   version "3.0.0"
@@ -7168,19 +7148,16 @@ run-parallel@^1.1.9:
   dependencies:
     queue-microtask "^1.2.2"
 
-safe-buffer@5.1.2, safe-buffer@>=5.1.0, safe-buffer@~5.1.0, safe-buffer@~5.1.1:
+safe-buffer@5.1.2, safe-buffer@~5.1.0, safe-buffer@~5.1.1:
   version "5.1.2"
   resolved "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.1.2.tgz"
   integrity sha512-Gd2UZBJDkXlY7GbJxfsE8/nvKkUEU1G38c1siN6QP6a9PT9MmHB8GnpscSmMJSoF8LOIrt8ud/wPtojys4G6+g==
 
-<<<<<<< HEAD
-=======
 safe-buffer@>=5.1.0, safe-buffer@^5.0.1, safe-buffer@~5.2.0:
   version "5.2.1"
   resolved "https://registry.npmjs.org/safe-buffer/-/safe-buffer-5.2.1.tgz"
   integrity sha512-rp3So07KcdmmKbGvgaNxQSJr7bGVSVk5S9Eq1F+ppbRo70+YeaDxkw5Dd8NPN+GD6bjnYm2VuPuCXmpuYvmCXQ==
 
->>>>>>> main
 safe-json-stringify@~1:
   version "1.2.0"
   resolved "https://registry.npmjs.org/safe-json-stringify/-/safe-json-stringify-1.2.0.tgz"
