@@ -3,20 +3,18 @@ import React from "react";
 import { Button } from "react-native";
 import { ref, set } from "firebase/database";
 import database from "../configuration/firebaseConfig";
-import { useNavigation } from "@react-navigation/native";
 
 const HomeScreen = () => {
 
-	const navigation = useNavigation();
-	const testDatabase = () => {
-		const dbRef = ref(database, 'test');
-		set(dbRef, 'Hello, World!');
-	};
+	const testDatabase = async () => {
+		const dbRef = ref(database, 'Wowzers');
+		await set(dbRef, 'Hello, World!');
+		console.log('Data added to database!');
+	  };
 
 	return (
 		<View>
 			<Text>I am the HomeScreen</Text>
-			<Button title="Go to Calender" onPress={() => navigation.navigate("Calender")} />
 			<Button
 				title="Test Database"
 				onPress={testDatabase}
