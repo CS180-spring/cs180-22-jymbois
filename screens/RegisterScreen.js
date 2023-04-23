@@ -8,6 +8,7 @@ import {
   Image,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { auth } from "../configuration/firebaseConfig"; //	Firebase Operations
 
 const RegisterScreen = () => {
   const navigation = useNavigation();
@@ -37,7 +38,23 @@ const RegisterScreen = () => {
     console.log("Email", email);
     console.log("Password", password);
     console.log("Confirm Password", confirmPasscode);
-    navigation.navigate("Gender"); 
+
+    //  Simple check to see if password matches confirmed password fields
+    if(password === confirmPasscode)
+    {
+      //  Registers email and password in Firebase
+      auth.createUserWithEmailAndPassword(email, password)
+      .then((userCredential) => { //  Signed in 
+        const user = userCredential.user;
+        console.log(user.email);
+        navigation.navigate("Gender");  //  Navigate to Gender Page
+      }).catch((error) => { //  Error
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        alert(error.message);
+      })
+    }else
+      alert("Your password and confirmed password do not match!")
   };
 
   //making sure that everything is filed and that password matches

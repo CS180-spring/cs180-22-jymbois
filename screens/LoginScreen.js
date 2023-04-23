@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
 	View,
 	Text,
@@ -9,7 +9,8 @@ import {
 	ScrollView,
 	Keyboard,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";	
+import { auth } from "../configuration/firebaseConfig"; //	Firebase Operations
 
 const LoginScreen = () => {
 	const navigation = useNavigation();
@@ -66,9 +67,19 @@ const LoginScreen = () => {
 	const handlePasswordBlur = () => setIsPasswordFocused(false);
 
 	const handleLogin = () => {
-		// TODO: Implement login logic
-		console.log("Email:", email);
-		console.log("Password:", password);
+		// Run login function here
+		auth.signInWithEmailAndPassword(email, password)
+          .then((userCredential) => { //  Successful sign in
+            const user = userCredential.user;
+            console.log("Logged in with: ", email);
+			navigation.navigate("Home")	//	Navigate to User Home Page :)
+          }).catch((error) => { //  Error, set to send alert when error occurs
+
+			//	Maybe set up message here instead of just an alert window?
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            alert(error.message);
+           })
 	};
 
 	const scrollViewRef = useRef(null);
@@ -96,7 +107,7 @@ const LoginScreen = () => {
 								: styles.inputInactive,
 						]}
 						placeholder="Enter Username"
-						value={email}
+						value={email}	//	email var set here trhough textbox
 						onChangeText={setEmail}
 						onFocus={handleEmailFocus}
 						onBlur={handleEmailBlur}

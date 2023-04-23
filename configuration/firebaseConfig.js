@@ -1,26 +1,41 @@
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
+import { getDatabase } from "firebase/database";
 import { initializeApp } from 'firebase/app';
 
-// Optionally import the services that you want to use
-// import {...} from "firebase/auth";
-import { getDatabase } from "firebase/database";
-// import {...} from "firebase/firestore";
-// import {...} from "firebase/functions";
-// import {...} from "firebase/storage";
-
-// Initialize Firebase
+// Your web app's Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyA8HJqyptlNMJxojqQt5wwIXgfewVXYBEA",
     authDomain: "cs180-db.firebaseapp.com",
     projectId: "cs180-db",
     storageBucket: "cs180-db.appspot.com",
     messagingSenderId: "943556470766",
-    appId: "1:943556470766:web:3cbd5eac5b1430cb9ed0ff"
+    appId: "1:943556470766:web:3cbd5eac5b1430cb9ed0ff",
+    databaseURL: "https://cs180-db-default-rtdb.firebaseio.com/"
   };
+  
+  // Use this to initialize the firebase App
+const firebaseApp = firebase.initializeApp(firebaseConfig);
 
-const app = initializeApp(firebaseConfig);
-const database = getDatabase(app);
-
+//  Export auth token
+const database = getDatabase(firebaseApp);
 export default database;
-// For more information on how to access Firebase in your project,
-// see the Firebase documentation: https://firebase.google.com/docs/web/setup#access-firebase
+
+
+export const auth = firebase.auth();
+
+//  Use this function to Sign up a new user with an email and password strings
+export function signUp(name, pw)
+{
+  auth.createUserWithEmailAndPassword(name, pw)
+          .then((userCredential) => { //  Signed in 
+            const user = userCredential.user;
+            console.log(user.email);
+          }).catch((error) => { //  Error
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            alert(error.message);
+          })
+}
 
