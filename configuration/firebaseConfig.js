@@ -12,13 +12,17 @@ const firebaseConfig = {
     storageBucket: "cs180-db.appspot.com",
     messagingSenderId: "943556470766",
     appId: "1:943556470766:web:3cbd5eac5b1430cb9ed0ff",
-    databaseURL: "gs://cs180-db.appspot.com"
+    databaseURL: "https://cs180-db-default-rtdb.firebaseio.com/"
   };
   
   // Use this to initialize the firebase App
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 
 //  Export auth token
+const database = getDatabase(firebaseApp);
+export default database;
+
+
 export const auth = firebase.auth();
 
 //  Use this function to Sign up a new user with an email and password strings
