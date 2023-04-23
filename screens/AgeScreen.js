@@ -69,12 +69,12 @@ const styles = StyleSheet.create({
   },
   button: {
     width: "50%",
-		height: 50,
-		backgroundColor: "#d2b48c",
-		justifyContent: "center",
-		alignItems: "center",
-		borderRadius: 25,
-		marginBottom: 15,
+	height: 50,
+	backgroundColor: "#d2b48c",
+	justifyContent: "center",
+	alignItems: "center",
+	borderRadius: 25,
+    marginBottom: 15,
   },
   enabled: {
     backgroundColor: "tan",
