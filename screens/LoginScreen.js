@@ -134,13 +134,13 @@ const LoginScreen = () => {
 					/>
 				</View>
 				<TouchableOpacity style={styles.button} onPress={handleLogin}>
-					<Text style={styles.buttonText}>Login</Text>
+					<Text style={styles.buttonText}>LOGIN</Text>
 				</TouchableOpacity>
 				<TouchableOpacity
 					style={styles.registerButton}
 					onPress={() => navigation.navigate("Register")}
 				>
-					<Text style={styles.registerButtonText}>Don't have an account?</Text>
+					<Text style={styles.registerButtonText}>Don't have an account? <Text style={{color: 'tan', fontWeight: 'bold'}}>Click here</Text></Text>
 				</TouchableOpacity>
 			</View>
 		</ScrollView>
