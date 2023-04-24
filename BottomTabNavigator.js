@@ -18,7 +18,7 @@ const BottomTabNavigator = () => {
       headerTintColor: 'white',
       tabBarInactiveTintColor: 'white',
       tabBarActiveTintColor: '#8B3A3A',
-      tabBarActiveBackgroundColor: '#FFFF99' // debating on whether to keep this or not
+      tabBarActiveBackgroundColor: '#f5dd4b' // debating on whether to keep this or not
 
     }}
     >

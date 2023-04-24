@@ -27,15 +27,16 @@ const SettingScreen = () => {
           <Text style={styles.notificationText}>{label}</Text>
           <Switch
             trackColor={{ false: "#767577", true: "#8B3A3A" }}
-            thumbColor={value ? "#f5dd4b" : "#f4f3f4"}
+            thumbColor={value ? "#f4f3f4" : "#f4f3f4"}
             ios_backgroundColor="#3e3e3e"
             onValueChange={toggle}
             value={value}
           />
         </View>
       ))}
+      <Text style={{marginTop: 90, marginBottom: 0, fontSize: 12}}>POWERED BY</Text>
       <Image 
-        style={ {width: 200, height: 200, marginTop: 20}}
+        style={ {width: 150, height: 200, marginTop: -47}}
         resizeMode='contain'
         source={require("./images/RealLogo.png")} />
     </View>
@@ -63,11 +64,14 @@ const styles = StyleSheet.create({
   },
   notificationContainer: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 40,
+    width: '100%',
+    marginTop: 45,
+    paddingHorizontal: 70,
   },
   notificationText: {
-    marginRight: 10,
     fontSize: 18,
+    fontWeight: 'bold',
   },
 });
