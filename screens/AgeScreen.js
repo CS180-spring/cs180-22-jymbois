@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Picker } from "@react-native-picker/picker";
+import { useNavigation } from "@react-navigation/native";
+import { auth } from "../configuration/firebaseConfig"; //	Firebase Operations
 
 const AgeScreen = () => {
+  const navigation = useNavigation();
   const [selectedAge, setSelectedAge] = useState(18);
 
   const handleAgeSelection = (age) => {
@@ -12,6 +15,7 @@ const AgeScreen = () => {
   const handleNextPress = () => {
     if (selectedAge > 0) {
       console.log("Next button pressed. Selected age:", selectedAge);
+      navigation.navigate("Height");  
     } else {
       console.log("Please select an age.");
     }
@@ -46,9 +50,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "top",
-    marginTop: 60,
+    backgroundColor: "#fff",
   },
   welcome: {
+    paddingTop: 50,
     fontSize:50,
     fontWeight: '500',
     fontFamily: 'Helvetica',
@@ -65,12 +70,12 @@ const styles = StyleSheet.create({
   },
   button: {
     width: "50%",
-		height: 50,
-		backgroundColor: "#d2b48c",
-		justifyContent: "center",
-		alignItems: "center",
-		borderRadius: 25,
-		marginBottom: 15,
+	height: 50,
+	backgroundColor: "#d2b48c",
+	justifyContent: "center",
+	alignItems: "center",
+	borderRadius: 25,
+    marginBottom: 15,
   },
   enabled: {
     backgroundColor: "tan",
@@ -81,6 +86,8 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "white",
     fontSize: 25,
+    fontWeight: 'bold',
+    textAlign: "center",
   },
 });
 
