@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { auth } from "../configuration/firebaseConfig"; //	Firebase Operations
@@ -67,10 +69,10 @@ const RegisterScreen = () => {
   //152 working
   const emailRegex = new RegExp('^[a-zA-Z0-9_.]+@[a-zA-Z0-9]+\\.[a-zA-Z0-9]+$');
   //will throw invalid if email is not valid 
-  const handleEmailChange = (text) => {
+  const handleEmailChange = (text) => { //this probably not needed because of firebase
     setEmail(text);
     if (!emailRegex.test(text)) {
-      setEmailError('Invalid email format');
+      //setEmailError('Invalid email format');
     } else {
       setEmailError('');
     }
@@ -78,6 +80,7 @@ const RegisterScreen = () => {
 
 
   return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <View style={styles.container}>
       <View style={styles.content}>
       <Text style={styles.welcome}>You're almost a JYM BRO!</Text>
@@ -176,6 +179,7 @@ const RegisterScreen = () => {
         </View>
       </View>
     </View>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -277,6 +281,7 @@ const styles = StyleSheet.create({
 		height: 35,
 		marginRight: 15,
 		marginBottom: 14,
+    
 	},
   
   inputInactive: {

@@ -24,22 +24,22 @@ const GenderScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>What is your gender?</Text>
+      <Text style={styles.welcome}>What is your gender?</Text>
       <Text style={styles.subheading}>Pick one:</Text>
       <View style={styles.genderContainer}>
         <View style={styles.imageWrapper}>
-          <TouchableOpacity onPress={() => handleGenderSelection("male")}>
-            <Image style={styles.genderImage} source={require("./images/male.jpg")} />
+          <TouchableOpacity onPress={() => handleGenderSelection("Male")}>
+            <Image style={styles.genderImageM} source={require("./images/male.png")} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleGenderSelection("female")}>
-            <Image style={styles.genderImage} source={require("./images/male.jpg")} />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.imageWrapperBot}>
-          <TouchableOpacity onPress={() => handleGenderSelection("other")}>
-            <Image style={styles.genderImage} source={require("./images/other.jpg")} />
+          <TouchableOpacity onPress={() => handleGenderSelection("Female")}>
+            <Image style={styles.genderImageF} source={require("./images/female.png")} />
           </TouchableOpacity>
         </View>
+        {/*<View style={styles.imageWrapperBot}>
+          <TouchableOpacity onPress={() => handleGenderSelection("Prefer Not To Say")}>
+            <Image style={styles.genderImage} source={require("./images/other.png")} />
+          </TouchableOpacity>
+        </View> */}
       </View>
       {gender && (
         <Text style={styles.selectedGenderText}>Selected gender: {gender}</Text>
@@ -59,22 +59,26 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "top",
-    padding: 20,
+    alignItems: "center",
+    backgroundColor: "#fff",
   },
-  heading: {
-    fontSize: 50,
-    marginBottom: 50,
-    textAlign: "left",
-    marginRight: 50,
+  welcome: {
+    marginTop: 60,
+    fontSize:50,
+    fontWeight: '500',
+    fontFamily: 'Helvetica',
+    color: '#333',
+    marginBottom: 35,
     color: "tan",
-    padding: 0,
-  },
+},
   subheading:{
     fontSize:20,
     fontWeight: "500",
     color: '#333',
     textAlign: 'left',
     color:"tan",
+    marginBottom: 30,
+    marginRight: 225,
   },
   genderContainer: {
     alignItems: "center",
@@ -92,32 +96,46 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     width: "100%",
     paddingBottom: 10,
-    paddingHorizontal: 10,
+    paddingHorizontal: 30,
   },
   genderImage: {
     width: 150,
-    height: 150,
+    height: 170,
+  },
+  genderImageM: {
+    width: 150,
+    height: 140,
+  },
+  genderImageF: {
+    width: 170,
+    height: 140,
   },
   selectedGenderText: {
     fontSize: 18,
     marginTop: 20,
-    color: "tan",
+    marginBottom: 10,
+    color: "black",
   },
   nextButton: {
-    backgroundColor: "tan",
-    padding: 10,
-    borderRadius: 5,
-    marginTop: 20,
+    width: "70%",
+		height: 50,
+		backgroundColor: "#d2b48c",
+		justifyContent: "center",
+		borderRadius: 25,
+		marginBottom: 15,
   },
   disabledNextButton: {
-    backgroundColor: "red",
-    padding: 10,
-    borderRadius: 5,
-    marginTop: 20,
+    width: "70%",
+		height: 50,
+		backgroundColor: "#d2b48c",
+		justifyContent: "center",
+		borderRadius: 25,
+		marginBottom: 15,
   },
   nextButtonText: {
     color: "white",
-    fontSize: 16,
+    fontSize: 25,
+    fontWeight: 'bold',
     textAlign: "center",
   },
 });
