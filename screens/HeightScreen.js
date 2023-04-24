@@ -76,9 +76,10 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: "center",
         justifyContent: "top",
-        marginTop: 60,
+        backgroundColor: "#fff",
       },
     welcome: {
+        paddingTop: 50,
         fontSize:50,
         fontWeight: '500',
         fontFamily: 'Helvetica',

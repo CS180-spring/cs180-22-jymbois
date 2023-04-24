@@ -35,11 +35,11 @@ const GenderScreen = () => {
             <Image style={styles.genderImageF} source={require("./images/female.png")} />
           </TouchableOpacity>
         </View>
-        <View style={styles.imageWrapperBot}>
+        {/*<View style={styles.imageWrapperBot}>
           <TouchableOpacity onPress={() => handleGenderSelection("Prefer Not To Say")}>
             <Image style={styles.genderImage} source={require("./images/other.png")} />
           </TouchableOpacity>
-        </View>
+        </View> */}
       </View>
       {gender && (
         <Text style={styles.selectedGenderText}>Selected gender: {gender}</Text>
@@ -60,14 +60,15 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "top",
     alignItems: "center",
-    marginTop: 60,
+    backgroundColor: "#fff",
   },
   welcome: {
+    marginTop: 60,
     fontSize:50,
     fontWeight: '500',
     fontFamily: 'Helvetica',
     color: '#333',
-    marginBottom: 15,
+    marginBottom: 35,
     color: "tan",
 },
   subheading:{
@@ -75,8 +76,8 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     color: '#333',
     textAlign: 'left',
-    color:"black",
-    marginBottom: 15,
+    color:"tan",
+    marginBottom: 30,
     marginRight: 225,
   },
   genderContainer: {
@@ -113,7 +114,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginTop: 20,
     marginBottom: 10,
-    color: "tan",
+    color: "black",
   },
   nextButton: {
     width: "70%",
