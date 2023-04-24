@@ -1,4 +1,4 @@
-import { View, Text, Image, StyleSheet, Switch } from 'react-native';
+import { View, Text, Image, StyleSheet, Switch, Button, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { FontAwesome } from '@expo/vector-icons';
 import { useDark, usePushNotifications, useVacation } from '../hooks/useSwitch';
@@ -34,9 +34,14 @@ const SettingScreen = () => {
           />
         </View>
       ))}
-      <Text style={{marginTop: 90, marginBottom: 0, fontSize: 12}}>POWERED BY</Text>
+
+      <TouchableOpacity style={styles.logout}>
+        <Text style={{color: '#fff', fontSize: 16, fontWeight: 'bold'}}>LOG OUT</Text>
+      </TouchableOpacity>
+      
+      <Text style={{marginTop: 30, marginBottom: 0, fontSize: 10}}>POWERED BY</Text>
       <Image 
-        style={ {width: 150, height: 200, marginTop: -47}}
+        style={ {width: 120, height: 200, marginTop: -60}}
         resizeMode='contain'
         source={require("./images/RealLogo.png")} />
     </View>
@@ -49,7 +54,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    marginTop: 40,
+    marginTop: 25,
   },
   image: {
     width: '34%',
@@ -61,6 +66,16 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 50,
     marginTop: -20,
+  },
+  logout:{
+    width: "70%",
+		height: 50,
+		backgroundColor: "#d2b48c",
+		justifyContent: "center",
+		alignItems: "center",
+		borderRadius: 20,
+		marginBottom: 15,
+    marginTop: 50,
   },
   notificationContainer: {
     flexDirection: 'row',

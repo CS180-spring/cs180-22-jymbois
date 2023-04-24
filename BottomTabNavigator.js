@@ -3,9 +3,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from './screens/HomeScreen';
 import CalenderScreen from './screens/CalenderScreen';
 import ProgressScreen from './screens/ProgressScreen';
-import SettingsScreen from './screens/SettingsScreen';
+import SettingsScreen from './screens/ProfileScreen';
 import { AntDesign } from '@expo/vector-icons';
 import { Fontisto } from '@expo/vector-icons';
+import { SimpleLineIcons } from '@expo/vector-icons'; 
 
 const Tab = createBottomTabNavigator();
 
@@ -50,11 +51,11 @@ const BottomTabNavigator = () => {
         }}
       />
       <Tab.Screen 
-        name="Settings" 
+        name="Profile" 
         component={SettingsScreen} 
         options={{
           tabBarIcon: ({color, size}) => (
-            <AntDesign name='setting' color={color} size={size}/>
+            <AntDesign name='user' color={color} size={size}/>
           ),
         }}
       />
