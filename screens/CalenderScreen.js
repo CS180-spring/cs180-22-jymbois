@@ -1,12 +1,258 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import React, {useState} from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, Modal, TextInput, ScrollView} from 'react-native';
+import InputSpinner from 'react-native-input-spinner';
+import  Calendar  from 'react-native-calendars/src/calendar';
 
 const CalenderScreen = () => {
+  const [showModal1, setShowModal1] = useState(false);
+  const [showModal2, setShowModal2] = useState(false);
+  const [recordDate, setRecordDate] = useState("");
+  const [text, onChangeText] = React.useState('');
+  const [nameOfExercise, setNameOfExercise] = useState('');
+  const [setNumbers, setSetNumbers] = useState(0);
+  
+  const handleNumberChange = (text) => {
+    if (/^\d{0,2}$/.test(text)) { // Regex pattern to validate input between 1 and 100
+      setSetNumbers(text);
+      //console.log(setNumbers);
+    }
+  };
+
+  const handleDayPress = (day) => {
+    //console.log(day.dateString);
+    setRecordDate(day.dateString);
+    console.log(recordDate);
+    setShowModal1(false);
+    setShowModal2(true);
+  };
   return (
-    <View>
-      <Text>I am the calender screen</Text>
+    
+    <ScrollView >  
+    <Text style={styles.titleText}>Select the date to record your work out gym rat!</Text>
+      <Calendar 
+        style={styles.calendar} 
+        onDayPress={ handleDayPress}
+        initialDate={'2023-04-21'}
+        minDate={"2023-04-01"}
+        maxDate={"2023-12-31"}
+        hideExtraDays={true}
+      />
+
+      <Modal
+         visible={showModal2} animationType="fade"
+         style ={styles.exerciseLogModal} 
+      >
+       <ScrollView>
+       {
+        recordDate && (<Text style={{marginTop: 100, marginLeft: 30 ,color: 'tan', fontWeight: 800, fontSize: 50, }}>{recordDate}</Text>)
+        
+       }
+       <TextInput
+        placeholder= "Exercise Name"
+        style={styles.input}
+        onChangeText={onChangeText}
+        value={text}
+
+      />
+       <View style={styles.setContainer}>
+       <Text style={{color:"tan", fontSize: 16, fontWeight: 800}}>No. Set</Text>
+       <InputSpinner style={styles.numberInput}
+         max={10}
+         min={0}
+         color={"#d2b48c"}
+         onChange={handleNumberChange}/>
+       </View>
+
+      <View style={styles.exerciseLogs}>
+        <Text style={styles.textStyle}>Set {setNumbers}</Text>
+          <View styles={styles.log}>
+            <Text style={styles.textStyle}>Weight</Text>
+            
+            <InputSpinner style={styles.numberInput1}
+            max={1000}
+            min={0}
+            skin="clean"
+            />
+            </View >
+            <View style={styles.log}>
+            <Text style={styles.textStyle}>No. Reps</Text>
+            
+            <InputSpinner style={styles.numberInput1}
+            max={1000}
+            min={0}
+            skin="clean"
+            />
+        </View>
+      </View>
+       </ScrollView>
+      </Modal>
+    </ScrollView>
+  );
+}
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    margin: 20,
+  },
+  button1: {
+    backgroundColor: 'tan', 
+    borderRadius: 10, 
+    margin: 40,
+    padding: 10,
+    width: 200,
+    alignItems: 'center'
+  },
+  button2: {
+    backgroundColor: 'tan', 
+    borderRadius: 10, 
+    margin: 40,
+    marginLeft:100,
+    padding: 10,
+    width: 200,
+    alignItems: 'center'
+  },
+  buttonText: {
+    color: 'white', 
+    fontSize: 22,
+  },
+  calendarModal: {
+   flex: 1,
+   backgroundColor: 'black',
+   alignItems: 'center',
+   justifyContent: 'center',
+  },
+  calendar: {
+    borderRadius: 10,
+    elevation: 4,
+    width: '100%', // Set the width of the calendar to 100%
+    maxWidth: 400, // Set a maximum width for the calendar
+    maxHeight: 600, // Set a maximum height for the calendar
+  },
+  titleText: {
+    color: 'tan',
+    fontWeight: 800,
+    fontSize: 15,
+    marginLeft: 5,
+    
+  },
+  exerciseLogModal: {
+  flex: 1,
+   backgroundColor: 'black',
+   alignItems: 'center',
+   justifyContent: 'center',
+  },
+  input: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    padding: 10,
+    borderColor: "tan",
+    borderRadius: 10,
+  },
+  numberInput: {
+    width: 170,
+    height: 40,
+    borderWidth: 1,
+    borderColor: 'tan',
+    paddingHorizontal: 10,
+    textColor: 'tan',
+  },
+  setContainer: {
+    display: "flex",
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    alignItems: "center",
+    marginTop: 10,
+  },
+  numberInput1: {
+    width: 110,
+    height: 40,
+  },
+  exerciseLogs: {
+    flex: 1,
+    display: "flex",
+    flexDirection: 'row',
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    marginTop: 20,
+  },
+  log: {
+    display: "flex",
+    flexDirection: 'column',
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 10,
+  },
+  textStyle:{
+    color: "tan", 
+    fontWeight:800,
+  },
+});
+
+
+export default CalenderScreen;
+
+/*
+const CalenderScreen = () => {
+  const [showModal, setShowModal] = useState(false);
+  return (
+    
+    <View style={styles.container}>
+
+
+      <TouchableOpacity 
+      onPress={() => setShowModal(true)}
+      style={ styles.button}>
+          <Text style={{ color: 'white', fontSize: 22}}>Show Calendar</Text>
+
+      </TouchableOpacity>
+      
+  
+      <Modal visible={showModal} animationType="fade">
+      <TouchableOpacity 
+        onPress={() => setShowModal(false)}
+        style={styles.button}> 
+       <Text style={ styles.buttonText }>Close Calendar</Text>
+      </TouchableOpacity>
+        
+      <Calendar 
+        style={styles.calendar} 
+        onDaypress={date => console.log(date)}
+        initialDate={'2023-04-21'}
+        minDate={"2023-04-01"}
+        maxDate={"2023-12-31"}
+      />
+      </Modal>
     </View>
   );
-};
-
-export default CalenderScreen
+}
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+  },
+  button: {
+    backgroundColor: 'black', 
+    borderRadius: 10, 
+    margin: 40,
+    padding: 10,
+    width: 200,
+    alignItems: 'center'
+  },
+  buttonText: {
+    color: 'white', 
+    fontSize: 22,
+  },
+  calendar: {
+    borderRadius: 10, 
+    elevation: 4, 
+    margin: 40,
+    marginTop: 100,
+  },
+});
+*/
