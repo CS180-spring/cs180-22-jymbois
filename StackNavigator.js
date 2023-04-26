@@ -49,13 +49,14 @@ import GenderScreen from "./screens/GenderScreen";
 import AgeScreen from "./screens/AgeScreen";
 import HeightScreen from "./screens/HeightScreen";
 import WeightScreen from "./screens/WeightScreen";
+//import GraphScreen from "./screens/GraphScreen";
 import PageDots from "./screens/PageDots";
 import BottomTabNavigator from "./BottomTabNavigator";
 
 const Stack = createNativeStackNavigator();
 
 const StackNavigator = () => {
-	const user = false; // placeholder for when we actually implement login
+	const user = true; // placeholder for when we actually implement login
 	return (
 		<Stack.Navigator
 			screenOptions={{

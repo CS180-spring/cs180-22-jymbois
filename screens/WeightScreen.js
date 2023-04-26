@@ -33,38 +33,11 @@ const WeightScreen = () => {
 	};
 	const [sliderValue, setSliderValue] = useState(0);
 
-	const weights = [
-		{ id: "1", weight: "10" },
-		{ id: "2", weight: "20" },
-		{ id: "3", weight: "30" },
-		{ id: "4", weight: "40" },
-		{ id: "5", weight: "50" },
-		{ id: "6", weight: "60" },
-		{ id: "7", weight: "70" },
-		{ id: "8", weight: "80" },
-		{ id: "9", weight: "90" },
-		{ id: "10", weight: "100" },
-		{ id: "11", weight: "110" },
-		{ id: "12", weight: "120" },
-		{ id: "13", weight: "130" },
-		{ id: "14", weight: "140" },
-		{ id: "15", weight: "150" },
-		{ id: "16", weight: "160" },
-		{ id: "17", weight: "170" },
-		{ id: "18", weight: "180" },
-		{ id: "19", weight: "190" },
-		{ id: "20", weight: "200" },
-		{ id: "21", weight: "210" },
-		{ id: "22", weight: "220" },
-		{ id: "23", weight: "230" },
-		{ id: "24", weight: "240" },
-		{ id: "25", weight: "250" },
-		{ id: "26", weight: "260" },
-		{ id: "27", weight: "270" },
-		{ id: "28", weight: "280" },
-		{ id: "29", weight: "290" },
-		{ id: "30", weight: "300" },
-	];
+	const weights = [];
+		for (let i = 0; i <= 300; i++) {
+  			weights.push({ id: i.toString(), weight: i.toString() });
+	}
+
 
 	const renderItem = ({ item }) => (
 		<TouchableOpacity
@@ -222,4 +195,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default WeightScreen;
+export default WeightScreen
