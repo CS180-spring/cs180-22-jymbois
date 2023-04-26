@@ -18,6 +18,10 @@ const CalenderScreen = () => {
     }
   };
 
+  const exitCalendarModal = ()=>{
+    setShowModal2(false);
+    setSetNumbers(0);
+  }
   const handleDayPress = (day) => {
     //console.log(day.dateString);
     setRecordDate(day.dateString);
@@ -25,6 +29,36 @@ const CalenderScreen = () => {
     setShowModal1(false);
     setShowModal2(true);
   };
+
+  const set = [];
+  for(let i = 1; i <= setNumbers; i++){
+    set.push(
+      <View style={styles.exerciseLogs} key={i}>
+        <Text style={styles.textStyle}>Set {i}</Text>
+          
+          <View styles={styles.log}>
+            <Text style={{color: "tan", fontWeight:800, marginLeft: 28}}>Weight</Text>
+            
+            <InputSpinner style={styles.numberInput1}
+            max={1000}
+            min={0}
+            skin="clean"
+            />
+            </View >
+
+            <View style={{color: "tan", fontWeight:800, marginLeft:0}}>
+            <Text style={{color: "tan", fontWeight:800, marginLeft: 23}}>No. Reps</Text>
+            
+            <InputSpinner style={styles.numberInput1}
+            max={1000}
+            min={0}
+            skin="clean"
+            />
+            </View>
+        </View>
+    );
+  }
+
   return (
     
     <ScrollView >  
@@ -63,27 +97,22 @@ const CalenderScreen = () => {
          onChange={handleNumberChange}/>
        </View>
 
-      <View style={styles.exerciseLogs}>
-        <Text style={styles.textStyle}>Set {setNumbers}</Text>
-          <View styles={styles.log}>
-            <Text style={styles.textStyle}>Weight</Text>
-            
-            <InputSpinner style={styles.numberInput1}
-            max={1000}
-            min={0}
-            skin="clean"
-            />
-            </View >
-            <View style={styles.log}>
-            <Text style={styles.textStyle}>No. Reps</Text>
-            
-            <InputSpinner style={styles.numberInput1}
-            max={1000}
-            min={0}
-            skin="clean"
-            />
-        </View>
-      </View>
+       {set}
+
+       <View style={styles.buttons}>
+       <TouchableOpacity 
+        onPress={exitCalendarModal}
+        style={styles.button2}> 
+       <Text style={ styles.buttonText }>Save</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity 
+        onPress={exitCalendarModal}
+        style={styles.button2}> 
+       <Text style={ styles.buttonText }>Cancel</Text>
+      </TouchableOpacity>
+       </View>
+
        </ScrollView>
       </Modal>
     </ScrollView>
@@ -102,17 +131,24 @@ const styles = StyleSheet.create({
     borderRadius: 10, 
     margin: 40,
     padding: 10,
-    width: 200,
+    width: 1000,
     alignItems: 'center'
   },
   button2: {
     backgroundColor: 'tan', 
     borderRadius: 10, 
     margin: 40,
-    marginLeft:100,
     padding: 10,
-    width: 200,
+    width: 100,
     alignItems: 'center'
+  },
+  buttons:{
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    maxWidth: '100%',
+
   },
   buttonText: {
     color: 'white', 
@@ -178,11 +214,16 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     alignItems: "center",
     marginTop: 20,
+    height: 100,
+    borderWidth: 1,
+    borderColor: "tan",
+    margin: 10,
+    borderRadius: 20,
   },
   log: {
     display: "flex",
     flexDirection: 'column',
-    justifyContent: "center",
+    justifyContent: "space-evenly",
     alignItems: "center",
     marginTop: 10,
   },
@@ -196,63 +237,27 @@ const styles = StyleSheet.create({
 export default CalenderScreen;
 
 /*
-const CalenderScreen = () => {
-  const [showModal, setShowModal] = useState(false);
-  return (
-    
-    <View style={styles.container}>
+<View style={styles.exerciseLogs}>
+        <Text style={styles.textStyle}>Set {setNumbers}</Text>
+          
+          <View styles={styles.log}>
+            <Text style={{color: "tan", fontWeight:800, marginLeft: 28}}>Weight</Text>
+            
+            <InputSpinner style={styles.numberInput1}
+            max={1000}
+            min={0}
+            skin="clean"
+            />
+            </View >
 
-
-      <TouchableOpacity 
-      onPress={() => setShowModal(true)}
-      style={ styles.button}>
-          <Text style={{ color: 'white', fontSize: 22}}>Show Calendar</Text>
-
-      </TouchableOpacity>
-      
-  
-      <Modal visible={showModal} animationType="fade">
-      <TouchableOpacity 
-        onPress={() => setShowModal(false)}
-        style={styles.button}> 
-       <Text style={ styles.buttonText }>Close Calendar</Text>
-      </TouchableOpacity>
-        
-      <Calendar 
-        style={styles.calendar} 
-        onDaypress={date => console.log(date)}
-        initialDate={'2023-04-21'}
-        minDate={"2023-04-01"}
-        maxDate={"2023-12-31"}
-      />
-      </Modal>
-    </View>
-  );
-}
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-  },
-  button: {
-    backgroundColor: 'black', 
-    borderRadius: 10, 
-    margin: 40,
-    padding: 10,
-    width: 200,
-    alignItems: 'center'
-  },
-  buttonText: {
-    color: 'white', 
-    fontSize: 22,
-  },
-  calendar: {
-    borderRadius: 10, 
-    elevation: 4, 
-    margin: 40,
-    marginTop: 100,
-  },
-});
+            <View style={{color: "tan", fontWeight:800, marginLeft:0}}>
+            <Text style={{color: "tan", fontWeight:800, marginLeft: 23}}>No. Reps</Text>
+            
+            <InputSpinner style={styles.numberInput1}
+            max={1000}
+            min={0}
+            skin="clean"
+            />
+            </View>
+        </View>
 */
