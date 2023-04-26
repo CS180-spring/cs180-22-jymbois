@@ -113,13 +113,6 @@ const StackNavigator = () => {
 							headerTintColor: "#d2b48c",
 						}}
 					/>
-					{/* <Stack.Screen
-						name="Graph"
-						component={GraphScreen}
-						options={{
-							headerTintColor: "#d2b48c",
-						}}
-					/> */}
 				</>
 			)}
 		</Stack.Navigator>
