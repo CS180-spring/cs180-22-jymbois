@@ -55,6 +55,7 @@ import HeightScreen from './screens/HeightScreen';
 import WeightScreen from './screens/WeightScreen';
 import PageDots from './screens/PageDots';
 import BottomTabNavigator from './BottomTabNavigator';
+import HomeScreen from './screens/HomeScreen';
 
 
 const Stack = createNativeStackNavigator();
