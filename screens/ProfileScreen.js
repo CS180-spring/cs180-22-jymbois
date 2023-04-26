@@ -1,4 +1,4 @@
-import { View, Text, Image, StyleSheet, Switch } from 'react-native';
+import { View, Text, Image, StyleSheet, Switch, Button, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { FontAwesome } from '@expo/vector-icons';
 import { useDark, usePushNotifications, useVacation } from '../hooks/useSwitch';
@@ -27,15 +27,21 @@ const SettingScreen = () => {
           <Text style={styles.notificationText}>{label}</Text>
           <Switch
             trackColor={{ false: "#767577", true: "#8B3A3A" }}
-            thumbColor={value ? "#f5dd4b" : "#f4f3f4"}
+            thumbColor={value ? "#f4f3f4" : "#f4f3f4"}
             ios_backgroundColor="#3e3e3e"
             onValueChange={toggle}
             value={value}
           />
         </View>
       ))}
+
+      <TouchableOpacity style={styles.logout}>
+        <Text style={{color: '#fff', fontSize: 16, fontWeight: 'bold'}}>LOG OUT</Text>
+      </TouchableOpacity>
+      
+      <Text style={{marginTop: 30, marginBottom: 0, fontSize: 10}}>POWERED BY</Text>
       <Image 
-        style={ {width: 200, height: 200, marginTop: 20}}
+        style={ {width: 120, height: 200, marginTop: -60}}
         resizeMode='contain'
         source={require("./images/RealLogo.png")} />
     </View>
@@ -48,7 +54,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    marginTop: 40,
+    marginTop: 25,
   },
   image: {
     width: '34%',
@@ -61,13 +67,26 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     marginTop: -20,
   },
+  logout:{
+    width: "70%",
+		height: 50,
+		backgroundColor: "#d2b48c",
+		justifyContent: "center",
+		alignItems: "center",
+		borderRadius: 20,
+		marginBottom: 15,
+    marginTop: 50,
+  },
   notificationContainer: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 40,
+    width: '100%',
+    marginTop: 45,
+    paddingHorizontal: 70,
   },
   notificationText: {
-    marginRight: 10,
     fontSize: 18,
+    fontWeight: 'bold',
   },
 });
