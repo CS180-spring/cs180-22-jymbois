@@ -195,4 +195,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default WeightScreen;
+export default WeightScreen

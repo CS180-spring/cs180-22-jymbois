@@ -1,14 +1,39 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack'; // import Stack from createStackNavigator
 import HomeScreen from './screens/HomeScreen';
 import CalenderScreen from './screens/CalenderScreen';
 import ProgressScreen from './screens/ProgressScreen';
+import GraphScreen from './screens/GraphScreen';
 import SettingsScreen from './screens/ProfileScreen';
 import { AntDesign } from '@expo/vector-icons';
 import { Fontisto } from '@expo/vector-icons';
 import { SimpleLineIcons } from '@expo/vector-icons'; 
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
+const ProgressStack = () => { //added this so i can nest in the Progress screen
+  return (
+    <Stack.Navigator>
+      <Stack.Screen 
+        name="Progress" 
+        component={ProgressScreen} 
+        options={{
+          headerShown: false
+        }}
+      />
+      <Stack.Screen 
+        name="Graph Screen" 
+        component={GraphScreen} 
+        options={{
+          title: 'Graph Screen',
+          headerTintColor: 'white',
+          headerStyle: { backgroundColor: '#8B3A3A' }
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
 
 const BottomTabNavigator = () => {
   return (
@@ -43,7 +68,7 @@ const BottomTabNavigator = () => {
       />
       <Tab.Screen 
         name="Progress" 
-        component={ProgressScreen} 
+        component={ProgressStack} 
         options={{
           tabBarIcon: ({ color, size }) => (
             <AntDesign name="linechart" color={color} size={size} />

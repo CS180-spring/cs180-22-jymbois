@@ -22,7 +22,7 @@ const ProgressScreen = () => {
 
   const handleNextPress = () => {
     console.log("Next button pressed. Weight in pounds:", weight);
-    navigation.navigate("Graph");
+    navigation.navigate("Graph Screen");
   };
 
   return (

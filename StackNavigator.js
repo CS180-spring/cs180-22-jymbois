@@ -49,7 +49,7 @@ import GenderScreen from "./screens/GenderScreen";
 import AgeScreen from "./screens/AgeScreen";
 import HeightScreen from "./screens/HeightScreen";
 import WeightScreen from "./screens/WeightScreen";
-import GraphScreen from "./screens/GraphScreen";
+//import GraphScreen from "./screens/GraphScreen";
 import PageDots from "./screens/PageDots";
 import BottomTabNavigator from "./BottomTabNavigator";
 
@@ -113,13 +113,13 @@ const StackNavigator = () => {
 							headerTintColor: "#d2b48c",
 						}}
 					/>
-					<Stack.Screen
+					{/* <Stack.Screen
 						name="Graph"
 						component={GraphScreen}
 						options={{
 							headerTintColor: "#d2b48c",
 						}}
-					/>
+					/> */}
 				</>
 			)}
 		</Stack.Navigator>
