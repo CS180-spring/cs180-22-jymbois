@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Dimensions } from "react-native";
 import React from "react";
 import { Button } from "react-native";
 import { ref, set } from "firebase/database";
@@ -35,6 +35,7 @@ const HomeScreen = () => {
 						</View>
 						<View style={styles.rightContent2}>
 							<Text style={styles.subtitle}>Time Spent:</Text>
+							<Text style={styles.goalWeight}>60 min</Text>
 						</View>
 					</View>
 				</View>
@@ -77,7 +78,7 @@ const styles = StyleSheet.create({
 			height: 2,
 		},
 		shadowOpacity: 0.15,
-		shadowRadius: 5,
+		shadowRadius: 6,
 		elevation: 5,
 		minHeight: 160,
 	},
@@ -100,9 +101,9 @@ const styles = StyleSheet.create({
 			height: 2,
 		},
 		shadowOpacity: 0.15,
-		shadowRadius: 5,
+		shadowRadius: 6,
 		elevation: 5,
-		maxHeight: 73,
+		maxHeight: 74,
 		alignItems: "center",
 	},
 	rightContent2: {
@@ -118,11 +119,11 @@ const styles = StyleSheet.create({
 			height: 2,
 		},
 		shadowOpacity: 0.15,
-		shadowRadius: 5,
+		shadowRadius: 6,
 		elevation: 5,
 		maxHeight: 73,
 		alignItems: "center",
-		marginBottom: 416,
+		marginBottom: 414,
 	},
 	subtitle: {
 		fontSize: 16,
