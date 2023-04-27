@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Dimensions } from "react-native";
 import React from "react";
 import { Button } from "react-native";
 import { ref, set } from "firebase/database";
@@ -19,15 +19,18 @@ const HomeScreen = () => {
 				<Text style={styles.title}>Welcome Back</Text>
 			</View>
 			<View style={styles.contentContainer}>
+			
 				<View style={[styles.leftContent, { height: containerHeight }]}>
 					<Text style={styles.subtitle}>Today's workouts:</Text>
+					<ScrollView>
 					{workouts.map((workout) => (
 						<Text style={styles.listItem} key={workout}>
 							- {workout}
 						</Text>
 					))}
+					</ScrollView>
 				</View>
-				<View style={styles.rightContainer}>
+				<View style={styles.rightContainer }>
 					<View style={styles.rightContent}>
 						<Text style={styles.subtitle}>Goal weight:</Text>
 						<Text style={styles.goalWeight}>140 lbs</Text>
