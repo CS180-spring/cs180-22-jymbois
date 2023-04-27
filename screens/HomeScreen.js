@@ -14,36 +14,39 @@ const HomeScreen = () => {
 	const containerHeight = numWorkouts * 24 + 32; // 24 is the height of each workout item, and 32 is the padding of the container
 
 	return (
-		<View style={styles.container}>
-			<View style={styles.titleContainer}>
-				<Text style={styles.title}>Welcome Back</Text>
-			</View>
-			<View style={styles.contentContainer}>
-				<View style={[styles.leftContent, { height: containerHeight }]}>
-					<Text style={styles.subtitle}>Today's workouts:</Text>
-					{workouts.map((workout) => (
-						<Text style={styles.listItem} key={workout}>
-							- {workout}
-						</Text>
-					))}
+		<ScrollView>
+			<View style={styles.container}>
+				<View style={styles.titleContainer}>
+					<Text style={styles.title}>Welcome Back</Text>
 				</View>
-				<View style={styles.rightContainer}>
-					<View style={styles.rightContent}>
-						<Text style={styles.subtitle}>Goal weight:</Text>
-						<Text style={styles.goalWeight}>140 lbs</Text>
+				<View style={styles.contentContainer}>
+					<View style={[styles.leftContent, { height: containerHeight }]}>
+						<Text style={styles.subtitle}>Today's workouts:</Text>
+						{workouts.map((workout) => (
+							<Text style={styles.listItem} key={workout}>
+								- {workout}
+							</Text>
+						))}
 					</View>
-					<View style={styles.rightContent2}>
-						<Text style={styles.subtitle}>Time Spent:</Text>
+					<View style={styles.rightContainer}>
+						<View style={styles.rightContent}>
+							<Text style={styles.subtitle}>Goal weight:</Text>
+							<Text style={styles.goalWeight}>140 lbs</Text>
+						</View>
+						<View style={styles.rightContent2}>
+							<Text style={styles.subtitle}>Time Spent:</Text>
+						</View>
 					</View>
 				</View>
 			</View>
-		</View>
+		</ScrollView>
 	);
 };
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: "#FFFFFF",
+		height: 750,
 	},
 	titleContainer: {
 		flex: 1,
@@ -83,7 +86,7 @@ const styles = StyleSheet.create({
 		flexDirection: "column",
 		justifyContent: "space-between",
 		alignItems: "center",
-		marginRight: -90,
+		marginRight: -60,
 	},
 	rightContent: {
 		flex: 1,
@@ -99,7 +102,7 @@ const styles = StyleSheet.create({
 		shadowOpacity: 0.15,
 		shadowRadius: 5,
 		elevation: 5,
-		maxHeight: 75,
+		maxHeight: 73,
 		alignItems: "center",
 	},
 	rightContent2: {
@@ -117,9 +120,9 @@ const styles = StyleSheet.create({
 		shadowOpacity: 0.15,
 		shadowRadius: 5,
 		elevation: 5,
-		maxHeight: 75,
+		maxHeight: 73,
 		alignItems: "center",
-		marginBottom: 413,
+		marginBottom: 416,
 	},
 	subtitle: {
 		fontSize: 16,
