@@ -19,7 +19,6 @@ const HomeScreen = () => {
 				<Text style={styles.title}>Welcome Back</Text>
 			</View>
 			<View style={styles.contentContainer}>
-			
 				<View style={[styles.leftContent, { height: containerHeight }]}>
 					<Text style={styles.subtitle}>Today's workouts:</Text>
 					<ScrollView>
@@ -30,7 +29,7 @@ const HomeScreen = () => {
 					))}
 					</ScrollView>
 				</View>
-				<View style={styles.rightContainer }>
+				<View style={styles.rightContainer}>
 					<View style={styles.rightContent}>
 						<Text style={styles.subtitle}>Goal weight:</Text>
 						<Text style={styles.goalWeight}>140 lbs</Text>
@@ -47,6 +46,7 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: "#FFFFFF",
+		height: 750,
 	},
 	titleContainer: {
 		flex: 1,
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
 		flexDirection: "column",
 		justifyContent: "space-between",
 		alignItems: "center",
-		marginRight: -90,
+		marginRight: -60,
 	},
 	rightContent: {
 		flex: 1,
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
 		shadowOpacity: 0.15,
 		shadowRadius: 5,
 		elevation: 5,
-		maxHeight: 75,
+		maxHeight: 73,
 		alignItems: "center",
 	},
 	rightContent2: {
@@ -120,9 +120,9 @@ const styles = StyleSheet.create({
 		shadowOpacity: 0.15,
 		shadowRadius: 5,
 		elevation: 5,
-		maxHeight: 75,
+		maxHeight: 73,
 		alignItems: "center",
-		marginBottom: 413,
+		marginBottom: 416,
 	},
 	subtitle: {
 		fontSize: 16,
