@@ -2,12 +2,19 @@ import { View, Text, Image, StyleSheet, Switch, Button, TouchableOpacity } from 
 import React from 'react';
 import { FontAwesome } from '@expo/vector-icons';
 import { useDark, usePushNotifications, useVacation } from '../hooks/useSwitch';
+import { auth } from "../configuration/firebaseConfig"; //	Firebase Operations
 
 const SettingScreen = () => {
   const [isDark, toggleDark] = useDark(false);
   const [isVacation, toggleVacation] = useVacation(false);
   const [isPushNotifications, togglePushNotifications] = usePushNotifications(false);
   // still need to do this for the username and for photo uploads
+
+  function signOut()
+  {
+    auth.signOut()
+    console.log("Signed Out")
+  }
 
   return (
     <View style={styles.container}>
@@ -35,7 +42,7 @@ const SettingScreen = () => {
         </View>
       ))}
 
-      <TouchableOpacity style={styles.logout}>
+      <TouchableOpacity style={styles.logout} onPress={signOut}>
         <Text style={{color: '#fff', fontSize: 16, fontWeight: 'bold'}}>LOG OUT</Text>
       </TouchableOpacity>
       

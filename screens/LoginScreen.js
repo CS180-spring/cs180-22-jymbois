@@ -72,7 +72,6 @@ const LoginScreen = () => {
           .then((userCredential) => { //  Successful sign in
             const user = userCredential.user;
             console.log("Logged in with: ", email);
-			navigation.navigate("Home")	//	Navigate to User Home Page :)
           }).catch((error) => { //  Error, set to send alert when error occurs
 
 			//	Maybe set up message here instead of just an alert window?
