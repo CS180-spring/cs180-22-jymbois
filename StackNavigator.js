@@ -75,42 +75,42 @@ const StackNavigator = () => {
 						name="Login"
 						component={LoginScreen}
 						options={{
-							headerTintColor: "#d2b48c",
+							headerTintColor: "#ffff",
 						}}
 					/>
 					<Stack.Screen
 						name="Register"
 						component={RegisterScreen}
 						options={{
-							headerTintColor: "#d2b48c",
+							headerTintColor: "#FFFF",
 						}}
 					/>
 					<Stack.Screen
 						name="Gender"
 						component={GenderScreen}
 						options={{
-							headerTintColor: "#d2b48c",
+							headerTintColor: "#FFFF",
 						}}
 					/>
 					<Stack.Screen
 						name="Age"
 						component={AgeScreen}
 						options={{
-							headerTintColor: "#d2b48c",
+							headerTintColor: "#FFFF",
 						}}
 					/>
 					<Stack.Screen
 						name="Height"
 						component={HeightScreen}
 						options={{
-							headerTintColor: "#d2b48c",
+							headerTintColor: "#FFFF",
 						}}
 					/>
 					<Stack.Screen
 						name="Weight"
 						component={WeightScreen}
 						options={{
-							headerTintColor: "#d2b48c",
+							headerTintColor: "#FFFF",
 						}}
 					/>
 				</>
