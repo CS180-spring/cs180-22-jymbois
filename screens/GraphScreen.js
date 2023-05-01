@@ -84,7 +84,6 @@ const GraphScreen = ({ route }) => {
             </View>
           </View>
         </Modal>
-        
       </View>
     </TouchableWithoutFeedback>
   );
@@ -100,7 +99,7 @@ const styles = StyleSheet.create({
     height: 200,
     borderRadius: 100,
     backgroundColor: '#F2F2F2',
-    alignItems: 'center',
+    alignItems: 'top',
     justifyContent: 'center',
     marginBottom: 30,
   },
