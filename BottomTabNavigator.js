@@ -54,7 +54,7 @@ const BottomTabNavigator = () => {
         }}
       />
       <Tab.Screen 
-        name="Stocks" 
+        name="Progress" 
         component={ProgressStack} 
         options={{
           tabBarIcon: ({ color, size }) => (
