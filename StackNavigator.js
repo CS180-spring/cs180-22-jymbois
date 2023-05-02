@@ -89,7 +89,7 @@ const StackNavigator = () => {
 						name="Gender"
 						component={GenderScreen}
 						options={{
-							headerTintColor: "grey",
+							headerTintColor: "#grey",
 						}}
 					/>
 					<Stack.Screen

@@ -10,6 +10,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { Fontisto } from '@expo/vector-icons';
 import { SimpleLineIcons } from '@expo/vector-icons'; 
 
+
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
@@ -30,7 +31,7 @@ const BottomTabNavigator = () => {
         headerStyle: { backgroundColor: 'white' },
         headerTintColor: 'grey',
         tabBarInactiveTintColor: 'grey',
-        tabBarActiveTintColor: '#8BC34A',
+        tabBarActiveTintColor: '#8B3A3A',
         tabBarActiveBackgroundColor: 'white'
       }}
     >
