@@ -40,7 +40,7 @@ const SettingScreen = () => {
         <View key={label} style={styles.notificationContainer}>
           <Text style={styles.notificationText}>{label}</Text>
           <Switch
-            trackColor={{ false: "#767577", true: "#8B3A3A" }}
+            trackColor={{ false: "#767577", true: "#8BC34A" }}
             thumbColor={value ? "#f4f3f4" : "#f4f3f4"}
             ios_backgroundColor="#3e3e3e"
             onValueChange={toggle}
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     borderRadius: 70,
   },
   editIconContainer: {
-    backgroundColor: '#8B3A3A',
+    backgroundColor: '#8BC34A',
     padding: 8,
     borderRadius: 50,
     marginTop: -20,
