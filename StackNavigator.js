@@ -64,11 +64,13 @@ const StackNavigator = () => {
 			}}
 		>
 			{user ? (
-				<Stack.Screen
-					name="BottomTabNavigator"
-					component={BottomTabNavigator}
-					options={{ headerShown: false }}
-				/>
+				<>
+					<Stack.Screen
+						name="BottomTabNavigator"
+						component={BottomTabNavigator}
+						options={{ headerShown: false }}
+					/>
+				</>
 			) : (
 				<>
 					<Stack.Screen
