@@ -56,7 +56,7 @@ import BottomTabNavigator from "./BottomTabNavigator";
 const Stack = createNativeStackNavigator();
 
 const StackNavigator = () => {
-	const user = false; // placeholder for when we actually implement login
+	const user = true; // placeholder for when we actually implement login
 	return (
 		<Stack.Navigator
 			screenOptions={{
