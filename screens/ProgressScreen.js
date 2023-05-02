@@ -59,12 +59,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F2F2F2'
+    backgroundColor: 'white'
   },
   question: {
     fontSize: 30,
 		fontWeight: "bold",
-		color: "#B8860B",
+		color: "black",
 		marginBottom: 100,
   },
   inputContainer: {
@@ -72,28 +72,39 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: '80%',
     marginBottom: 30,
+    shadowColor: '#000',
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.2,
+  shadowRadius: 2,
+  elevation: 2
   },
   input: {
     fontSize: 20,
     height: 50,
     paddingLeft: 20,
+    
   },
   button: {
     width: "50%",
 		height: 50,
-		backgroundColor: "#B8860B",
+		backgroundColor: "blue",
 		justifyContent: "center",
 		alignItems: "center",
 		borderRadius: 25,
 		marginTop: 30,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 2
   },
   buttonText: {
-    color: "white",
+    color: "black",
 		fontSize: 25,
 		fontWeight: "bold",
   },
   enabled: {
-    backgroundColor: "#D2B48C",
+    backgroundColor: "white",
   },
   disabled: {
     backgroundColor: "gray",
@@ -106,7 +117,7 @@ const styles = StyleSheet.create({
 	},
   announcement:{
     fontWeight: "bold",
-    color: "red",
+    color: "blue",
     marginTop:20,
   }
 });

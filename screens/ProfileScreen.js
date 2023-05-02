@@ -26,7 +26,7 @@ const SettingScreen = () => {
         <View key={label} style={styles.notificationContainer}>
           <Text style={styles.notificationText}>{label}</Text>
           <Switch
-            trackColor={{ false: "#767577", true: "#8B3A3A" }}
+            trackColor={{ false: "#767577", true: "#8BC34A" }}
             thumbColor={value ? "#f4f3f4" : "#f4f3f4"}
             ios_backgroundColor="#3e3e3e"
             onValueChange={toggle}
@@ -36,12 +36,12 @@ const SettingScreen = () => {
       ))}
 
       <TouchableOpacity style={styles.logout}>
-        <Text style={{color: '#fff', fontSize: 16, fontWeight: 'bold'}}>LOG OUT</Text>
+        <Text style={{color: 'white', fontSize: 16, fontWeight: 'bold'}}>LOG OUT</Text>
       </TouchableOpacity>
       
-      <Text style={{marginTop: 30, marginBottom: 0, fontSize: 10}}>POWERED BY</Text>
+      <Text style={{marginTop: 20, marginBottom: 0, fontSize: 10}}>POWERED BY</Text>
       <Image 
-        style={ {width: 120, height: 200, marginTop: -60}}
+        style={ {width: 120, height: 200, marginTop: -65}}
         resizeMode='contain'
         source={require("./images/RealLogo.png")} />
     </View>
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     borderRadius: 70,
   },
   editIconContainer: {
-    backgroundColor: '#8B3A3A',
+    backgroundColor: '#8BC34A',
     padding: 8,
     borderRadius: 50,
     marginTop: -20,
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
   logout:{
     width: "70%",
 		height: 50,
-		backgroundColor: "#d2b48c",
+		backgroundColor: "#8BC34A",
 		justifyContent: "center",
 		alignItems: "center",
 		borderRadius: 20,

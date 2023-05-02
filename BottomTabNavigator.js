@@ -26,12 +26,12 @@ const BottomTabNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarStyle: { backgroundColor: 'tan', height: 80, size: 30 },
-        headerStyle: { backgroundColor: 'tan' },
-        headerTintColor: 'white',
-        tabBarInactiveTintColor: 'white',
-        tabBarActiveTintColor: '#8B3A3A',
-        tabBarActiveBackgroundColor: '#f5dd4b'
+        tabBarStyle: { backgroundColor: 'white', height: 80, size: 30 },
+        headerStyle: { backgroundColor: 'white' },
+        headerTintColor: 'grey',
+        tabBarInactiveTintColor: 'grey',
+        tabBarActiveTintColor: '#8BC34A',
+        tabBarActiveBackgroundColor: 'white'
       }}
     >
       <Tab.Screen 

@@ -140,7 +140,7 @@ const LoginScreen = () => {
 					style={styles.registerButton}
 					onPress={() => navigation.navigate("Register")}
 				>
-					<Text style={styles.registerButtonText}>Don't have an account? <Text style={{color: 'tan', fontWeight: 'bold'}}>Click here</Text></Text>
+					<Text style={styles.registerButtonText}>Don't have an account? <Text style={{color: 'black', fontWeight: 'bold'}}>Click here</Text></Text>
 				</TouchableOpacity>
 			</View>
 		</ScrollView>
@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
 		fontSize: 24,
 		marginBottom: 20,
 		textAlign: "center",
-		color: "#333",
+		color: "white",
 	},
 	input: {
 		justifyContent: "center",
@@ -215,14 +215,19 @@ const styles = StyleSheet.create({
 	button: {
 		width: "70%",
 		height: 50,
-		backgroundColor: "#d2b48c",
+		backgroundColor: "white",
 		justifyContent: "center",
 		alignItems: "center",
 		borderRadius: 20,
 		marginBottom: 15,
+		shadowColor: '#000',
+  		shadowOffset: { width: 0, height: 2 },
+  		shadowOpacity: 0.2,
+  		shadowRadius: 2,
+  		elevation: 2
 	},
 	buttonText: {
-		color: "#fff",
+		color: "black",
 		fontSize: 16,
 		fontWeight: "bold",
 	},

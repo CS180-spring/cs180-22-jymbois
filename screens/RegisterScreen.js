@@ -172,9 +172,9 @@ const RegisterScreen = () => {
         <View View style={styles.footer}>
           <Text>
           By signing up you agree our 
-          <Text style={{ color: 'tan' }}> Terms & Condition </Text> 
+          <Text style={{ color: 'black', fontWeight: 'bold' }}> Terms & Condition </Text> 
            and  
-          <Text style={{ color: 'tan' }}> Privacy Policy</Text>.
+          <Text style={{ color: 'black', fontWeight: 'bold' }}> Privacy Policy</Text>.
           </Text>
         </View>
       </View>
@@ -228,14 +228,19 @@ const styles = StyleSheet.create({
 	button: {
 		width: "70%",
 		height: 50,
-		backgroundColor: "#d2b48c",
+		backgroundColor: "white",
 		justifyContent: "center",
 		alignItems: "center",
 		borderRadius: 25,
 		marginBottom: 15,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 2
 	},
 	buttonText: {
-		color: "#fff",
+		color: "black",
 		fontSize: 16,
 		fontWeight: "bold",
 	},

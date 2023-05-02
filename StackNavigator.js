@@ -56,11 +56,11 @@ import BottomTabNavigator from "./BottomTabNavigator";
 const Stack = createNativeStackNavigator();
 
 const StackNavigator = () => {
-	const user = true; // placeholder for when we actually implement login
+	const user = false; // placeholder for when we actually implement login
 	return (
 		<Stack.Navigator
 			screenOptions={{
-				headerStyle: { backgroundColor: "tan" },
+				headerStyle: { backgroundColor: "white" },
 			}}
 		>
 			{user ? (
@@ -75,42 +75,42 @@ const StackNavigator = () => {
 						name="Login"
 						component={LoginScreen}
 						options={{
-							headerTintColor: "#d2b48c",
+							headerTintColor: "grey",
 						}}
 					/>
 					<Stack.Screen
 						name="Register"
 						component={RegisterScreen}
 						options={{
-							headerTintColor: "#d2b48c",
+							headerTintColor: "grey",
 						}}
 					/>
 					<Stack.Screen
 						name="Gender"
 						component={GenderScreen}
 						options={{
-							headerTintColor: "#d2b48c",
+							headerTintColor: "grey",
 						}}
 					/>
 					<Stack.Screen
 						name="Age"
 						component={AgeScreen}
 						options={{
-							headerTintColor: "#d2b48c",
+							headerTintColor: "grey",
 						}}
 					/>
 					<Stack.Screen
 						name="Height"
 						component={HeightScreen}
 						options={{
-							headerTintColor: "#d2b48c",
+							headerTintColor: "grey",
 						}}
 					/>
 					<Stack.Screen
 						name="Weight"
 						component={WeightScreen}
 						options={{
-							headerTintColor: "#d2b48c",
+							headerTintColor: "grey",
 						}}
 					/>
 				</>
