@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
 	subheading: {
 		fontSize: 24,
 		fontWeight: "bold",
-		color: "#333",
+		color: "grey",
 		textAlign: "center",
 		color: "black",
 		marginBottom: 30,
@@ -129,7 +129,6 @@ const styles = StyleSheet.create({
 	genderText: {
 		fontSize: 20,
 		fontWeight: "bold",
-		color: "#333",
 		textAlign: "center",
 		color: "black",
 		marginTop: 10,

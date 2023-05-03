@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
 		marginBottom: 50,
 		marginTop: -100,
     textAlign: "center",
+    fontFamily: 'OpenSans-Regular',
   },
   weightContainer: {
     justifyContent: 'center',
@@ -85,9 +86,7 @@ const styles = StyleSheet.create({
 	justifyContent: 'center',
 	alignItems: 'center',
 	overflow: 'hidden',
-	marginBottom: 30,
-  borderWidth: 2,
-  borderColor: 'black',
+	marginBottom: 20,
   },
   
   weightText: {
@@ -138,7 +137,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   disabled: {
-    backgroundColor: "gray",
+    opacity: 0,
   },
 
 });

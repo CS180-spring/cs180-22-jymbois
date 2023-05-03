@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
 		borderBottomColor: "#ccc",
 	},
 	inputFocused: {
-		borderBottomColor: "#d2b48c",
+		borderBottomColor: "#8BC34A",
 	},
 
 	button: {
