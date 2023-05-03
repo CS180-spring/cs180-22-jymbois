@@ -26,12 +26,6 @@ const ProgressStack = () => {
 };
 
 const BottomTabNavigator = () => {
-
-  if(auth.currentUser.metadata.creationTime == auth.currentUser.metadata.lastSignInTime)
-  {
-    return(newUserStack)
-  }
-
   return (
     <Tab.Navigator
       screenOptions={{

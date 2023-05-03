@@ -11,26 +11,50 @@ import {
 	ScrollView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { auth } from "../configuration/firebaseConfig"; //	Firebase Operations
+import database from "../configuration/firebaseConfig";
+import { ref, set } from "firebase/database"
 
-const WeightScreen = () => {
-	const navigation = useNavigation();
+const WeightScreen = ({route}) => {
 	const [weight, setWeight] = useState("");
 	const [buttonDisabled, setButtonDisabled] = useState(true);
+
+	const {email, username, pw, gender, selectedAge, height} = route.params
 
 	const handleWeightInput = (selectedWeight) => {
 		setWeight(selectedWeight);
 		setButtonDisabled(false);
 	};
 
-	const handleNextPress = () => {
+	const handleNextPress = async () => {
 		if (weight !== "") {
-			console.log("Next button pressed. Weight:", weight);
-			navigation.navigate("Login");
-			// Here you can write your code to push weight into Firebase database
+		  console.log("Next button pressed. Weight:", weight);
+		  try {
+			const userCredential = await auth.createUserWithEmailAndPassword(email, pw); // Sign in
+			const user = userCredential.user;
+			dbRef = ref(database, 'users/' + user.uid + '/email'); // Reference to email section of user
+			await set(dbRef, email);
+			dbRef = ref(database, 'users/' + user.uid + '/uname');
+			await set(dbRef, username);
+			dbRef = ref(database, 'users/' + user.uid + '/password'); // Reference to password section (Maybe we should hash this?)
+			await set(dbRef, pw);
+			dbRef = ref(database, 'users/' + user.uid + '/gender');
+			await set(dbRef, gender);
+			dbRef = ref(database, 'users/' + user.uid + '/age');
+			await set(dbRef, selectedAge);
+			dbRef = ref(database, 'users/' + user.uid + '/height');
+			await set(dbRef, height);
+			dbRef = ref(database, 'users/' + user.uid + '/weight');
+			await set(dbRef, toString(weight));
+			console.log(user.email + " logged in!");
+		  } catch (error) {
+			console.log(error);
+		  }
 		} else {
-			console.log("Please select a weight.");
+		  console.log("Please select a weight.");
 		}
-	};
+	  };
+	  
 	const [sliderValue, setSliderValue] = useState(0);
 
 	const weights = [];
@@ -89,7 +113,7 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		alignItems: "center",
-		justifyContent: "top",
+		//justifyContent: "top",
 		backgroundColor: "#fff9e6",
 		paddingHorizontal: 30,
 	},

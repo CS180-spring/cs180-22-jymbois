@@ -13,11 +13,6 @@ import { FontAwesome } from "@expo/vector-icons";
 import { useDark, usePushNotifications, useVacation } from "../hooks/useSwitch";
 import { auth } from "../configuration/firebaseConfig";
 
-import GenderScreen from "../screens/GenderScreen";
-import AgeScreen from "../screens/AgeScreen";
-import HeightScreen from "../screens/HeightScreen";
-import WeightScreen from "../screens/WeightScreen";
-
 const Stack = createStackNavigator();
 
 const SettingScreen = () => {
@@ -32,41 +27,6 @@ const SettingScreen = () => {
 		console.log(auth.currentUser.email + " logged out...");
 		auth.signOut();
 	}
-
-	const newUserStack = () => {
-		return (
-		  <Stack.Navigator>
-			<Stack.Screen
-				name="Gender"
-				component={GenderScreen}
-				options={{
-				  headerTintColor: "#FFFF",
-				}}
-			  />
-			  <Stack.Screen
-				name="Age"
-				component={AgeScreen}
-				options={{
-				  headerTintColor: "#FFFF",
-				}}
-			  />
-			  <Stack.Screen
-				name="Height"
-				component={HeightScreen}
-				options={{
-				  headerTintColor: "#FFFF",
-				}}
-			  />
-			  <Stack.Screen
-				name="Weight"
-				component={WeightScreen}
-				options={{
-				  headerTintColor: "#FFFF",
-				}}
-			  />
-		  </Stack.Navigator>
-		);
-	};
 
 	return (
 		<View style={styles.container}>

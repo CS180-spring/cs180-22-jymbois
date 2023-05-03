@@ -4,11 +4,13 @@ import { Picker } from "@react-native-picker/picker";
 import { useNavigation } from "@react-navigation/native";
 import { auth } from "../configuration/firebaseConfig"; //	Firebase Operations
 
-const HeightScreen = () => {
+const HeightScreen = ({route}) => {
 	const navigation = useNavigation();
 	const [selectedFeet, setSelectedFeet] = useState(0);
 	const [selectedInches, setSelectedInches] = useState(0);
 	const [totalInches, setTotalInches] = useState(0);
+
+	const {email, username, pw, gender, selectedAge} = route.params
 
 	const handleFeetSelection = (feet) => {
 		setSelectedFeet(feet);
@@ -23,7 +25,14 @@ const HeightScreen = () => {
 	const handleNextPress = () => {
 		if (totalInches > 0) {
 			console.log("Next button pressed. Height in inches:", totalInches);
-			navigation.navigate("Weight");
+			navigation.navigate("Weight", {
+				email: email,
+				username: username,
+				pw: pw,
+				gender: gender,
+				age: selectedAge,
+				height: totalInches
+			});
 			// totalInces good good
 		} else {
 			console.log("Please select a height.");
