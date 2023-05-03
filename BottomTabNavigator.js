@@ -6,9 +6,11 @@ import CalenderScreen from './screens/CalenderScreen';
 import ProgressScreen from './screens/ProgressScreen';
 import SettingsScreen from './screens/ProfileScreen';
 import GraphScreen from './screens/GraphScreen';
+
 import { AntDesign } from '@expo/vector-icons';
 import { Fontisto } from '@expo/vector-icons';
 import { SimpleLineIcons } from '@expo/vector-icons'; 
+import { auth } from './configuration/firebaseConfig';
 
 
 const Tab = createBottomTabNavigator();
@@ -24,6 +26,12 @@ const ProgressStack = () => {
 };
 
 const BottomTabNavigator = () => {
+
+  if(auth.currentUser.metadata.creationTime == auth.currentUser.metadata.lastSignInTime)
+  {
+    return(newUserStack)
+  }
+
   return (
     <Tab.Navigator
       screenOptions={{

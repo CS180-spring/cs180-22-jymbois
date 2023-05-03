@@ -8,8 +8,17 @@ import {
 	TouchableOpacity,
 } from "react-native";
 import React from "react";
+import { createStackNavigator } from '@react-navigation/stack';
 import { FontAwesome } from "@expo/vector-icons";
 import { useDark, usePushNotifications, useVacation } from "../hooks/useSwitch";
+import { auth } from "../configuration/firebaseConfig";
+
+import GenderScreen from "../screens/GenderScreen";
+import AgeScreen from "../screens/AgeScreen";
+import HeightScreen from "../screens/HeightScreen";
+import WeightScreen from "../screens/WeightScreen";
+
+const Stack = createStackNavigator();
 
 const SettingScreen = () => {
 	const [isDark, toggleDark] = useDark(false);
@@ -17,6 +26,47 @@ const SettingScreen = () => {
 	const [isPushNotifications, togglePushNotifications] =
 		usePushNotifications(false);
 	// still need to do this for the username and for photo uploads
+
+	function logOut()
+	{
+		console.log(auth.currentUser.email + " logged out...");
+		auth.signOut();
+	}
+
+	const newUserStack = () => {
+		return (
+		  <Stack.Navigator>
+			<Stack.Screen
+				name="Gender"
+				component={GenderScreen}
+				options={{
+				  headerTintColor: "#FFFF",
+				}}
+			  />
+			  <Stack.Screen
+				name="Age"
+				component={AgeScreen}
+				options={{
+				  headerTintColor: "#FFFF",
+				}}
+			  />
+			  <Stack.Screen
+				name="Height"
+				component={HeightScreen}
+				options={{
+				  headerTintColor: "#FFFF",
+				}}
+			  />
+			  <Stack.Screen
+				name="Weight"
+				component={WeightScreen}
+				options={{
+				  headerTintColor: "#FFFF",
+				}}
+			  />
+		  </Stack.Navigator>
+		);
+	};
 
 	return (
 		<View style={styles.container}>
@@ -49,9 +99,15 @@ const SettingScreen = () => {
 				</View>
 			))}
 
-			<TouchableOpacity style={styles.logout}>
+			<TouchableOpacity style={styles.logout} onPress={logOut}>
 				<Text style={{ color: "#fff", fontSize: 16, fontWeight: "bold" }}>
 					LOG OUT
+				</Text>
+			</TouchableOpacity>
+
+			<TouchableOpacity style={styles.logout} onPress={newUserStack}>
+				<Text style={{ color: "#fff", fontSize: 16, fontWeight: "bold" }}>
+					SET PROFILE
 				</Text>
 			</TouchableOpacity>
 

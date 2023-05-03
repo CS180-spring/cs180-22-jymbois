@@ -11,6 +11,8 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { auth } from "../configuration/firebaseConfig"; //	Firebase Operations
+import database from "../configuration/firebaseConfig";
+import { ref, set } from "firebase/database"
 
 const RegisterScreen = () => {
   const navigation = useNavigation();
@@ -48,8 +50,13 @@ const RegisterScreen = () => {
       auth.createUserWithEmailAndPassword(email, password)
       .then((userCredential) => { //  Signed in 
         const user = userCredential.user;
-        console.log(user.email);
-        navigation.navigate("Gender");  //  Navigate to Gender Page
+        dbEmail = ref(database, 'users/' + user.uid + '/email');  //  Reference to email section of user
+        dbPw = ref(database, 'users/' + user.uid + '/password');  // Reference to password section (Maybe we should hash this?)
+        dbCheck = ref(database, 'users/' + user.uid + '/firstTime');
+        set(dbEmail, email);
+        set(dbPw, password)
+        set(dbCheck, true);
+        console.log(user.email + " logged in!");
       }).catch((error) => { //  Error
         const errorCode = error.code;
         const errorMessage = error.message;
