@@ -12,6 +12,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { useDark, usePushNotifications, useVacation } from "../hooks/useSwitch";
 
 const SettingScreen = () => {
+	//const [darkMode, setDarkMode] = useState(false);
 	const [isDark, toggleDark] = useDark(false);
 	const [isVacation, toggleVacation] = useVacation(false);
 	const [isPushNotifications, togglePushNotifications] =

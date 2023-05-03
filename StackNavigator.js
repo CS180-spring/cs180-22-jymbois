@@ -49,7 +49,6 @@ import GenderScreen from "./screens/GenderScreen";
 import AgeScreen from "./screens/AgeScreen";
 import HeightScreen from "./screens/HeightScreen";
 import WeightScreen from "./screens/WeightScreen";
-//import GraphScreen from "./screens/GraphScreen";
 import PageDots from "./screens/PageDots";
 import BottomTabNavigator from "./BottomTabNavigator";
 

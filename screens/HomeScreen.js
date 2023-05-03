@@ -19,6 +19,7 @@ import { ref, set } from "firebase/database";
 import database from "../configuration/firebaseConfig";
 
 const HomeScreen = () => {
+	//const[darkmode, setDarkMode] = useState(false)
 	const navigation = useNavigation();
 	const [showTimerModal, setShowTimerModal] = React.useState(false);
 	const [mode, setMode] = React.useState("stopwatch"); // Add mode state variable
