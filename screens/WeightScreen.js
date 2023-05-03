@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
 		color: "black",
 		marginBottom: 50,
 		marginTop: -100,
+    textAlign: "center",
   },
   weightContainer: {
     justifyContent: 'center',
