@@ -8,13 +8,27 @@ import {
 	FlatList,
 	Image,
 	TouchableOpacity,
+	Modal,
+	Picker,
 } from "react-native";
-import React from "react";
-import { Button, useNavigation } from "react-native";
+import React, { useState, useRef } from "react";
+import { MaterialIcons } from "@expo/vector-icons";
+
+import { useNavigation } from "@react-navigation/native";
 import { ref, set } from "firebase/database";
 import database from "../configuration/firebaseConfig";
 
 const HomeScreen = () => {
+	const navigation = useNavigation();
+	const [showTimerModal, setShowTimerModal] = React.useState(false);
+	const [mode, setMode] = React.useState("stopwatch"); // Add mode state variable
+	const [timer, setTimer] = React.useState({ min: 0, sec: 0 });
+
+	const [isActive, setIsActive] = React.useState(false);
+	const [isPaused, setIsPaused] = React.useState(false);
+	const [showButtons, setShowButtons] = React.useState(true); // Add showButtons state variable
+	const [startButton, setStartButton] = React.useState("Start"); // Add startButton state variable
+	const countRef = React.useRef(null);
 	const workoutData = [
 		{
 			id: "1",
@@ -42,6 +56,90 @@ const HomeScreen = () => {
 	const itemWidth = isSmallScreen ? width - 32 : (width - 64) / 3;
 	const itemHeight = isSmallScreen ? itemWidth * 1.2 : itemWidth * 1.5;
 
+	const startTimer = () => {
+		setIsActive(true);
+		setIsPaused(false);
+		if (mode === "timer") {
+			const duration = timer.min * 60 + timer.sec;
+			const startTime = Date.now();
+			countRef.current = setInterval(() => {
+				const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+				const remainingTime = Math.max(duration - elapsedTime, 0);
+				if (remainingTime === 0) {
+					clearInterval(countRef.current);
+					setIsActive(false);
+					alert("Timer finished!");
+				}
+				const newMin = Math.floor(remainingTime / 60);
+				const newSec = remainingTime % 60;
+				setTimer({ min: newMin, sec: newSec });
+			}, 1000);
+		} else if (mode === "stopwatch") {
+			// Execute stopwatch logic
+			countRef.current = setInterval(() => {
+				setTimer((timer) => {
+					const newMin = timer.sec === 59 ? timer.min + 1 : timer.min;
+					const newSec = timer.sec === 59 ? 0 : timer.sec + 1;
+					return { min: newMin, sec: newSec };
+				});
+			}, 1000);
+			setIsPaused(false); // reset isPaused to false when the stopwatch starts
+		}
+	};
+	const pauseTimer = () => {
+		clearInterval(countRef.current);
+		setIsPaused(true);
+		setIsActive(false);
+	};
+	const resetTimer = () => {
+		clearInterval(countRef.current);
+		setTimer({ min: 0, sec: 0 });
+		setIsActive(false);
+		setIsPaused(false);
+	};
+
+	const toggleTimerModal = () => {
+		setShowTimerModal(!showTimerModal);
+	};
+
+	const handleTimerChange = (value, type) => {
+		if (type === "hour") {
+			setTimer((timer) => {
+				return { ...timer, hour: value };
+			});
+		} else if (type === "minute") {
+			setTimer((timer) => {
+				return { ...timer, minute: value };
+			});
+		} else if (type === "second") {
+			setTimer((timer) => {
+				return { ...timer, second: value };
+			});
+		}
+	};
+
+	const handleModeChange = (mode) => {
+		// Add handleModeChange function
+		setMode(mode);
+		resetTimer();
+	};
+
+	const [buttonTitle, setButtonTitle] = useState("Stopwatch");
+	const [buttonColor, setButtonColor] = useState("#9b59b6"); // purple
+
+	const toggleTimerMode = () => {
+		if (mode === "stopwatch") {
+			setMode("timer");
+			setButtonTitle("Mode1");
+			// setButtonColor("#00FF00"); // lime green
+		} else {
+			setMode("stopwatch");
+			setButtonTitle("Mode2");
+			// setButtonColor("#9b59b6"); // purple
+		}
+		resetTimer();
+	};
+
 	const renderItem = ({ item, index }) => (
 		<TouchableOpacity
 			style={[
@@ -65,6 +163,72 @@ const HomeScreen = () => {
 
 	return (
 		<View style={styles.container}>
+			<Modal visible={showTimerModal} animationType="slide">
+				<View style={styles.timerModal}>
+					<View style={styles.timerContainer}>
+						<View style={styles.timerCircle}>
+							<Text style={styles.timerText}>
+								{timer.min.toString().padStart(2, "0")}:
+								{timer.sec.toString().padStart(2, "0")}
+							</Text>
+						</View>
+					</View>
+
+					{!isActive && !isPaused && (
+						<TouchableOpacity onPress={startTimer}>
+							<Text style={styles.startBtn}>Start</Text>
+						</TouchableOpacity>
+					)}
+					{isActive && (
+						<TouchableOpacity onPress={pauseTimer}>
+							<Text style={styles.pauseBtn}>Pause</Text>
+						</TouchableOpacity>
+					)}
+					{isActive && (
+						<TouchableOpacity onPress={resetTimer}>
+							<Text style={styles.resetBtn}>Reset</Text>
+						</TouchableOpacity>
+					)}
+					{isPaused && (
+						<TouchableOpacity onPress={startTimer}>
+							<Text style={styles.startBtn}>Resume</Text>
+						</TouchableOpacity>
+					)}
+
+					{mode === "timer" && (
+						<View style={styles.timerControl}>
+							<TouchableOpacity style={styles.timerControlButton}>
+								<MaterialIcons name="add" size={24} color="white" />
+								<Text style={styles.timerControlButtonText}>1 Min</Text>
+							</TouchableOpacity>
+							<TouchableOpacity style={styles.timerControlButton}>
+								<MaterialIcons name="remove" size={24} color="white" />
+								<Text style={styles.timerControlButtonText}>1 Min</Text>
+							</TouchableOpacity>
+							<TouchableOpacity style={styles.timerControlButton}>
+								<MaterialIcons name="add" size={24} color="white" />
+								<Text style={styles.timerControlButtonText}>10 Sec</Text>
+							</TouchableOpacity>
+							<TouchableOpacity style={styles.timerControlButton}>
+								<MaterialIcons name="remove" size={24} color="white" />
+								<Text style={styles.timerControlButtonText}>10 Sec</Text>
+							</TouchableOpacity>
+						</View>
+					)}
+
+					{/* <TouchableOpacity
+						style={[styles.timerModeButton, { backgroundColor: buttonColor }]}
+						onPress={toggleTimerMode}
+					>
+						<Text style={styles.timerModeText}>{buttonTitle}</Text>
+					</TouchableOpacity> */}
+
+					<TouchableOpacity onPress={() => setShowTimerModal(false)}>
+						<Text style={styles.closeModalText}>Close</Text>
+					</TouchableOpacity>
+				</View>
+			</Modal>
+
 			<View style={styles.titleContainer}>
 				<Image
 					source={require("./images/profileHome.png")}
@@ -116,15 +280,16 @@ const HomeScreen = () => {
 					}}
 				/>
 			</View>
-			<View style={[styles.bottomContent, { height: itemHeight }]}>
-				<Image source={require("./images/clap.png")} style={styles.image2} />
+			<TouchableOpacity
+				style={[styles.bottomContent, { height: itemHeight }]}
+				onPress={() => setShowTimerModal(true)}
+			>
+				<Image source={require("./images/timer.png")} style={styles.image2} />
 				<View style={[styles.bottomMiddle]}>
-					<Text style={styles.subtitle4}>You got this!</Text>
-					<Text style={styles.heading2}>Better than the average!</Text>
+					<Text style={styles.subtitle4}>Rest Timer</Text>
+					<Text style={styles.heading2}>Click Here!</Text>
 				</View>
-			</View>
-
-			{/* <View style={styles.title2Container}></View> */}
+			</TouchableOpacity>
 		</View>
 	);
 };
@@ -151,7 +316,7 @@ const styles = StyleSheet.create({
 		shadowOpacity: 0.11,
 		shadowRadius: 5,
 		elevation: 5,
-		maxHeight: 110,
+		maxHeight: 80,
 
 		alignSelf: "center",
 		position: "relative",
@@ -185,12 +350,14 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	title2: {
-		alignSelf: "center",
-		marginBottom: 9,
+		// alignSelf: "center",
+		marginBottom: 16,
 		// justifyContent: "center",
 		// justifyContent: "top",
-		fontSize: 23,
+		fontSize: 21,
 		fontWeight: "bold",
+		left: 20,
+		flex: 1,
 	},
 	leftContent2: {
 		flexDirection: "column",
@@ -213,8 +380,8 @@ const styles = StyleSheet.create({
 		borderColor: "#FFDB58",
 	},
 	image2: {
-		width: 65,
-		height: 65,
+		width: 58,
+		height: 58,
 
 		position: "absolute",
 		left: 0,
@@ -347,9 +514,9 @@ const styles = StyleSheet.create({
 		marginTop: 8,
 	},
 	flatListContainer: {
-		marginTop: 320,
-		alignItems: "center",
-		justifyContent: "center",
+		marginTop: 330,
+		// alignItems: "center",
+		// justifyContent: "center",
 		position: "absolute",
 		width: "100%",
 		alignSelf: "center",
@@ -373,17 +540,17 @@ const styles = StyleSheet.create({
 		paddingVertical: 16,
 		paddingHorizontal: 16,
 		marginBottom: 20,
-		width: "60%",
+		width: "58%",
 		paddingLeft: 140,
 
 		justifyContent: "space-evenly",
 
-		height: 170,
+		maxHeight: 140,
 		borderRadius: 13,
 	},
 
 	workoutName: {
-		fontSize: 23,
+		fontSize: 20,
 		fontWeight: "bold",
 		color: "#ffff",
 		position: "absolute",
@@ -395,6 +562,129 @@ const styles = StyleSheet.create({
 		height: 80,
 		top: 5,
 		right: -13,
+	},
+	timerModal: {
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+		backgroundColor: "white",
+		padding: 20,
+	},
+	timerContainer: {
+		alignItems: "center",
+		justifyContent: "center",
+		width: 250,
+		height: 250,
+		borderRadius: 250 / 2,
+		backgroundColor: "#E8E8E8",
+	},
+	timerCircle: {
+		alignItems: "center",
+		justifyContent: "center",
+		width: 220,
+		height: 220,
+		borderRadius: 220 / 2,
+		backgroundColor: "white",
+		borderWidth: 2,
+		borderColor: "#7F7F7F",
+	},
+	timerText: {
+		fontSize: 48,
+		fontWeight: "bold",
+	},
+	closeModalText: {
+		fontSize: 16,
+		color: "blue",
+		bottom: -100,
+		left: 0,
+		marginBottom: 60,
+	},
+	startBtn: {
+		backgroundColor: "#4CAF50",
+		color: "white",
+		paddingHorizontal: 32,
+		paddingVertical: 16,
+		borderRadius: 20,
+		fontSize: 24,
+		fontWeight: "bold",
+		margin: 16,
+		shadowColor: "#4CAF50",
+		shadowOpacity: 0.4,
+		shadowOffset: { width: 0, height: 4 },
+		shadowRadius: 8,
+		elevation: 4,
+	},
+	pauseBtn: {
+		backgroundColor: "#FF9800",
+		color: "white",
+		paddingHorizontal: 32,
+		paddingVertical: 16,
+		borderRadius: 20,
+		fontSize: 24,
+		fontWeight: "bold",
+		margin: 16,
+		shadowColor: "#FF9800",
+		shadowOpacity: 0.4,
+		shadowOffset: { width: 0, height: 4 },
+		shadowRadius: 8,
+		elevation: 4,
+	},
+	resetBtn: {
+		backgroundColor: "#F44336",
+		color: "white",
+		paddingHorizontal: 32,
+		paddingVertical: 16,
+		borderRadius: 20,
+		fontSize: 24,
+		fontWeight: "bold",
+		margin: 16,
+		shadowColor: "#F44336",
+		shadowOpacity: 0.4,
+		shadowOffset: { width: 0, height: 4 },
+		shadowRadius: 8,
+		elevation: 4,
+	},
+	timerModeButton: {
+		color: "white",
+		paddingHorizontal: 32,
+		paddingVertical: 16,
+		borderRadius: 120 / 2,
+		height: 120,
+		width: 120,
+		fontWeight: "bold",
+		margin: 16,
+		justifyContent: "center",
+		alignItems: "center",
+		shadowOpacity: 0.4,
+		shadowOffset: { width: 0, height: 4 },
+		shadowRadius: 8,
+		elevation: 4,
+	},
+
+	timerModeText: {
+		fontSize: 17,
+		fontWeight: "bold",
+		color: "white",
+	},
+	timerControl: {
+		marginTop: 32,
+		flexDirection: "row",
+		alignItems: "center",
+	},
+
+	timerControlButton: {
+		backgroundColor: "#4CAF50",
+		borderRadius: 50,
+		paddingVertical: 5,
+		paddingHorizontal: 5,
+		marginHorizontal: 8,
+		flexDirection: "row",
+		alignItems: "center",
+	},
+	timerControlButtonText: {
+		color: "white",
+		fontWeight: "bold",
+		fontSize: 20,
 	},
 });
 
