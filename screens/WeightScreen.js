@@ -40,7 +40,7 @@ const WeightScreen = () => {
             value={weight}
             onChangeText={handleWeightChange}
             keyboardType="numeric"
-            placeholder="Enter weight in pounds  "
+            placeholder="Enter weight in pounds"
             placeholderTextColor="#BDBDBD"
           />
         </View>
@@ -100,11 +100,16 @@ const styles = StyleSheet.create({
 		width: 250,
 		height: 50,
 		marginBottom: 30,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 2
 	  },
 	  input: {
 		fontSize: 20,
 		height: '100%',
-		paddingLeft: 20,
+		paddingLeft: 10,
 		textAlign: "center",
 	  },
 	  
