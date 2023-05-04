@@ -1,18 +1,19 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import StackNavigator from './StackNavigator';
-import {NavigationContainer} from '@react-navigation/native'
+import { NavigationContainer } from '@react-navigation/native';
 import { AuthProvider } from './hooks/useAuth';
-
+import { ThemeProvider } from './hooks/ThemeContext'; 
 
 export default function App() {
   return (
     <NavigationContainer>
-      <AuthProvider>
-        <StackNavigator/>
-      </AuthProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <StackNavigator />
+        </AuthProvider>
+      </ThemeProvider>
     </NavigationContainer>
-    
   );
 }
 

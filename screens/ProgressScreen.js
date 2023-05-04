@@ -9,9 +9,72 @@ import {
   Keyboard, 
 } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
+import ThemeContext from "../hooks/ThemeContext";
+
+const createThemedStyles = (isDarkMode) => {
+	return StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: isDarkMode ? '#333' : '#fff',
+    },
+    question: {
+      fontSize: 30,
+      fontWeight: "bold",
+      color: "#B8860B",
+      marginBottom: 100,
+    },
+    inputContainer: {
+      backgroundColor: '#FFFFFF',
+      borderRadius: 10,
+      width: '80%',
+      marginBottom: 30,
+    },
+    input: {
+      fontSize: 20,
+      height: 50,
+      paddingLeft: 20,
+    },
+    button: {
+      width: "50%",
+      height: 50,
+      backgroundColor: "#B8860B",
+      justifyContent: "center",
+      alignItems: "center",
+      borderRadius: 25,
+      marginTop: 30,
+    },
+    buttonText: {
+      color: "white",
+      fontSize: 25,
+      fontWeight: "bold",
+    },
+    enabled: {
+      backgroundColor: "#D2B48C",
+    },
+    disabled: {
+      backgroundColor: "gray",
+    },
+    weightText: {
+      fontSize: 50,
+      fontWeight: "bold",
+      justifyContent: "space-between",
+      marginBottom:30,
+    },
+    announcement:{
+      fontWeight: "bold",
+      color: "red",
+      marginTop:20,
+    }
+});
+};
+
 
 const ProgressScreen = () => {
   const navigation = useNavigation();
+  const { isDarkMode, toggleTheme } = React.useContext(ThemeContext);
+	const styles = createThemedStyles(isDarkMode);
   const [weight, setWeight] = useState("");
   const [buttonDisabled, setButtonDisabled] = useState(true);
 
