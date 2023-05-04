@@ -65,7 +65,7 @@ const SettingScreen = () => {
 				</Text>
 			</TouchableOpacity>
 
-			<TouchableOpacity style={styles.logout} onPress={newUserStack}>
+			<TouchableOpacity style={styles.logout}>
 				<Text style={{ color: "#fff", fontSize: 16, fontWeight: "bold" }}>
 					SET PROFILE
 				</Text>

@@ -10,7 +10,7 @@ const HeightScreen = ({route}) => {
 	const [selectedInches, setSelectedInches] = useState(0);
 	const [totalInches, setTotalInches] = useState(0);
 
-	const {email, username, pw, gender, selectedAge} = route.params
+	const {email, username, pw, gender, age} = route.params
 
 	const handleFeetSelection = (feet) => {
 		setSelectedFeet(feet);
@@ -23,6 +23,8 @@ const HeightScreen = ({route}) => {
 	};
 
 	const handleNextPress = () => {
+		console.log(age);
+		console.log(totalInches)
 		if (totalInches > 0) {
 			console.log("Next button pressed. Height in inches:", totalInches);
 			navigation.navigate("Weight", {
@@ -30,7 +32,7 @@ const HeightScreen = ({route}) => {
 				username: username,
 				pw: pw,
 				gender: gender,
-				age: selectedAge,
+				age: age,
 				height: totalInches
 			});
 			// totalInces good good

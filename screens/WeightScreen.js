@@ -19,7 +19,7 @@ const WeightScreen = ({route}) => {
 	const [weight, setWeight] = useState("");
 	const [buttonDisabled, setButtonDisabled] = useState(true);
 
-	const {email, username, pw, gender, selectedAge, height} = route.params
+	const {email, username, pw, gender, age, height} = route.params
 
 	const handleWeightInput = (selectedWeight) => {
 		setWeight(selectedWeight);
@@ -41,11 +41,11 @@ const WeightScreen = ({route}) => {
 			dbRef = ref(database, 'users/' + user.uid + '/gender');
 			await set(dbRef, gender);
 			dbRef = ref(database, 'users/' + user.uid + '/age');
-			await set(dbRef, selectedAge);
+			await set(dbRef, age);
 			dbRef = ref(database, 'users/' + user.uid + '/height');
 			await set(dbRef, height);
 			dbRef = ref(database, 'users/' + user.uid + '/weight');
-			await set(dbRef, toString(weight));
+			await set(dbRef, weight);
 			console.log(user.email + " logged in!");
 		  } catch (error) {
 			console.log(error);
