@@ -18,8 +18,8 @@ const Stack = createStackNavigator();
 
 const ProgressStack = () => {
   return (
-    <Stack.Navigator>
-      <Stack.Screen name="Progress" component={ProgressScreen} />
+    <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Screen name="Progress_" component={ProgressScreen} />
       <Stack.Screen name="Graph" component={GraphScreen} />
     </Stack.Navigator>
   );
@@ -29,12 +29,12 @@ const BottomTabNavigator = () => {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarStyle: { backgroundColor: "#FFFF", height: 80, size: 30 },
-				headerStyle: { backgroundColor: "#ffff" },
-				headerTintColor: "black",
-				tabBarInactiveTintColor: "grey",
-				tabBarActiveTintColor: "#FFDB58",
-				tabBarActiveBackgroundColor: "#ffff", // debating on whether to keep this or not
+        tabBarStyle: { backgroundColor: 'white', height: 80, size: 30 },
+        headerStyle: { backgroundColor: 'white' },
+        headerTintColor: 'grey',
+        tabBarInactiveTintColor: 'grey',
+        tabBarActiveTintColor: '#8BC34A',
+        tabBarActiveBackgroundColor: 'white'
       }}
     >
       <Tab.Screen 
@@ -56,7 +56,7 @@ const BottomTabNavigator = () => {
         }}
       />
       <Tab.Screen 
-        name="Stocks" 
+        name="Progress" 
         component={ProgressStack} 
         options={{
           tabBarIcon: ({ color, size }) => (

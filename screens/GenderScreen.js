@@ -6,7 +6,6 @@ const GenderScreen = ({route}) => {
 	const navigation = useNavigation();
 	const [gender, setGender] = useState(null);
 	const [isButtonEnabled, setIsButtonEnabled] = useState(false);
-
 	const {email, username, pw} = route.params
 
 	const handleGenderSelection = (selectedGender) => {
@@ -50,8 +49,7 @@ const GenderScreen = ({route}) => {
 				</View>
 				<View style={styles.imageWrapper2}>
 					<TouchableOpacity
-						onPress={() => handleGenderSelection("Prefer Not To Say")}
-					>
+						onPress={() => handleGenderSelection("Prefer Not To Say")}>
 						<Image
 							style={styles.genderImage}
 							source={require("./images/other.png")}
@@ -79,15 +77,15 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: "center",
 		alignItems: "center",
-		backgroundColor: "#FFF8DC",
+		backgroundColor: "white",
 	},
 
 	subheading: {
 		fontSize: 24,
 		fontWeight: "bold",
-		color: "#333",
+		color: "grey",
 		textAlign: "center",
-		color: "#B8860B",
+		color: "black",
 		marginBottom: 30,
 	},
 	genderContainer: {
@@ -116,44 +114,48 @@ const styles = StyleSheet.create({
 		height: 130,
 		borderRadius: 65,
 		borderWidth: 3,
-		borderColor: "#B8860B",
+		borderColor: "#8BC34A",
 	},
 	genderImageF: {
 		width: 130,
 		height: 130,
 		borderRadius: 65,
 		borderWidth: 3,
-		borderColor: "#B8860B",
+		borderColor: "#8BC34A",
 	},
 	genderImage: {
 		width: 130,
 		height: 130,
 		borderRadius: 65,
 		borderWidth: 3,
-		borderColor: "#B8860B",
+		borderColor: "#8BC34A",
 	},
 
 	genderText: {
 		fontSize: 20,
 		fontWeight: "bold",
-		color: "#333",
 		textAlign: "center",
-		color: "#B8860B",
+		color: "black",
 		marginTop: 10,
 	},
 	selectedGenderText: {
 		fontSize: 18,
 		marginTop: 20,
 		marginBottom: 10,
-		color: "#333",
+		color: "black#8BC34A",
 	},
 	nextButton: {
 		width: "70%",
 		height: 50,
-		backgroundColor: "#d2b48c",
+		backgroundColor: "white",
 		justifyContent: "center",
 		borderRadius: 25,
 		marginBottom: 15,
+		shadowColor: '#000',
+  		shadowOffset: { width: 0, height: 2 },
+  		shadowOpacity: 0.2,
+  		shadowRadius: 2,
+  		elevation: 2
 	},
 	disabledNextButton: {
 		width: "70%",
@@ -164,7 +166,7 @@ const styles = StyleSheet.create({
 		marginBottom: 15,
 	},
 	nextButtonText: {
-		color: "#fff",
+		color: "black",
 		fontSize: 25,
 		fontWeight: "bold",
 		textAlign: "center",
