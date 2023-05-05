@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-const GenderScreen = () => {
+const GenderScreen = ({route}) => {
 	const navigation = useNavigation();
 	const [gender, setGender] = useState(null);
 	const [isButtonEnabled, setIsButtonEnabled] = useState(false);
-
+	const {email, username, pw} = route.params
 
 	const handleGenderSelection = (selectedGender) => {
 		setGender(selectedGender);
@@ -15,7 +15,12 @@ const GenderScreen = () => {
 
 	const handleNextButtonPress = () => {
 		if (gender) {
-			navigation.navigate("Age");
+			navigation.navigate("Age",{
+				email: email,
+				username: username,
+				pw: pw,
+				gender: gender
+			});
 		} else {
 			// Show error message
 			alert("Please select a gender to proceed");

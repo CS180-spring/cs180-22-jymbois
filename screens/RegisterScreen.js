@@ -10,7 +10,6 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { auth } from "../configuration/firebaseConfig"; //	Firebase Operations
 
 const RegisterScreen = () => {
   const navigation = useNavigation();
@@ -45,16 +44,15 @@ const RegisterScreen = () => {
     if(password === confirmPasscode)
     {
       //  Registers email and password in Firebase
-      auth.createUserWithEmailAndPassword(email, password)
-      .then((userCredential) => { //  Signed in 
-        const user = userCredential.user;
-        console.log(user.email);
-        navigation.navigate("Gender");  //  Navigate to Gender Page
-      }).catch((error) => { //  Error
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        alert(error.message);
-      })
+
+      //  Pass args from one screen to another
+      //  username, email passwd -> Gender Screen
+      
+      navigation.navigate('Gender', {
+          email: email,
+          username: username,
+          pw: password
+      });
     }else
       alert("Your password and confirmed password do not match!")
   };

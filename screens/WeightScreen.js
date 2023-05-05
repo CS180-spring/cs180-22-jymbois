@@ -9,22 +9,51 @@ import {
   Keyboard, 
 } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
+import { auth } from "../configuration/firebaseConfig"; //	Firebase Operations
+import database from "../configuration/firebaseConfig";
+import { ref, set } from "firebase/database"
 
-const WeightScreen = () => {
-  const navigation = useNavigation();
-  const [weight, setWeight] = useState("");
-  const [buttonDisabled, setButtonDisabled] = useState(true);
+const WeightScreen = ({route}) => {
+	const [weight, setWeight] = useState("");
+	const [buttonDisabled, setButtonDisabled] = useState(true);
 
-  const handleWeightChange = (text) => {
-    setWeight(text);
-    setButtonDisabled(false);
-  };
+	const {email, username, pw, gender, age, height} = route.params
 
-  const handleNextPress = () => {
-    console.log("Next button pressed. Weight in pounds:", weight);
-    navigation.navigate('Login');
+	const handleWeightInput = (selectedWeight) => {
+		setWeight(selectedWeight);
+		setButtonDisabled(false);
+	};
 
-  };
+	const handleNextPress = async () => {
+		if (weight !== "") {
+		  console.log("Next button pressed. Weight:", weight);
+		  try {
+			const userCredential = await auth.createUserWithEmailAndPassword(email, pw); // Sign in
+			const user = userCredential.user;
+			dbRef = ref(database, 'users/' + user.uid + '/email'); // Reference to email section of user
+			await set(dbRef, email);
+			dbRef = ref(database, 'users/' + user.uid + '/uname');
+			await set(dbRef, username);
+			dbRef = ref(database, 'users/' + user.uid + '/password'); // Reference to password section (Maybe we should hash this?)
+			await set(dbRef, pw);
+			dbRef = ref(database, 'users/' + user.uid + '/gender');
+			await set(dbRef, gender);
+			dbRef = ref(database, 'users/' + user.uid + '/age');
+			await set(dbRef, age);
+			dbRef = ref(database, 'users/' + user.uid + '/height');
+			await set(dbRef, height);
+			dbRef = ref(database, 'users/' + user.uid + '/weight');
+			await set(dbRef, weight);
+			console.log(user.email + " logged in!");
+		  } catch (error) {
+			console.log(error);
+		  }
+		} else {
+		  console.log("Please select a weight.");
+		}
+	  };
+	  
+	const [sliderValue, setSliderValue] = useState(0);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

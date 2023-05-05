@@ -4,12 +4,15 @@ import {
 	Image,
 	StyleSheet,
 	Switch,
-	Button,
 	TouchableOpacity,
 } from "react-native";
 import React from "react";
+import { createStackNavigator } from '@react-navigation/stack';
 import { FontAwesome } from "@expo/vector-icons";
 import { useDark, usePushNotifications, useVacation } from "../hooks/useSwitch";
+import { auth } from "../configuration/firebaseConfig";
+
+const Stack = createStackNavigator();
 
 const SettingScreen = () => {
 	const [isDark, toggleDark] = useDark(false);
@@ -17,6 +20,12 @@ const SettingScreen = () => {
 	const [isPushNotifications, togglePushNotifications] =
 		usePushNotifications(false);
 	// still need to do this for the username and for photo uploads
+
+	function logOut()
+	{
+		console.log(auth.currentUser.email + " logged out...");
+		auth.signOut();
+	}
 
 	return (
 		<View style={styles.container}>

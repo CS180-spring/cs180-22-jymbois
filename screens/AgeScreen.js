@@ -5,18 +5,28 @@ import { Picker } from "@react-native-picker/picker";
 import { useNavigation } from "@react-navigation/native";
 import { auth } from "../configuration/firebaseConfig"; //	Firebase Operations
 
-const AgeScreen = () => {
+const AgeScreen = ({route}) => {
 	const navigation = useNavigation();
 	const [selectedAge, setSelectedAge] = useState(18);
+
+	const {email, username, pw, gender} = route.params
 
 	const handleAgeSelection = (age) => {
 		setSelectedAge(age);
 	};
 
 	const handleNextPress = () => {
+
+		console.log(selectedAge);
 		if (selectedAge > 0) {
 			console.log("Next button pressed. Selected age:", selectedAge);
-			navigation.navigate("Height");
+			navigation.navigate("Height", {
+				email: email,
+				username: username,
+				pw: pw,
+				gender: gender,
+				age: selectedAge
+			});
 		} else {
 			console.log("Please select an age.");
 		}
