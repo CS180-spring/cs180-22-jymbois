@@ -10,6 +10,7 @@ import {
 	TouchableOpacity,
 	Modal,
 	Picker,
+	Button,
 } from "react-native";
 import React, { useState, useRef } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -29,6 +30,15 @@ const HomeScreen = () => {
 	const [showButtons, setShowButtons] = React.useState(true); // Add showButtons state variable
 	const [startButton, setStartButton] = React.useState("Start"); // Add startButton state variable
 	const countRef = React.useRef(null);
+	const [selectedWorkout, setSelectedWorkout] = useState(null);
+
+	const openWorkoutModal = () => {
+		setModalVisible(true);
+	};
+
+	const closeWorkoutModal = () => {
+		setModalVisible(false);
+	};
 	const workoutData = [
 		{
 			id: "1",
@@ -150,7 +160,8 @@ const HomeScreen = () => {
 					height: itemHeight,
 				},
 			]}
-			onPress={() => navigation.navigate(item.routeName)}
+			// onPress={() => navigation.navigate(item.routeName)}
+			onPress={() => setSelectedWorkout(item.routeName)}
 		>
 			<View style={[styles.leftContent2]}>
 				<Text style={styles.subtitle3}>5-10 Exercises</Text>
@@ -163,6 +174,38 @@ const HomeScreen = () => {
 
 	return (
 		<View style={styles.container}>
+			<Modal
+				visible={selectedWorkout === "Workout1"}
+				animationType="slide"
+				onRequestClose={() => setSelectedWorkout(null)}
+			>
+				{/* <View>
+					<Button title="Close" onPress={() => setSelectedWorkout(null)} />
+				</View> */}
+				<TouchableOpacity onPress={() => setSelectedWorkout(null)}>
+					<Text style={styles.closeModalText}>Close</Text>
+				</TouchableOpacity>
+			</Modal>
+
+			<Modal
+				visible={selectedWorkout === "Workout2"}
+				animationType="slide"
+				onRequestClose={() => setSelectedWorkout(null)}
+			>
+				<TouchableOpacity onPress={() => setSelectedWorkout(null)}>
+					<Text style={styles.closeModalText}>Close</Text>
+				</TouchableOpacity>
+			</Modal>
+
+			<Modal
+				visible={selectedWorkout === "Workout3"}
+				animationType="slide"
+				onRequestClose={() => setSelectedWorkout(null)}
+			>
+				<TouchableOpacity onPress={() => setSelectedWorkout(null)}>
+					<Text style={styles.closeModalText}>Close</Text>
+				</TouchableOpacity>
+			</Modal>
 			<Modal visible={showTimerModal} animationType="slide">
 				<View style={styles.timerModal}>
 					<View style={styles.timerContainer}>
@@ -377,7 +420,7 @@ const styles = StyleSheet.create({
 		right: 0,
 		borderRadius: 45,
 		borderWidth: 2,
-		borderColor: "#FFDB58",
+		borderColor: "#4CAF50",
 	},
 	image2: {
 		width: 58,
