@@ -16,6 +16,8 @@ const CalenderScreen = () => {
 	const [showModal2, setShowModal2] = useState(false);
 	const [recordDate, setRecordDate] = useState("");
 	const [text, onChangeText] = React.useState("");
+	const [setWeight, onChangeWeight] = React.useState("");
+	const [setReps, onChangeReps] = React.useState("");
 	const [nameOfExercise, setNameOfExercise] = useState("");
 	const [setNumbers, setSetNumbers] = useState(0);
 
@@ -45,8 +47,8 @@ const CalenderScreen = () => {
 			<View style={styles.exerciseLogs} key={i}>
 				<Text style={styles.textStyle}>Set {i}</Text>
 
-				<View styles={styles.log}>
-					<Text style={{ color: "tan", fontWeight: 800, marginLeft: 28 }}>
+				{/* <View styles={styles.log}>
+					<Text style={{ color: "#8BC34A", fontWeight: 800, marginLeft: 28 }}>
 						Weight
 					</Text>
 
@@ -58,8 +60,8 @@ const CalenderScreen = () => {
 					/>
 				</View>
 
-				<View style={{ color: "tan", fontWeight: 800, marginLeft: 0 }}>
-					<Text style={{ color: "tan", fontWeight: 800, marginLeft: 23 }}>
+				<View style={{ color: "#ffff", fontWeight: 800, marginLeft: 0 }}>
+					<Text style={{ color: "#ffff", fontWeight: 800, marginLeft: 23 }}>
 						No. Reps
 					</Text>
 
@@ -68,6 +70,67 @@ const CalenderScreen = () => {
 						max={1000}
 						min={0}
 						skin="clean"
+					/>
+				</View> */}
+
+				<View style={styles.log}>
+					<Text style={{ color: "black", fontWeight: 400, marginLeft: 10 }}>
+						Weight
+					</Text>
+					<TextInput
+						placeholder="Enter Weight"
+						style={styles.input}
+						onChangeText={onChangeWeight}
+						value={setWeight}
+						keyboardType="numeric"
+					/>
+				</View>
+
+				{/* <View style={{ color: "#ffff", fontWeight: 800, marginLeft: 0 }}>
+					<Text style={{ color: "#ffff", fontWeight: 800, marginLeft: 23 }}>
+						No. Reps
+					</Text>
+
+					<InputSpinner
+						style={styles.numberInput1}
+						max={1000}
+						min={0}
+						skin="clean"
+					/>
+				</View> */}
+
+				<View
+					style={{
+						flexDirection: "row",
+						alignItems: "center",
+
+						// marginBottom: 0,
+					}}
+				>
+					<Text
+						style={{
+							color: "#fff",
+							fontWeight: "bold",
+							fontSize: 16,
+							marginRight: -30,
+						}}
+					>
+						No. Reps:
+					</Text>
+					<InputSpinner
+						max={1000}
+						min={0}
+						step={1}
+						colorMax={"#fff"}
+						colorMin={"#fff"}
+						color={"lightgrey"}
+						height={28}
+						rounded={true}
+						style={{ borderColor: "lightgrey", borderWidth: 2 }}
+						valueType="integer"
+						showBorder
+						skin="modern"
+						onChange={onChangeReps}
 					/>
 				</View>
 			</View>,
@@ -114,7 +177,11 @@ const CalenderScreen = () => {
 						value={text}
 					/>
 					<View style={styles.setContainer}>
-						<Text style={{ color: "tan", fontSize: 16, fontWeight: 800 }}>
+
+						
+
+						<Text style={{ color: "lightgrey", fontSize: 16, fontWeight: 800 }}>
+
 							No. Set
 						</Text>
 						<InputSpinner
@@ -125,6 +192,7 @@ const CalenderScreen = () => {
 							onChange={handleNumberChange}
 						/>
 					</View>
+
 
 					{set}
 
@@ -148,6 +216,8 @@ const CalenderScreen = () => {
 		</ScrollView>
 	);
 };
+
+
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
@@ -212,17 +282,17 @@ const styles = StyleSheet.create({
 		height: 40,
 		margin: 12,
 		borderWidth: 1,
-		width: 420,
 		padding: 10,
-		borderColor: "tan",
+		borderColor: "lightgrey",
 		borderRadius: 10,
-		alignSelf: "center",
 	},
 	numberInput: {
 		width: 170,
 		height: 40,
 		borderWidth: 1,
-		borderColor: "tan",
+
+		borderColor: "lightgrey",
+
 		paddingHorizontal: 10,
 		textColor: "tan",
 	},
@@ -234,8 +304,10 @@ const styles = StyleSheet.create({
 		marginTop: 10,
 	},
 	numberInput1: {
-		width: 110,
-		height: 40,
+
+		width: 100,
+		height: 20,
+
 	},
 	exerciseLogs: {
 		flex: 1,
@@ -246,7 +318,7 @@ const styles = StyleSheet.create({
 		marginTop: 20,
 		height: 100,
 		borderWidth: 1,
-		borderColor: "tan",
+		borderColor: "lightgrey",
 		margin: 10,
 		borderRadius: 20,
 	},
