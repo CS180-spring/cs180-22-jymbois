@@ -1,26 +1,24 @@
 import database from "../configuration/firebaseConfig";
 import { ref, set, child, get, getDatabase} from "firebase/database"
 
-function writeUserData(userId, eMail, g, p, u) {
-    set(ref(database, 'users/' + userId), {
-      email: eMail,
-      gender: g,
-      password : p,
-      uname: u
+export async function writeData(path, data) {
+  return set(ref(database, path), data)
+    .then(() => {
+      console.log("Data written successfully!");
+    })
+    .catch((error) => {
+      console.error("Error writing data:", error);
     });
 }
-let userId = "5StlXUIxmPMGgzFFvXPF0RKICcu1";
-const dbRef = ref(getDatabase());
-get(child(dbRef, `users/${userId}`)).then((snapshot) => {
-  if (snapshot.exists()) {
-    console.log(snapshot.val());
-  } else {
-    console.log("No data available");
-  }
-}).catch((error) => {
-  console.error(error);
-});
 
+export async function readData(path, callback) {
+  const dataRef = ref(database, path);
 
-writeUserData(userId, "ttran456@gmail.com", "neutral", "pass", "boney171");
+  onValue(dataRef, (snapshot) => {
+    const data = snapshot.val();
+    callback(data);
+  }, (error) => {
+    console.error("Error reading data:", error);
+  });
+}
 
