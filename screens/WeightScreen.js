@@ -71,7 +71,6 @@ const styles = StyleSheet.create({
 		marginBottom: 50,
 		marginTop: -100,
     textAlign: "center",
-    fontFamily: 'OpenSans-Regular',
   },
   weightContainer: {
     justifyContent: 'center',
