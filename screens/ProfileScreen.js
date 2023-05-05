@@ -32,59 +32,64 @@ const SettingScreen = () => {
 				Welcome, <Text style={{ fontWeight: "bold" }}>User</Text>
 			</Text>
 
-      {[
-        ['Dark Mode', isDark, toggleDark],
-        ['Vacation Mode', isVacation, toggleVacation],
-        ['Push Notifications', isPushNotifications, togglePushNotifications],
-      ].map(([label, value, toggle]) => (
-        <View key={label} style={styles.notificationContainer}>
-          <Text style={styles.notificationText}>{label}</Text>
-          <Switch
-            trackColor={{ false: "#767577", true: "#8BC34A" }}
-            thumbColor={value ? "#f4f3f4" : "#f4f3f4"}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={toggle}
-            value={value}
-          />
-        </View>
-      ))}
+			{[
+				["Dark Mode", isDark, toggleDark],
+				["Vacation Mode", isVacation, toggleVacation],
+				["Push Notifications", isPushNotifications, togglePushNotifications],
+			].map(([label, value, toggle]) => (
+				<View key={label} style={styles.notificationContainer}>
+					<Text style={styles.notificationText}>{label}</Text>
+					<Switch
+						trackColor={{ false: "#767577", true: "#013220" }}
+						thumbColor={value ? "#f4f3f4" : "#f4f3f4"}
+						ios_backgroundColor="#3e3e3e"
+						onValueChange={toggle}
+						value={value}
+					/>
+				</View>
+			))}
 
-      <TouchableOpacity style={styles.logout}>
-        <Text style={{color: 'white', fontSize: 16, fontWeight: 'bold'}}>LOG OUT</Text>
-      </TouchableOpacity>
-      
-      <Text style={{marginTop: 20, marginBottom: 0, fontSize: 10}}>POWERED BY</Text>
-      <Image 
-        style={ {width: 120, height: 200, marginTop: -65}}
-        resizeMode='contain'
-        source={require("./images/RealLogo.png")} />
-    </View>
-  );
+			<TouchableOpacity style={styles.logout}>
+				<Text style={{ color: "white", fontSize: 16, fontWeight: "bold" }}>
+					LOG OUT
+				</Text>
+			</TouchableOpacity>
+
+			<Text style={{ marginTop: 20, marginBottom: 0, fontSize: 10 }}>
+				POWERED BY
+			</Text>
+			<Image
+				style={{ width: 120, height: 200, marginTop: -65 }}
+				resizeMode="contain"
+				source={require("./images/RealLogo.png")}
+			/>
+		</View>
+	);
 };
 
 export default SettingScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    marginTop: 25,
-  },
-  image: {
-    width: '34%',
-    height: '21%',
-    borderRadius: 70,
-  },
-  editIconContainer: {
-    backgroundColor: '#8BC34A',
-    padding: 8,
-    borderRadius: 50,
-    marginTop: -20,
-  },
-  logout:{
-    width: "70%",
+	container: {
+		flex: 1,
+		alignItems: "center",
+		marginTop: 25,
+	},
+	image: {
+		width: "34%",
+		height: "21%",
+		borderRadius: 70,
+	},
+	editIconContainer: {
+		backgroundColor: "#013220",
+		padding: 8,
+		borderRadius: 50,
+		marginTop: -20,
+	},
+	logout: {
+		width: "40%",
 		height: 50,
-		backgroundColor: "#8BC34A",
+		backgroundColor: "#013220",
 		justifyContent: "center",
 		alignItems: "center",
 		borderRadius: 20,

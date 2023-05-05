@@ -7,7 +7,6 @@ const GenderScreen = () => {
 	const [gender, setGender] = useState(null);
 	const [isButtonEnabled, setIsButtonEnabled] = useState(false);
 
-
 	const handleGenderSelection = (selectedGender) => {
 		setGender(selectedGender);
 		setIsButtonEnabled(true);
@@ -44,7 +43,8 @@ const GenderScreen = () => {
 				</View>
 				<View style={styles.imageWrapper2}>
 					<TouchableOpacity
-						onPress={() => handleGenderSelection("Prefer Not To Say")}>
+						onPress={() => handleGenderSelection("Prefer Not To Say")}
+					>
 						<Image
 							style={styles.genderImage}
 							source={require("./images/other.png")}
@@ -140,20 +140,22 @@ const styles = StyleSheet.create({
 		color: "black#8BC34A",
 	},
 	nextButton: {
-		width: "70%",
+		width: "40%",
 		height: 50,
 		backgroundColor: "white",
 		justifyContent: "center",
 		borderRadius: 25,
 		marginBottom: 15,
-		shadowColor: '#000',
-  		shadowOffset: { width: 0, height: 2 },
-  		shadowOpacity: 0.2,
-  		shadowRadius: 2,
-  		elevation: 2
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 2 },
+		shadowOpacity: 0.2,
+		shadowRadius: 2,
+		elevation: 2,
+		borderColor: "#8BC34A",
+		borderWidth: 1,
 	},
 	disabledNextButton: {
-		width: "70%",
+		width: "40%",
 		height: 50,
 		backgroundColor: "#ccc",
 		justifyContent: "center",
