@@ -10,7 +10,6 @@ import {
 	TouchableWithoutFeedback,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { auth } from "../configuration/firebaseConfig"; //	Firebase Operations
 
 const RegisterScreen = () => {
 	const navigation = useNavigation();
@@ -70,6 +69,7 @@ const RegisterScreen = () => {
 		password.length > 0 &&
 		confirmPasscode.length > 0;
 
+
 	const signUpDisabled = !passwordMatch || !fieldsFilled;
 	//152 working
 	const emailRegex = new RegExp("^[a-zA-Z0-9_.]+@[a-zA-Z0-9]+\\.[a-zA-Z0-9]+$");
@@ -83,6 +83,24 @@ const RegisterScreen = () => {
 			setEmailError("");
 		}
 	};
+
+    //  Simple check to see if password matches confirmed password fields
+    if(password === confirmPasscode)
+    {
+      //  Registers email and password in Firebase
+
+      //  Pass args from one screen to another
+      //  username, email passwd -> Gender Screen
+      
+      navigation.navigate('Gender', {
+          email: email,
+          username: username,
+          pw: password
+      });
+    }else
+      alert("Your password and confirmed password do not match!")
+  };
+
 
 	return (
 		<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
