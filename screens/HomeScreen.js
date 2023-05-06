@@ -22,7 +22,7 @@ import { useNavigation } from "@react-navigation/native";
 const createThemedStyles = (isDarkMode) => StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: isDarkMode ? "#333" : "#FFFFFF",
+		backgroundColor: isDarkMode ? "#000" : "#FFFFFF",
 		height: "auto",
 	},
 	smallContent: {
@@ -64,7 +64,6 @@ const createThemedStyles = (isDarkMode) => StyleSheet.create({
 
 	titleContainer: {
 		flex: 1,
-
 		justifyContent: "flex-start",
 		flexDirection: "row",
 		marginTop: 15,
@@ -148,7 +147,7 @@ const createThemedStyles = (isDarkMode) => StyleSheet.create({
 		width: 170,
 		padding: 16,
 		borderRadius: 10,
-		backgroundColor: isDarkMode ? "#000000" : "#FFFFFF",
+		backgroundColor: isDarkMode ? "#333" : "#FFFFFF",
 		shadowColor: isDarkMode ? "#FFFFFF" : "#000",
 		shadowOffset: {
 		width: 2,
@@ -166,7 +165,7 @@ const createThemedStyles = (isDarkMode) => StyleSheet.create({
 		width: 170,
 		padding: 16,
 		borderRadius: 10,
-		backgroundColor: isDarkMode ? "#000000" : "#FFFFFF",
+		backgroundColor: isDarkMode ? "#333" : "#FFFFFF",
 		shadowColor: isDarkMode ? "#FFFFFF" : "#000",
 		shadowOffset: {
 		width: 2,

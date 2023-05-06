@@ -17,12 +17,12 @@ const createThemedStyles = (isDarkMode) => {
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: isDarkMode ? '#333' : '#fff',
+      backgroundColor: isDarkMode ? '#000' : '#fff',
     },
     question: {
       fontSize: 30,
       fontWeight: "bold",
-      color: "#B8860B",
+      color: isDarkMode ? '#fff' : '#000',
       marginBottom: 100,
     },
     inputContainer: {
@@ -37,13 +37,14 @@ const createThemedStyles = (isDarkMode) => {
       paddingLeft: 20,
     },
     button: {
-      width: "50%",
+      width: "70%",
       height: 50,
-      backgroundColor: "#B8860B",
+      backgroundColor: "#FFDB58",
       justifyContent: "center",
       alignItems: "center",
-      borderRadius: 25,
-      marginTop: 30,
+      borderRadius: 20,
+      marginBottom: 5,
+      marginTop: 50,
     },
     buttonText: {
       color: "white",
@@ -51,7 +52,7 @@ const createThemedStyles = (isDarkMode) => {
       fontWeight: "bold",
     },
     enabled: {
-      backgroundColor: "#D2B48C",
+      backgroundColor: "#FFDB58",
     },
     disabled: {
       backgroundColor: "gray",
@@ -61,12 +62,9 @@ const createThemedStyles = (isDarkMode) => {
       fontWeight: "bold",
       justifyContent: "space-between",
       marginBottom:30,
+      color: isDarkMode ? '#fff' : '#000',
     },
-    announcement:{
-      fontWeight: "bold",
-      color: "red",
-      marginTop:20,
-    }
+    
 });
 };
 
@@ -111,67 +109,11 @@ const ProgressScreen = () => {
       >
         <Text style={styles.buttonText}>Continue</Text>
       </TouchableOpacity>
-      <Text style={styles.announcement}>We need this page to make sure they input their weight, Howie justin just make it look better plz thanks  ~xoxo</Text>
     </View>
     </TouchableWithoutFeedback>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F2F2F2'
-  },
-  question: {
-    fontSize: 30,
-		fontWeight: "bold",
-		color: "#B8860B",
-		marginBottom: 100,
-  },
-  inputContainer: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 10,
-    width: '80%',
-    marginBottom: 30,
-  },
-  input: {
-    fontSize: 20,
-    height: 50,
-    paddingLeft: 20,
-  },
-  button: {
-    width: "50%",
-		height: 50,
-		backgroundColor: "#B8860B",
-		justifyContent: "center",
-		alignItems: "center",
-		borderRadius: 25,
-		marginTop: 30,
-  },
-  buttonText: {
-    color: "white",
-		fontSize: 25,
-		fontWeight: "bold",
-  },
-  enabled: {
-    backgroundColor: "#D2B48C",
-  },
-  disabled: {
-    backgroundColor: "gray",
-  },
-  weightText: {
-		fontSize: 50,
-		fontWeight: "bold",
-		justifyContent: "space-between",
-    marginBottom:30,
-	},
-  announcement:{
-    fontWeight: "bold",
-    color: "red",
-    marginTop:20,
-  }
-});
+
 
 export default ProgressScreen

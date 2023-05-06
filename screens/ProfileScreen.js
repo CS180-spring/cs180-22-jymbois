@@ -17,13 +17,14 @@ import {
 	  container: {
 		flex: 1,
 		alignItems: "center",
-		marginTop: 25,
-		backgroundColor: isDarkMode ? '#333' : '#fff',
+		//marginTop: 25,
+		backgroundColor: isDarkMode ? '#000' : '#fff',
 	  },
 	  image: {
 		width: "34%",
 		height: "21%",
 		borderRadius: 70,
+		marginTop: 35,
 	  },
 	  editIconContainer: {
 		backgroundColor: "#8B3A3A",
@@ -38,15 +39,15 @@ import {
 		justifyContent: "center",
 		alignItems: "center",
 		borderRadius: 20,
-		marginBottom: 15,
-		marginTop: 50,
+		marginBottom: 5,
+		marginTop: 25,
 	  },
 	  notificationContainer: {
 		flexDirection: "row",
 		justifyContent: "space-between",
 		alignItems: "center",
 		width: "100%",
-		marginTop: 45,
+		marginTop: 25,
 		paddingHorizontal: 70,
 	  },
 	  notificationText: {
