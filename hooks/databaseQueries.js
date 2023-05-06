@@ -2,23 +2,42 @@ import {database} from "../configuration/firebaseConfig";
 import { ref, set, child, get, getDatabase, onValue} from "firebase/database"
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
+import { auth } from "../configuration/firebaseConfig"; //	Firebase Operations
 //Function to write data into the database
-//let data = {
-//  name: "John Doe",
-//  email: "john.doe@example.com",
-//  age: 30,
-//};
+/*
+let data1 = {
+  name: "John Doe",
+  email: "john.doe@example.com",
+  age: 30,
+};
+*/
 //To call this function:  writeData("users/user1", data);
-export async function writeData(path, data) {
-  return set(ref(database, path), data)
-    .then(() => {
-      console.log("Data written successfully!");
-    })
-    .catch((error) => {
-      console.error("Error writing data:", error);
-    });
-}
 
+export function writeUserData(path, uid, data) {
+  const db = getDatabase();
+  let testData = {
+    [uid]: data,
+  }
+  set(ref(db, path),testData);
+}
+export function createExersisePath(path, exerciseName) {
+  const db = getDatabase();
+  let testData = {
+    [exerciseName]: "",
+  }
+  set(ref(db, path),testData);
+}
+export function createSet(path, setInfo, _setData){
+  const db = getDatabase();
+  let setData ={
+    [setInfo]: _setData,
+  }
+  set(ref(db, path),setData);
+}
+const path1 = "DatesExerciseLogs/2023-05-05/5StlXUIxmPMGgzFFvXPF0RKICcu1";
+      createExersisePath(path1,"Deadlift" );
+//Function to readData from real-time firebase
+//to use this function readData()
 export async function readData(path) {
   try {
     const dbRef = ref(getDatabase());
@@ -38,6 +57,12 @@ export async function readData(path) {
   }
 }
 
+
+
+
+
+//Have to use await/promise and await for async function, else will not be able to read data
+/*
 readData("users/users")
   .then((userData) => {
     console.log(userData.email);
@@ -45,6 +70,9 @@ readData("users/users")
   .catch((error) => {
     console.error("Error fetching data:", error);
   });
+*/
+
+
 
 
 
