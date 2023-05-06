@@ -4,13 +4,13 @@ import { Picker } from "@react-native-picker/picker";
 import { useNavigation } from "@react-navigation/native";
 import { auth } from "../configuration/firebaseConfig"; //	Firebase Operations
 
-const HeightScreen = ({route}) => {
+const HeightScreen = ({ route }) => {
 	const navigation = useNavigation();
 	const [selectedFeet, setSelectedFeet] = useState(0);
 	const [selectedInches, setSelectedInches] = useState(0);
 	const [totalInches, setTotalInches] = useState(0);
 
-	const {email, username, pw, gender, age} = route.params
+	const { email, username, pw, gender, age } = route.params;
 
 	const handleFeetSelection = (feet) => {
 		setSelectedFeet(feet);
@@ -24,7 +24,7 @@ const HeightScreen = ({route}) => {
 
 	const handleNextPress = () => {
 		console.log(age);
-		console.log(totalInches)
+		console.log(totalInches);
 		if (totalInches > 0) {
 			console.log("Next button pressed. Height in inches:", totalInches);
 			navigation.navigate("Weight", {
@@ -33,7 +33,7 @@ const HeightScreen = ({route}) => {
 				pw: pw,
 				gender: gender,
 				age: age,
-				height: totalInches
+				height: totalInches,
 			});
 			// totalInces good good
 		} else {
@@ -115,24 +115,28 @@ const styles = StyleSheet.create({
 		color: "black",
 	},
 	button: {
-		width: "50%",
+		width: "40%",
 		height: 50,
 		backgroundColor: "white",
 		justifyContent: "center",
 		alignItems: "center",
 		borderRadius: 25,
 		marginTop: 70,
-		shadowColor: '#000',
-  		shadowOffset: { width: 0, height: 2 },
-  		shadowOpacity: 0.2,
-  		shadowRadius: 2,
-  		elevation: 2
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 2 },
+		shadowOpacity: 0.2,
+		shadowRadius: 2,
+		elevation: 2,
 	},
 	enabled: {
 		backgroundColor: "white",
+		width: "40%",
+		borderColor: "#8BC34A",
+		borderWidth: 2,
 	},
 	disabled: {
-		backgroundColor: "gray",
+		backgroundColor: "#D3D3D3",
+		width: "40%",
 	},
 	buttonText: {
 		color: "black",
