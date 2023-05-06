@@ -5,6 +5,7 @@ import {
 	StyleSheet,
 	Switch,
 	TouchableOpacity,
+	ScrollView,
 } from "react-native";
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -27,51 +28,53 @@ const SettingScreen = () => {
 	}
 
 	return (
-		<View style={styles.container}>
-			<Image
-				style={styles.image}
-				source={require("./images/default-profile.png")}
-			/>
-			<View style={styles.editIconContainer}>
-				<FontAwesome name="pencil" size={20} color="white" />
-			</View>
-
-			<Text style={{ fontSize: 20, marginTop: 20 }}>
-				Welcome, <Text style={{ fontWeight: "bold" }}>User</Text>
-			</Text>
-
-			{[
-				["Dark Mode", isDark, toggleDark],
-				["Vacation Mode", isVacation, toggleVacation],
-				["Push Notifications", isPushNotifications, togglePushNotifications],
-			].map(([label, value, toggle]) => (
-				<View key={label} style={styles.notificationContainer}>
-					<Text style={styles.notificationText}>{label}</Text>
-					<Switch
-						trackColor={{ false: "#767577", true: "#013220" }}
-						thumbColor={value ? "#f4f3f4" : "#f4f3f4"}
-						ios_backgroundColor="#3e3e3e"
-						onValueChange={toggle}
-						value={value}
-					/>
+		<ScrollView>
+			<View style={styles.container}>
+				<Image
+					style={styles.image}
+					source={require("./images/default-profile.png")}
+				/>
+				<View style={styles.editIconContainer}>
+					<FontAwesome name="pencil" size={20} color="white" />
 				</View>
-			))}
 
-			<TouchableOpacity style={styles.logout}>
-				<Text style={{ color: "white", fontSize: 16, fontWeight: "bold" }}>
-					LOG OUT
+				<Text style={{ fontSize: 20, marginTop: 20 }}>
+					Welcome, <Text style={{ fontWeight: "bold" }}>User</Text>
 				</Text>
-			</TouchableOpacity>
 
-			<Text style={{ marginTop: 20, marginBottom: 0, fontSize: 10 }}>
-				POWERED BY
-			</Text>
-			<Image
-				style={{ width: 120, height: 200, marginTop: -65 }}
-				resizeMode="contain"
-				source={require("./images/RealLogo.png")}
-			/>
-		</View>
+				{[
+					["Dark Mode", isDark, toggleDark],
+					["Vacation Mode", isVacation, toggleVacation],
+					["Push Notifications", isPushNotifications, togglePushNotifications],
+				].map(([label, value, toggle]) => (
+					<View key={label} style={styles.notificationContainer}>
+						<Text style={styles.notificationText}>{label}</Text>
+						<Switch
+							trackColor={{ false: "#767577", true: "#013220" }}
+							thumbColor={value ? "#f4f3f4" : "#f4f3f4"}
+							ios_backgroundColor="#3e3e3e"
+							onValueChange={toggle}
+							value={value}
+						/>
+					</View>
+				))}
+
+				<TouchableOpacity style={styles.logout}>
+					<Text style={{ color: "white", fontSize: 16, fontWeight: "bold" }}>
+						LOG OUT
+					</Text>
+				</TouchableOpacity>
+
+				<Text style={{ marginTop: 20, marginBottom: 0, fontSize: 10 }}>
+					POWERED BY
+				</Text>
+				<Image
+					style={{ width: 120, height: 200, marginTop: -65 }}
+					resizeMode="contain"
+					source={require("./images/RealLogo.png")}
+				/>
+			</View>
+		</ScrollView>
 	);
 };
 
@@ -84,8 +87,8 @@ const styles = StyleSheet.create({
 		marginTop: 25,
 	},
 	image: {
-		width: "34%",
-		height: "21%",
+		width: "30%",
+		height: "22%",
 		borderRadius: 70,
 	},
 	editIconContainer: {
