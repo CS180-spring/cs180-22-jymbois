@@ -1,6 +1,14 @@
-import database from "../configuration/firebaseConfig";
-import { ref, set, child, get, getDatabase} from "firebase/database"
-
+import {database} from "../configuration/firebaseConfig";
+import { ref, set, child, get, getDatabase, onValue} from "firebase/database"
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
+//Function to write data into the database
+//let data = {
+//  name: "John Doe",
+//  email: "john.doe@example.com",
+//  age: 30,
+//};
+//To call this function:  writeData("users/user1", data);
 export async function writeData(path, data) {
   return set(ref(database, path), data)
     .then(() => {
@@ -11,14 +19,33 @@ export async function writeData(path, data) {
     });
 }
 
-export async function readData(path, callback) {
-  const dataRef = ref(database, path);
+export async function readData(path) {
+  try {
+    const dbRef = ref(getDatabase());
+    const snapshot = await get(child(dbRef, path));
 
-  onValue(dataRef, (snapshot) => {
-    const data = snapshot.val();
-    callback(data);
-  }, (error) => {
-    console.error("Error reading data:", error);
-  });
+    if (snapshot.exists()) {
+      console.log(snapshot.val());
+      let object = snapshot.val();
+      return Promise.resolve(object);
+    } else {
+      console.log("No data available");
+      return Promise.resolve("No data available");
+    }
+  } catch (error) {
+    console.error(error);
+    return Promise.reject(error);
+  }
 }
+
+readData("users/users")
+  .then((userData) => {
+    console.log(userData.email);
+  })
+  .catch((error) => {
+    console.error("Error fetching data:", error);
+  });
+
+
+
 
