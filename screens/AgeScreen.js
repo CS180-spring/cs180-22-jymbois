@@ -5,18 +5,17 @@ import { Picker } from "@react-native-picker/picker";
 import { useNavigation } from "@react-navigation/native";
 import { auth } from "../configuration/firebaseConfig"; //	Firebase Operations
 
-const AgeScreen = ({route}) => {
+const AgeScreen = ({ route }) => {
 	const navigation = useNavigation();
 	const [selectedAge, setSelectedAge] = useState(18);
 
-	const {email, username, pw, gender} = route.params
+	const { email, username, pw, gender } = route.params;
 
 	const handleAgeSelection = (age) => {
 		setSelectedAge(age);
 	};
 
 	const handleNextPress = () => {
-
 		console.log(selectedAge);
 		if (selectedAge > 0) {
 			console.log("Next button pressed. Selected age:", selectedAge);
@@ -25,7 +24,7 @@ const AgeScreen = ({route}) => {
 				username: username,
 				pw: pw,
 				gender: gender,
-				age: selectedAge
+				age: selectedAge,
 			});
 		} else {
 			console.log("Please select an age.");
@@ -87,38 +86,40 @@ const styles = StyleSheet.create({
 		color: "black",
 	},
 	button: {
-		width: "50%",
+		width: "40%",
 		height: 50,
 		backgroundColor: "white",
 		justifyContent: "center",
 		alignItems: "center",
 		borderRadius: 25,
 		marginTop: 30,
-		shadowColor: '#000',
-  		shadowOffset: { width: 0, height: 2 },
-  		shadowOpacity: 0.2,
-  		shadowRadius: 2,
-  		elevation: 2
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 2 },
+		shadowOpacity: 0.2,
+		shadowRadius: 2,
+		elevation: 2,
 	},
-	disabledButton: { 
-    width: "70%",
+	disabledButton: {
+		width: "40%",
 		height: 50,
 		backgroundColor: "#ccc",
 		justifyContent: "center",
 		alignItems: "center",
 		borderRadius: 25,
 		marginBottom: 15,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-    elevation: 2
-  },
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 2 },
+		shadowOpacity: 0.2,
+		shadowRadius: 2,
+		elevation: 2,
+	},
 	enabled: {
 		backgroundColor: "white",
+		borderColor: "#8BC34A",
+		borderWidth: 2,
 	},
 	disabled: {
-		backgroundColor: "gray",
+		backgroundColor: "#D3D3D3",
 	},
 	buttonText: {
 		color: "black",

@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-const GenderScreen = ({route}) => {
+const GenderScreen = ({ route }) => {
 	const navigation = useNavigation();
 	const [gender, setGender] = useState(null);
 	const [isButtonEnabled, setIsButtonEnabled] = useState(false);
-	const {email, username, pw} = route.params
+	const { email, username, pw } = route.params;
 
 	const handleGenderSelection = (selectedGender) => {
 		setGender(selectedGender);
@@ -15,11 +15,11 @@ const GenderScreen = ({route}) => {
 
 	const handleNextButtonPress = () => {
 		if (gender) {
-			navigation.navigate("Age",{
+			navigation.navigate("Age", {
 				email: email,
 				username: username,
 				pw: pw,
-				gender: gender
+				gender: gender,
 			});
 		} else {
 			// Show error message
@@ -49,7 +49,8 @@ const GenderScreen = ({route}) => {
 				</View>
 				<View style={styles.imageWrapper2}>
 					<TouchableOpacity
-						onPress={() => handleGenderSelection("Prefer Not To Say")}>
+						onPress={() => handleGenderSelection("Prefer Not To Say")}
+					>
 						<Image
 							style={styles.genderImage}
 							source={require("./images/other.png")}
@@ -145,22 +146,24 @@ const styles = StyleSheet.create({
 		color: "black#8BC34A",
 	},
 	nextButton: {
-		width: "70%",
+		width: "40%",
 		height: 50,
 		backgroundColor: "white",
 		justifyContent: "center",
 		borderRadius: 25,
 		marginBottom: 15,
-		shadowColor: '#000',
-  		shadowOffset: { width: 0, height: 2 },
-  		shadowOpacity: 0.2,
-  		shadowRadius: 2,
-  		elevation: 2
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 2 },
+		shadowOpacity: 0.2,
+		shadowRadius: 2,
+		elevation: 2,
+		borderColor: "#8BC34A",
+		borderWidth: 2,
 	},
 	disabledNextButton: {
-		width: "70%",
+		width: "40%",
 		height: 50,
-		backgroundColor: "#ccc",
+		backgroundColor: "#D3D3D3",
 		justifyContent: "center",
 		borderRadius: 25,
 		marginBottom: 15,
