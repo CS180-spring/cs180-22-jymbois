@@ -377,7 +377,7 @@ const styles = StyleSheet.create({
 		right: 0,
 		borderRadius: 45,
 		borderWidth: 2,
-		borderColor: "#FFDB58",
+		borderColor: "#013220",
 	},
 	image2: {
 		width: 58,
