@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity, Modal, TextInput, ScrollView}
 import InputSpinner from 'react-native-input-spinner';
 import  Calendar  from 'react-native-calendars/src/calendar';
 import { writeUserData, createExersisePath, createSet}  from "../hooks/databaseQueries";
+import { auth } from "../configuration/firebaseConfig"; //	Firebase Operations
 import  readData  from '../hooks/databaseQueries';
 const CalenderScreen = () => {
   const [showModal1, setShowModal1] = useState(false);
@@ -25,7 +26,7 @@ const CalenderScreen = () => {
     setShowModal2(false);
     setSetNumbers(0);
   }
-  const saveCalendarModal = ()=>{
+  const saveCalendarModal = async ()=>{
     setShowModal2(false);
     setNameOfExercise(nameOfExercise);
     if(setNumbers != 0){
@@ -37,14 +38,13 @@ const CalenderScreen = () => {
       //insert the exercise into the right array
       const path1 = "DatesExerciseLogs/" + recordDate + "/" + "5StlXUIxmPMGgzFFvXPF0RKICcu1";
       createExersisePath(path1,exerciseName );
-      const path2 = "DatesExerciseLogs/" + recordDate + "/" + "5StlXUIxmPMGgzFFvXPF0RKICcu1/" + exerciseName;
       for(var i = 1; i <= setNumbers; i++){
         let data2 = {
           weight: weights[i],
           reps: reps[i],
         }
         console.log(data2);
-        createSet( path2,   "set " + i, data2);
+        await createSet( "DatesExerciseLogs/" + recordDate + "/" + "5StlXUIxmPMGgzFFvXPF0RKICcu1/" + exerciseName + "/",   "set " + i, data2);
       }
     }
     setSetNumbers(0);

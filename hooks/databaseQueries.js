@@ -1,5 +1,5 @@
 import {database} from "../configuration/firebaseConfig";
-import { ref, set, child, get, getDatabase, onValue} from "firebase/database"
+import { ref, set, child, get, getDatabase, onValue, push, update} from "firebase/database"
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import { auth } from "../configuration/firebaseConfig"; //	Firebase Operations
@@ -25,17 +25,36 @@ export function createExersisePath(path, exerciseName) {
   let testData = {
     [exerciseName]: "",
   }
-  set(ref(db, path),testData);
+  update(ref(db, path),testData);
 }
-export function createSet(path, setInfo, _setData){
+export async function createSet(path, setInfo, _setData){
   const db = getDatabase();
   let setData ={
     [setInfo]: _setData,
   }
-  set(ref(db, path),setData);
+  update(ref(db, path),setData);
 }
-const path1 = "DatesExerciseLogs/2023-05-05/5StlXUIxmPMGgzFFvXPF0RKICcu1";
-      createExersisePath(path1,"Deadlift" );
+//const path1 = "DatesExerciseLogs/2023-05-05/5StlXUIxmPMGgzFFvXPF0RKICcu1";
+//      createExersisePath(path1,"Deadlift" );
+
+
+
+export function writeNewPost(childKey, childData) {
+  const db = getDatabase();
+
+  // A post entry.
+  const postData = {
+    [childKey]: childData,
+  };
+
+  // Set the path for the new post
+  const path = 'DatesBoolean/2023-05-05';
+
+  // Write the new post's data at the specified path
+  return update(ref(db, path), postData);
+}
+
+writeNewPost('5StlXUIxmPMGgzFFvXPF0RKICcu1', 'true');
 //Function to readData from real-time firebase
 //to use this function readData()
 export async function readData(path) {
