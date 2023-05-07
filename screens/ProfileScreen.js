@@ -87,8 +87,8 @@ const styles = StyleSheet.create({
 		marginTop: 25,
 	},
 	image: {
-		width: "25%",
-		height: "22%",
+		width: "34%",
+		height: "24%",
 		borderRadius: 70,
 	},
 	editIconContainer: {

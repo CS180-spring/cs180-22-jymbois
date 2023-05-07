@@ -150,12 +150,12 @@ const HomeScreen = () => {
 					<Text style={styles.WorkoutTitle}>Workouts</Text>
 
 					<View style={styles.workoutList}>
-						{/* <View style={[styles.leftContent]}>
-							<Text style={styles.subtitle}>Finished:</Text>
-							<Text style={styles.workoutsDone}>5 </Text>
-							<Text style={styles.workoutsText}>Workouts Completed</Text>
-						</View> */}
-						<View style={styles.workoutPosts}></View>
+						<View style={styles.workoutPosts}>
+							<View style={styles.workoutLeftContent}>
+								<Text style={styles.workoutSubtitle}>Bench</Text>
+								<Text style={styles.workoutSubtitle2}>4 Sets</Text>
+							</View>
+						</View>
 					</View>
 					<TouchableOpacity onPress={() => setSelectedWorkout(null)}>
 						<Text style={styles.closeModalTextWorkout}>Close</Text>
@@ -168,9 +168,16 @@ const HomeScreen = () => {
 				animationType="slide"
 				onRequestClose={() => setSelectedWorkout(null)}
 			>
-				<TouchableOpacity onPress={() => setSelectedWorkout(null)}>
-					<Text style={styles.closeModalTextWorkout}>Close</Text>
-				</TouchableOpacity>
+				<View style={styles.modalContainer1}>
+					<Text style={styles.WorkoutTitle}>Workouts</Text>
+
+					<View style={styles.workoutList}>
+						<View style={styles.workoutPosts}></View>
+					</View>
+					<TouchableOpacity onPress={() => setSelectedWorkout(null)}>
+						<Text style={styles.closeModalTextWorkout}>Close</Text>
+					</TouchableOpacity>
+				</View>
 			</Modal>
 
 			<Modal
@@ -178,9 +185,18 @@ const HomeScreen = () => {
 				animationType="slide"
 				onRequestClose={() => setSelectedWorkout(null)}
 			>
-				<TouchableOpacity onPress={() => setSelectedWorkout(null)}>
-					<Text style={styles.closeModalTextWorkout}>Close</Text>
-				</TouchableOpacity>
+				<View style={styles.modalContainer1}>
+					<Text style={styles.WorkoutTitle}>Workouts</Text>
+
+					<View style={styles.workoutList}>
+						<View style={styles.workoutPosts}>
+							<View style={styles.workoutLeftContent}></View>
+						</View>
+					</View>
+					<TouchableOpacity onPress={() => setSelectedWorkout(null)}>
+						<Text style={styles.closeModalTextWorkout}>Close</Text>
+					</TouchableOpacity>
+				</View>
 			</Modal>
 			<Modal visible={showTimerModal} animationType="slide">
 				<View style={styles.timerModal}>
@@ -492,6 +508,7 @@ const styles = StyleSheet.create({
 		color: "#4A4A4A",
 		marginTop: -2,
 	},
+
 	workoutsDone: {
 		fontSize: 60,
 		fontWeight: "bold",
@@ -684,11 +701,12 @@ const styles = StyleSheet.create({
 		padding: 20,
 		backgroundColor: "#fff",
 	},
+
 	WorkoutTitle: {
 		fontWeight: "bold",
-		top: 80,
+		top: 100,
 		fontSize: 26,
-		left: 10,
+		left: 15,
 	},
 	closeModalTextWorkout: {
 		fontSize: 12,
@@ -698,6 +716,43 @@ const styles = StyleSheet.create({
 	},
 	workoutList: {
 		top: 120,
+		flexDirection: "column",
+	},
+	workoutPosts: {
+		flex: 1,
+		flexDirection: "row",
+
+		padding: 16,
+		borderRadius: 10,
+		width: "90%",
+		backgroundColor: "#FFFFFF",
+		shadowColor: "#000",
+		shadowOffset: {
+			width: 2,
+			height: 2,
+		},
+		shadowOpacity: 0.11,
+		shadowRadius: 5,
+		elevation: 5,
+		minHeight: 130,
+		alignSelf: "center",
+	},
+	workoutLeftContent: {
+		flexDirection: "column",
+		flex: 1,
+		left: 15,
+		position: "absolute",
+	},
+	workoutSubtitle: {
+		fontSize: 18,
+		fontWeight: "bold",
+		top: 15,
+	},
+	workoutSubtitle2: {
+		fontSize: 15,
+		fontWeight: "bold",
+		color: "#4A4A4A",
+		marginTop: 20,
 	},
 });
 
