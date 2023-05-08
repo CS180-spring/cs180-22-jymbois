@@ -584,11 +584,11 @@ const styles = StyleSheet.create({
 
 	image3: {
 		width: 160,
-		height: 130,
-		marginRight: 10,
+		height: 116,
+		marginRight: 4,
 		position: "absolute",
 		right: 0,
-		top: 10,
+		top: 13,
 
 		borderRadius: 7,
 		borderWidth: 0.5,
@@ -911,7 +911,7 @@ const styles = StyleSheet.create({
 	closeModalTextWorkout: {
 		fontSize: 15,
 		fontWeight: 700,
-		top: -610,
+		top: -573,
 		left: 140,
 		alignSelf: "center",
 	},
@@ -935,7 +935,7 @@ const styles = StyleSheet.create({
 		shadowOpacity: 0.11,
 		shadowRadius: 5,
 		elevation: 5,
-		minHeight: 150,
+		minHeight: 140,
 		alignSelf: "center",
 		marginBottom: 12, // Add margin bottom
 	},
