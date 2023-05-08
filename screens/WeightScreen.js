@@ -11,13 +11,11 @@ import {
 import { auth } from "../configuration/firebaseConfig"; //	Firebase Operations
 import database from "../configuration/firebaseConfig";
 import { ref, set } from "firebase/database";
-import { usePushNotification } from "../hooks/usePushNotifications";
 
 
 const WeightScreen = ({ route }) => {
 	const [weight, setWeight] = useState("");
 	const [buttonDisabled, setButtonDisabled] = useState(true);
-	const pushToken = usePushNotification();
 
 	const { email, username, pw, gender, age, height } = route.params;
 
@@ -49,8 +47,6 @@ const WeightScreen = ({ route }) => {
 				await set(dbRef, height);
 				dbRef = ref(database, "users/" + user.uid + "/weight");
 				await set(dbRef, weight);
-				dbRef = ref(database, "users/" + user.uid + "/pushToken");
-  				await set(dbRef, pushToken);
 				
 				console.log(user.email + " logged in!");
 			} catch (error) {
