@@ -13,6 +13,14 @@ const saveTokenToDatabase = async (token, isPushNotificationsEnabled) => {
   await set(dbRef, token);
 };
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+  }),
+});
+
 export const usePushRegister = (isPushNotificationsEnabled) => {
   const [expoPushToken, setExpoPushToken] = useState('');
   const notificationListener = useRef();
