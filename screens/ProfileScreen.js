@@ -9,16 +9,18 @@ import {
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { FontAwesome } from "@expo/vector-icons";
-import { useDark, usePushNotifications, useVacation } from "../hooks/useSwitch";
+import { useDark, useVacation } from "../hooks/useSwitch";
 import { auth } from "../configuration/firebaseConfig";
+import { usePushNotificationToggle } from "../hooks/usePushNotificationToggle";
+import { usePushRegister } from "../hooks/usePushRegister";
 
 const Stack = createStackNavigator();
 
 const SettingScreen = () => {
 	const [isDark, toggleDark] = useDark(false);
 	const [isVacation, toggleVacation] = useVacation(false);
-	const [isPushNotifications, togglePushNotifications] =
-		usePushNotifications(false);
+	const [isPushNotificationsEnabled, togglePushNotifications] = usePushNotificationToggle(false);
+	const expoPushToken = usePushRegister(isPushNotificationsEnabled);
 	// still need to do this for the username and for photo uploads
 
 	function logOut() {
@@ -43,7 +45,7 @@ const SettingScreen = () => {
 			{[
 				["Dark Mode", isDark, toggleDark],
 				["Vacation Mode", isVacation, toggleVacation],
-				["Push Notifications", isPushNotifications, togglePushNotifications],
+				["Push Notifications", isPushNotificationsEnabled, togglePushNotifications],
 			].map(([label, value, toggle]) => (
 				<View key={label} style={styles.notificationContainer}>
 					<Text style={styles.notificationText}>{label}</Text>
