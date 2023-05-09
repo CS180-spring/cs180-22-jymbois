@@ -5,18 +5,27 @@ import { Picker } from "@react-native-picker/picker";
 import { useNavigation } from "@react-navigation/native";
 import { auth } from "../configuration/firebaseConfig"; //	Firebase Operations
 
-const AgeScreen = () => {
+const AgeScreen = ({ route }) => {
 	const navigation = useNavigation();
 	const [selectedAge, setSelectedAge] = useState(18);
+
+	const { email, username, pw, gender } = route.params;
 
 	const handleAgeSelection = (age) => {
 		setSelectedAge(age);
 	};
 
 	const handleNextPress = () => {
+		console.log(selectedAge);
 		if (selectedAge > 0) {
 			console.log("Next button pressed. Selected age:", selectedAge);
-			navigation.navigate("Height");
+			navigation.navigate("Height", {
+				email: email,
+				username: username,
+				pw: pw,
+				gender: gender,
+				age: selectedAge,
+			});
 		} else {
 			console.log("Please select an age.");
 		}
@@ -58,12 +67,12 @@ const styles = StyleSheet.create({
 		flex: 1,
 		alignItems: "center",
 		justifyContent: "center",
-		backgroundColor: "#FFF8DC",
+		backgroundColor: "white",
 	},
 	header: {
 		fontSize: 30,
 		fontWeight: "bold",
-		color: "#B8860B",
+		color: "black",
 		marginBottom: 20,
 	},
 	picker: {
@@ -74,25 +83,46 @@ const styles = StyleSheet.create({
 		marginTop: 70,
 		fontSize: 20,
 		fontWeight: "bold",
-		color: "#B8860B",
+		color: "black",
 	},
 	button: {
-		width: "50%",
+		width: "40%",
 		height: 50,
-		backgroundColor: "#B8860B",
+		backgroundColor: "white",
 		justifyContent: "center",
 		alignItems: "center",
 		borderRadius: 25,
 		marginTop: 30,
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 2 },
+		shadowOpacity: 0.2,
+		shadowRadius: 2,
+		elevation: 2,
+	},
+	disabledButton: {
+		width: "40%",
+		height: 50,
+		backgroundColor: "#ccc",
+		justifyContent: "center",
+		alignItems: "center",
+		borderRadius: 25,
+		marginBottom: 15,
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 2 },
+		shadowOpacity: 0.2,
+		shadowRadius: 2,
+		elevation: 2,
 	},
 	enabled: {
-		backgroundColor: "#D2B48C",
+		backgroundColor: "white",
+		borderColor: "#8BC34A",
+		borderWidth: 2,
 	},
 	disabled: {
-		backgroundColor: "gray",
+		backgroundColor: "#D3D3D3",
 	},
 	buttonText: {
-		color: "white",
+		color: "black",
 		fontSize: 25,
 		fontWeight: "bold",
 	},

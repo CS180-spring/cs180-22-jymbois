@@ -9,7 +9,7 @@ import {
 	ScrollView,
 	Keyboard,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";	
+import { useNavigation } from "@react-navigation/native";
 import { auth } from "../configuration/firebaseConfig"; //	Firebase Operations
 
 const LoginScreen = () => {
@@ -68,18 +68,22 @@ const LoginScreen = () => {
 
 	const handleLogin = () => {
 		// Run login function here
-		auth.signInWithEmailAndPassword(email, password)
-          .then((userCredential) => { //  Successful sign in
-            const user = userCredential.user;
-            console.log("Logged in with: ", email);
-			navigation.navigate("Home")	//	Navigate to User Home Page :)
-          }).catch((error) => { //  Error, set to send alert when error occurs
+		auth
+			.signInWithEmailAndPassword(email, password)
+			.then((userCredential) => {
+				//  Successful sign in
+				const user = userCredential.user;
+				console.log("Logged in with: ", email);
+				navigation.navigate("Home"); //	Navigate to User Home Page :)
+			})
+			.catch((error) => {
+				//  Error, set to send alert when error occurs
 
-			//	Maybe set up message here instead of just an alert window?
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            alert(error.message);
-           })
+				//	Maybe set up message here instead of just an alert window?
+				const errorCode = error.code;
+				const errorMessage = error.message;
+				alert(error.message);
+			});
 	};
 
 	const scrollViewRef = useRef(null);
@@ -107,7 +111,7 @@ const LoginScreen = () => {
 								: styles.inputInactive,
 						]}
 						placeholder="Enter Username"
-						value={email}	//	email var set here trhough textbox
+						value={email} //	email var set here trhough textbox
 						onChangeText={setEmail}
 						onFocus={handleEmailFocus}
 						onBlur={handleEmailBlur}
@@ -140,13 +144,17 @@ const LoginScreen = () => {
 					style={styles.registerButton}
 					onPress={() => navigation.navigate("Register")}
 				>
-					<Text style={styles.registerButtonText}>Don't have an account? <Text style={{color: 'tan', fontWeight: 'bold'}}>Click here</Text></Text>
+					<Text style={styles.registerButtonText}>
+						Don't have an account?{" "}
+						<Text style={{ color: "black", fontWeight: "bold" }}>
+							Click here
+						</Text>
+					</Text>
 				</TouchableOpacity>
 			</View>
 		</ScrollView>
 	);
 };
-
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
@@ -190,7 +198,7 @@ const styles = StyleSheet.create({
 		fontSize: 24,
 		marginBottom: 20,
 		textAlign: "center",
-		color: "#333",
+		color: "white",
 	},
 	input: {
 		justifyContent: "center",
@@ -209,20 +217,28 @@ const styles = StyleSheet.create({
 		borderBottomColor: "#ccc",
 	},
 	inputFocused: {
-		borderBottomColor: "#d2b48c",
+		borderBottomColor: "#8BC34A",
 	},
 
 	button: {
-		width: "70%",
+		width: "40%",
 		height: 50,
-		backgroundColor: "#d2b48c",
+		backgroundColor: "white",
 		justifyContent: "center",
+		borderColor: "#8BC34A",
+		borderWidth: 2,
 		alignItems: "center",
 		borderRadius: 20,
 		marginBottom: 15,
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 2 },
+		shadowOpacity: 0.2,
+		shadowRadius: 2,
+		elevation: 2,
+		top: 35,
 	},
 	buttonText: {
-		color: "#fff",
+		color: "black",
 		fontSize: 16,
 		fontWeight: "bold",
 	},
@@ -232,6 +248,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "#fff",
 		justifyContent: "center",
 		alignItems: "center",
+		top: 40,
 	},
 	registerButtonText: {
 		color: "black",

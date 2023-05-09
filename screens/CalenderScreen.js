@@ -5,6 +5,7 @@ import  Calendar  from 'react-native-calendars/src/calendar';
 import { writeUserData, createExersisePath, createSet}  from "../hooks/databaseQueries";
 import { auth } from "../configuration/firebaseConfig"; //	Firebase Operations
 import  readData  from '../hooks/databaseQueries';
+
 const CalenderScreen = () => {
   const [showModal1, setShowModal1] = useState(false);
   const [showModal2, setShowModal2] = useState(false);
@@ -29,14 +30,15 @@ const CalenderScreen = () => {
   const saveCalendarModal = async ()=>{
     setShowModal2(false);
     setNameOfExercise(nameOfExercise);
+    const user = auth.currentUser.uid;
     if(setNumbers != 0){
       //write on left array
       let path = "DatesBoolean/" + recordDate;
-      writeUserData( path,   "5StlXUIxmPMGgzFFvXPF0RKICcu1", "true");
+      writeUserData( path,   user, "true");
       
 
       //insert the exercise into the right array
-      const path1 = "DatesExerciseLogs/" + recordDate + "/" + "5StlXUIxmPMGgzFFvXPF0RKICcu1";
+      const path1 = "DatesExerciseLogs/" + recordDate + "/" + user;
       createExersisePath(path1,exerciseName );
       for(var i = 1; i <= setNumbers; i++){
         let data2 = {
@@ -44,7 +46,7 @@ const CalenderScreen = () => {
           reps: reps[i],
         }
         console.log(data2);
-        await createSet( "DatesExerciseLogs/" + recordDate + "/" + "5StlXUIxmPMGgzFFvXPF0RKICcu1/" + exerciseName + "/",   "set " + i, data2);
+        await createSet( "DatesExerciseLogs/" + recordDate + "/" + user + "/" + exerciseName + "/",   "set " + i, data2);
       }
     }
     setSetNumbers(0);
@@ -108,7 +110,6 @@ const CalenderScreen = () => {
       <Calendar 
         style={styles.calendar} 
         onDayPress={ handleDayPress}
-        initialDate={'2023-04-21'}
         minDate={"2023-04-01"}
         maxDate={"2023-12-31"}
         hideExtraDays={true}

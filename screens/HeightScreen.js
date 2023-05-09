@@ -4,11 +4,13 @@ import { Picker } from "@react-native-picker/picker";
 import { useNavigation } from "@react-navigation/native";
 import { auth } from "../configuration/firebaseConfig"; //	Firebase Operations
 
-const HeightScreen = () => {
+const HeightScreen = ({ route }) => {
 	const navigation = useNavigation();
 	const [selectedFeet, setSelectedFeet] = useState(0);
 	const [selectedInches, setSelectedInches] = useState(0);
 	const [totalInches, setTotalInches] = useState(0);
+
+	const { email, username, pw, gender, age } = route.params;
 
 	const handleFeetSelection = (feet) => {
 		setSelectedFeet(feet);
@@ -21,9 +23,18 @@ const HeightScreen = () => {
 	};
 
 	const handleNextPress = () => {
+		console.log(age);
+		console.log(totalInches);
 		if (totalInches > 0) {
 			console.log("Next button pressed. Height in inches:", totalInches);
-			navigation.navigate("Weight");
+			navigation.navigate("Weight", {
+				email: email,
+				username: username,
+				pw: pw,
+				gender: gender,
+				age: age,
+				height: totalInches,
+			});
 			// totalInces good good
 		} else {
 			console.log("Please select a height.");
@@ -78,12 +89,12 @@ const styles = StyleSheet.create({
 		flex: 1,
 		alignItems: "center",
 		justifyContent: "center",
-		backgroundColor: "#FFF8DC",
+		backgroundColor: "#FFFFFF",
 	},
 	header: {
 		fontSize: 30,
 		fontWeight: "bold",
-		color: "#B8860B",
+		color: "black",
 		marginBottom: 20,
 	},
 	pickerContainer: {
@@ -101,25 +112,34 @@ const styles = StyleSheet.create({
 		marginTop: 60,
 		fontSize: 20,
 		fontWeight: "bold",
-		color: "#B8860B",
+		color: "black",
 	},
 	button: {
-		width: "50%",
+		width: "40%",
 		height: 50,
-		backgroundColor: "#B8860B",
+		backgroundColor: "white",
 		justifyContent: "center",
 		alignItems: "center",
 		borderRadius: 25,
 		marginTop: 70,
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 2 },
+		shadowOpacity: 0.2,
+		shadowRadius: 2,
+		elevation: 2,
 	},
 	enabled: {
-		backgroundColor: "#D2B48C",
+		backgroundColor: "white",
+		width: "40%",
+		borderColor: "#8BC34A",
+		borderWidth: 2,
 	},
 	disabled: {
-		backgroundColor: "gray",
+		backgroundColor: "#D3D3D3",
+		width: "40%",
 	},
 	buttonText: {
-		color: "white",
+		color: "black",
 		fontSize: 25,
 		fontWeight: "bold",
 	},

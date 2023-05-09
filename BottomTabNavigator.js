@@ -1,39 +1,66 @@
-import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import HomeScreen from './screens/HomeScreen';
-import CalenderScreen from './screens/CalenderScreen';
-import ProgressScreen from './screens/ProgressScreen';
-import SettingsScreen from './screens/ProfileScreen';
-import { AntDesign } from '@expo/vector-icons';
-import { Fontisto } from '@expo/vector-icons';
-import { SimpleLineIcons } from '@expo/vector-icons'; 
+import React from "react";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createStackNavigator } from "@react-navigation/stack";
+import { Appearance, useColorScheme } from "react-native";
+import HomeScreen from "./screens/HomeScreen";
+import CalenderScreen from "./screens/CalenderScreen";
+import ProgressScreen from "./screens/ProgressScreen";
+import SettingsScreen from "./screens/ProfileScreen";
+import GraphScreen from "./screens/GraphScreen";
+
+import { AntDesign } from "@expo/vector-icons";
+import { Fontisto } from "@expo/vector-icons";
+import { SimpleLineIcons } from "@expo/vector-icons";
+import { auth } from "./configuration/firebaseConfig";
+
+import ThemeContext from "./hooks/ThemeContext";
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
+
+const ProgressStack = () => {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Progress_" component={ProgressScreen} />
+      <Stack.Screen name="Graph" component={GraphScreen} />
+    </Stack.Navigator>
+  );
+};
 
 const BottomTabNavigator = () => {
+  const { isDarkMode } = React.useContext(ThemeContext);
+
   return (
     <Tab.Navigator
-    screenOptions={{
-      tabBarStyle: { backgroundColor: 'tan', height: 80, size: 30 },
-      headerStyle: { backgroundColor: 'tan' },
-      headerTintColor: 'white',
-      tabBarInactiveTintColor: 'white',
-      tabBarActiveTintColor: '#8B3A3A',
-      tabBarActiveBackgroundColor: '#f5dd4b' // debating on whether to keep this or not
-
-    }}
+      screenOptions={{
+        tabBarStyle: {
+          backgroundColor: isDarkMode ? "#000" : "white",
+          height: 80,
+          size: 30,
+        },
+        headerStyle: {
+          backgroundColor: isDarkMode ? "#000" : "white",
+        },
+        headerTintColor: isDarkMode ? "grey" : "grey",
+        headerTitleStyle: {
+          color: isDarkMode ? "white" : "grey",
+        },
+        tabBarInactiveTintColor: isDarkMode ? "grey" : "grey",
+        tabBarActiveTintColor: isDarkMode ? "#013220" : "#013220",
+        tabBarActiveBackgroundColor: isDarkMode ? "black" : "white",
+      }}
     >
-      <Tab.Screen 
-        name="Home" 
-        component={HomeScreen} 
+      <Tab.Screen
+        name="Home"
+        component={HomeScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
             <AntDesign name="home" color={color} size={size} />
           ),
         }}
       />
-      <Tab.Screen 
-        name="Calendar" 
+      <Tab.Screen
+        name="Calendar"
         component={CalenderScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
@@ -41,23 +68,24 @@ const BottomTabNavigator = () => {
           ),
         }}
       />
-      <Tab.Screen 
-        name="Progress" 
-        component={ProgressScreen} 
+      <Tab.Screen
+        name="Progress"
+        component={ProgressStack}
         options={{
           tabBarIcon: ({ color, size }) => (
             <AntDesign name="linechart" color={color} size={size} />
           ),
         }}
       />
-      <Tab.Screen 
-        name="Profile" 
-        component={SettingsScreen} 
+      <Tab.Screen
+        name="Profile"
+        component={SettingsScreen}
         options={{
-          tabBarIcon: ({color, size}) => (
-            <AntDesign name='user' color={color} size={size}/>
+          tabBarIcon: ({ color, size }) => (
+            <AntDesign name="user" color={color} size={size} />
           ),
         }}
+        initialParams={{ isDarkMode }}
       />
     </Tab.Navigator>
   );

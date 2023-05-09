@@ -3,15 +3,19 @@ import { StyleSheet, Text, View } from 'react-native';
 import StackNavigator from './StackNavigator';
 import {NavigationContainer} from '@react-navigation/native'
 import { AuthProvider } from './hooks/useAuth';
-
+import LoginNavigator from './LoginNavigator';
+import { ThemeProvider } from './hooks/ThemeContext'; 
 
 export default function App() {
   return (
     <NavigationContainer>
-      <AuthProvider>
-        <StackNavigator/>
-      </AuthProvider>
+      <ThemeProvider>
+        <AuthProvider>
+        <LoginNavigator/>
+        </AuthProvider>
+      </ThemeProvider>
     </NavigationContainer>
+   
     
   );
 }
