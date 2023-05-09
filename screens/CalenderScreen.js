@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Modal, TextInput, ScrollView} from 'react-native';
 import InputSpinner from 'react-native-input-spinner';
 import  Calendar  from 'react-native-calendars/src/calendar';
+import ThemeContext from "../hooks/ThemeContext";
 
 const CalenderScreen = () => {
   const [showModal1, setShowModal1] = useState(false);
