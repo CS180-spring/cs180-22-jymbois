@@ -26,8 +26,6 @@ const HomeScreen = () => {
 
 	const [isActive, setIsActive] = React.useState(false);
 	const [isPaused, setIsPaused] = React.useState(false);
-	const [showButtons, setShowButtons] = React.useState(true); // Add showButtons state variable
-	const [startButton, setStartButton] = React.useState("Start"); // Add startButton state variable
 	const [selectedWorkout, setSelectedWorkout] = useState(null);
 	const countRef = React.useRef(null);
 	const workoutData = [
