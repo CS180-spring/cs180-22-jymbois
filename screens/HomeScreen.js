@@ -503,8 +503,9 @@ const createThemedStyles = (isDarkMode) => StyleSheet.create({
 		marginTop: 10,
 	},
 	workoutText: { //IDK WHYY THIS PART IS NOT TURNING WHITE
-		fontSize: 13,
+		fontSize: 45,
 		fontWeight: "bold",
+		//color: "red", // not even turning red so idk
 		color: isDarkMode ? "#FFFFFF" : "#4A4A4A",
 		marginTop: 8,
 	},
@@ -540,7 +541,7 @@ const createThemedStyles = (isDarkMode) => StyleSheet.create({
 	workoutName: {
         fontSize: 20,
         fontWeight: "bold",
-        color: isDarkMode ? "#FFFFFF" : "#000000",
+        color: isDarkMode ? "#FFFFFF" : "#FFFFFF",
         position: "absolute",
         // top: 20,
         // left: 10,
