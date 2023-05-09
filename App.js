@@ -4,15 +4,18 @@ import StackNavigator from './StackNavigator';
 import {NavigationContainer} from '@react-navigation/native'
 import { AuthProvider } from './hooks/useAuth';
 import LoginNavigator from './LoginNavigator';
-
+import { ThemeProvider } from './hooks/ThemeContext'; 
 
 export default function App() {
   return (
     <NavigationContainer>
-      <AuthProvider>
+      <ThemeProvider>
+        <AuthProvider>
         <LoginNavigator/>
-      </AuthProvider>
+        </AuthProvider>
+      </ThemeProvider>
     </NavigationContainer>
+   
     
   );
 }
