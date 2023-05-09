@@ -26,77 +26,6 @@ const ProgressScreen = () => {
     navigation.navigate('Graph', { weight: weight });
   };
 
-  const createThemedStyles = (isDarkMode) => {
-    return StyleSheet.create({
-      container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: isDarkMode ? '#000' : '#fff',
-      },
-      question: {
-        fontSize: 30,
-        fontWeight: "bold",
-        color: isDarkMode ? '#fff' : '#000',
-        marginBottom: 100,
-      },
-      inputContainer: {
-        backgroundColor: isDarkMode ? '#333' : '#fff',
-        borderRadius: 10,
-        width: '80%',
-        marginBottom: 30,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 2,
-        elevation: 2,
-      },
-      input: {
-        fontSize: 20,
-        height: 50,
-        paddingLeft: 20,
-        color: isDarkMode ? '#fff' : '#000',
-      },
-      button: {
-        width: "50%",
-        height: 50,
-        backgroundColor: isDarkMode ? '#fff' : '#000',
-        justifyContent: "center",
-        alignItems: "center",
-        borderRadius: 25,
-        marginTop: 30,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 2,
-        elevation: 2,
-      },
-      buttonText: {
-        color: isDarkMode ? '#fff' : 'black',
-        fontSize: 25,
-        fontWeight: "bold",
-      },
-      enabled: {
-        backgroundColor: isDarkMode ? '#013220' : 'white',
-      },
-      disabled: {
-        backgroundColor: isDarkMode ? 'gray' : 'gray',
-      },
-      weightText: {
-        fontSize: 50,
-        fontWeight: "bold",
-        justifyContent: "space-between",
-        marginBottom:30,
-        color: isDarkMode ? '#fff' : '#000',
-      },
-      announcement:{
-        fontWeight: "bold",
-        color: isDarkMode ? '#fff' : 'blue',
-        marginTop:20,
-      }
-    });
-  };
-
   const { isDarkMode } = React.useContext(ThemeContext);
   const styles = createThemedStyles(isDarkMode);
 
@@ -127,7 +56,76 @@ const ProgressScreen = () => {
     </TouchableWithoutFeedback>
   );
 };
-
+const createThemedStyles = (isDarkMode) => {
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: isDarkMode ? '#000' : '#fff',
+    },
+    question: {
+      fontSize: 30,
+      fontWeight: "bold",
+      color: isDarkMode ? '#fff' : '#000',
+      marginBottom: 100,
+    },
+    inputContainer: {
+      backgroundColor: isDarkMode ? '#333' : '#fff',
+      borderRadius: 10,
+      width: '80%',
+      marginBottom: 30,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.2,
+      shadowRadius: 2,
+      elevation: 2,
+    },
+    input: {
+      fontSize: 20,
+      height: 50,
+      paddingLeft: 20,
+      color: isDarkMode ? '#fff' : '#000',
+    },
+    button: {
+      width: "50%",
+      height: 50,
+      backgroundColor: isDarkMode ? '#fff' : '#000',
+      justifyContent: "center",
+      alignItems: "center",
+      borderRadius: 25,
+      marginTop: 30,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.2,
+      shadowRadius: 2,
+      elevation: 2,
+    },
+    buttonText: {
+      color: isDarkMode ? '#fff' : 'black',
+      fontSize: 25,
+      fontWeight: "bold",
+    },
+    enabled: {
+      backgroundColor: isDarkMode ? '#013220' : 'white',
+    },
+    disabled: {
+      backgroundColor: isDarkMode ? 'gray' : 'gray',
+    },
+    weightText: {
+      fontSize: 50,
+      fontWeight: "bold",
+      justifyContent: "space-between",
+      marginBottom:30,
+      color: isDarkMode ? '#fff' : '#000',
+    },
+    announcement:{
+      fontWeight: "bold",
+      color: isDarkMode ? '#fff' : 'blue',
+      marginTop:20,
+    }
+  });
+};
 
 
 export default ProgressScreen
