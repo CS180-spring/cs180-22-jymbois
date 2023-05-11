@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Picker } from "@react-native-picker/picker";
 import { 
   StyleSheet, 
   View, 
@@ -26,6 +27,11 @@ const ProgressScreen = () => {
     navigation.navigate('Graph', { weight: weight });
   };
 
+  const weightOptions = [];
+  for (let i = 0; i <= 400; i += 1) {
+    weightOptions.push(<Picker.Item key={i} label={`${i} lbs`} value={i.toString()} />)
+  }
+
   const { isDarkMode } = React.useContext(ThemeContext);
   const styles = createThemedStyles(isDarkMode);
 
@@ -33,16 +39,19 @@ const ProgressScreen = () => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <View style={styles.container}>
       <Text style={styles.question}>What is your current weight today?</Text>
-        <Text style={styles.weightText}>{weight} lbs</Text>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          value={weight}
-          onChangeText={handleWeightChange}
-          keyboardType="numeric"
-          placeholder="Enter your weight in pounds"
-          placeholderTextColor="#BDBDBD"
-        />
+      <View style={styles.weightContainer}>
+        <View style={styles.circle}>
+          <Text style={styles.weightText}>{weight} lbs</Text>
+        </View>
+        <View style={styles.pickerContainer}>
+          <Picker 
+            selectedValue={weight}
+            onValueChange={handleWeightChange}
+            style={styles.picker}
+          >
+            {weightOptions}
+          </Picker>
+        </View>
       </View>
       <TouchableOpacity
         style={[styles.button, buttonDisabled ? styles.disabled : styles.enabled]}
@@ -51,7 +60,6 @@ const ProgressScreen = () => {
       >
         <Text style={styles.buttonText}>Continue</Text>
       </TouchableOpacity>
-      <Text style={styles.announcement}>We need this page to make sure they input their weight, Howie justin just make it look better plz thanks  ~xoxo</Text>
     </View>
     </TouchableWithoutFeedback>
   );
@@ -64,8 +72,19 @@ const createThemedStyles = (isDarkMode) => {
       alignItems: 'center',
       backgroundColor: isDarkMode ? '#000' : '#fff',
     },
+    picker: {
+      width: "70%",
+      height: 150,
+    },
+    selectedWeightText: {
+      marginTop: 70,
+      fontSize: 20,
+      fontWeight: "bold",
+      color: "black",
+    },
     question: {
       fontSize: 30,
+      textAlign : 'center',
       fontWeight: "bold",
       color: isDarkMode ? '#fff' : '#000',
       marginBottom: 100,
@@ -115,15 +134,40 @@ const createThemedStyles = (isDarkMode) => {
     weightText: {
       fontSize: 50,
       fontWeight: "bold",
-      justifyContent: "space-between",
-      marginBottom:30,
-      color: isDarkMode ? '#fff' : '#000',
+      justifyContent: "center",
+      marginBottom:5,
+      color: isDarkMode ? '#fff' : '#fff',
     },
     announcement:{
       fontWeight: "bold",
       color: isDarkMode ? '#fff' : 'blue',
       marginTop:20,
-    }
+    },
+    weightContainer: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginBottom: 30,
+    },
+    circle: {
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+    backgroundColor: '#8BC34A',
+    justifyContent: 'center',
+    alignItems: 'center',
+    overflow: 'hidden',
+    marginBottom: 20,
+    },
+    pickerContainer: {
+      flex: 1,
+      height: undefined,
+      maxHeight: 100,
+    },
+    picker: {
+      width: 200,
+      height: undefined,
+      flex:'row',
+    },
   });
 };
 
