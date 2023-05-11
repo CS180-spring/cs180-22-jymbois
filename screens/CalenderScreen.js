@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Modal, TextInput, ScrollView} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Modal, TextInput, ScrollView, KeyboardAvoidingView, Platform} from 'react-native';
 import InputSpinner from 'react-native-input-spinner';
 import  Calendar  from 'react-native-calendars/src/calendar';
 import { writeUserData, createExersisePath, createSet}  from "../hooks/databaseQueries";
@@ -7,8 +7,8 @@ import { auth } from "../configuration/firebaseConfig"; //	Firebase Operations
 import  readData  from '../hooks/databaseQueries';
 
 const CalenderScreen = () => {
-  const [showModal1, setShowModal1] = useState(false);
-  const [showModal2, setShowModal2] = useState(false);
+  const [showExerciseRecord, setShowExerciseRecordModal] = useState(false);
+  const [showExerciseLogModal, setShowExerciseLogModal] = useState(false);
   const [recordDate, setRecordDate] = useState("");
   const [exerciseName, setExerciseName] = useState('');
   const [nameOfExercise, setNameOfExercise] = useState('');
@@ -23,21 +23,21 @@ const CalenderScreen = () => {
       //console.log(setNumbers);
     }
   };
+
   const exitCalendarModal = ()=>{
-    setShowModal2(false);
+    setShowExerciseLogModal(false);
     setSetNumbers(0);
   }
   const saveCalendarModal = async ()=>{
-    setShowModal2(false);
+    setShowExerciseLogModal(false);
     setNameOfExercise(nameOfExercise);
     const user = auth.currentUser.uid;
     if(setNumbers != 0){
-      //write on left array
+      //write on DatesBooleanArray, Uid:"True"
       let path = "DatesBoolean/" + recordDate;
       writeUserData( path,   user, "true");
       
-
-      //insert the exercise into the right array
+      //insert the exercise into the DateExerciseLogs Uid/ExerciseName/{Set Information}
       const path1 = "DatesExerciseLogs/" + recordDate + "/" + user;
       createExersisePath(path1,exerciseName );
       for(var i = 1; i <= setNumbers; i++){
@@ -52,11 +52,10 @@ const CalenderScreen = () => {
     setSetNumbers(0);
   }
   const handleDayPress = (day) => {
-    //console.log(day.dateString);
+    console.log(day.dateString);
     setRecordDate(day.dateString);
     console.log(recordDate);
-    setShowModal1(false);
-    setShowModal2(true);
+    
   };
   const handleWeightChange = (index, value) => {
     const newWeights = [...weights];
@@ -70,6 +69,15 @@ const CalenderScreen = () => {
   };
   const handleExerciseName = (input) => {
     setExerciseName(input);
+  }
+  const selectViewExerciseRecord = () => {
+    if( recordDate != "") setShowExerciseRecordModal(true);
+  }
+  const selectInsertExerciseRecord = () => {
+    if( recordDate != "") setShowExerciseLogModal(true);
+  }
+  const exitExerciseRecordModal = () => {
+    setShowExerciseRecordModal(false);
   }
   const set = [];
   for(let i = 1; i <= setNumbers; i++){
@@ -115,10 +123,31 @@ const CalenderScreen = () => {
         hideExtraDays={true}
       />
 
+      <View style={styles.buttons}>
+        <TouchableOpacity 
+          onPress={selectViewExerciseRecord}
+          style={styles.button2}> 
+        <Text style={ styles.buttonText }>View Exercise Record</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity 
+          onPress={selectInsertExerciseRecord}
+          style={styles.button2}> 
+          <Text style={ styles.buttonText }>Insert Exercise Record</Text>
+        </TouchableOpacity>
+      
+      </View>
+      
+    
       <Modal
-         visible={showModal2} animationType="fade"
+         visible={showExerciseLogModal} animationType="fade"
          style ={styles.exerciseLogModal} 
       >
+        <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style = {{flex: 1}}
+        >
+
        <ScrollView>
        {
         recordDate && (<Text style={{marginTop: 100, marginLeft: 30 ,color: 'tan', fontWeight: 800, fontSize: 50, }}>{recordDate}</Text>)
@@ -157,8 +186,35 @@ const CalenderScreen = () => {
        </View>
 
        </ScrollView>
+       </KeyboardAvoidingView>
       </Modal>
+
+
+      <Modal
+         visible={showExerciseRecord} animationType="fade"
+         style ={styles.exerciseLogModal} 
+      >
+       <ScrollView>
+       {
+        recordDate && (<Text style={{marginTop: 100, marginLeft: 30 ,color: 'tan', fontWeight: 800, fontSize: 50, }}>{recordDate}</Text>)
+        
+       }
+       
+       <View style={styles.returnButtonContainer}>
+        <TouchableOpacity 
+          onPress={exitExerciseRecordModal}
+          style={styles.button2}> 
+          <Text style={ styles.buttonText }>Return</Text>
+        </TouchableOpacity>
+       </View>
+      
+
+       </ScrollView>
+      </Modal>
+
+
     </ScrollView>
+
   );
 }
 const styles = StyleSheet.create({
@@ -274,33 +330,13 @@ const styles = StyleSheet.create({
     color: "tan", 
     fontWeight:800,
   },
+  returnButtonContainer:{
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  }
 });
 
 
 export default CalenderScreen;
 
-/*
-<View style={styles.exerciseLogs}>
-        <Text style={styles.textStyle}>Set {setNumbers}</Text>
-          
-          <View styles={styles.log}>
-            <Text style={{color: "tan", fontWeight:800, marginLeft: 28}}>Weight</Text>
-            
-            <InputSpinner style={styles.numberInput1}
-            max={1000}
-            min={0}
-            skin="clean"
-            />
-            </View >
-
-            <View style={{color: "tan", fontWeight:800, marginLeft:0}}>
-            <Text style={{color: "tan", fontWeight:800, marginLeft: 23}}>No. Reps</Text>
-            
-            <InputSpinner style={styles.numberInput1}
-            max={1000}
-            min={0}
-            skin="clean"
-            />
-            </View>
-        </View>
-*/
