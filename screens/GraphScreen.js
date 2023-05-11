@@ -9,9 +9,7 @@ import {
   TouchableWithoutFeedback,
   Modal,
 } from 'react-native';
-import {
-  BarChart,
-} from 'react-native-chart-kit'
+import {BarChart,LineChart} from 'react-native-chart-kit'
   //import CircularProgress from 'react-native-circular-progress-indicator';
 
 const GraphScreen = ({ route }) => {
@@ -48,15 +46,26 @@ const GraphScreen = ({ route }) => {
       </View>
     );
   };
+
   const barData = {
     labels: ['Today', 'Goal', 'June', 'July'],
     datasets: [
       {
-        data: [weight, goalWeight, 150, 180],
+        data: [weight, goalWeight, 146, 150],
       },
     ],
   };
-  const chartConfig = {
+
+  const lineData = {
+    labels: ['Today', 'Goal', 'June', 'July'],
+    datasets: [
+      {
+        data: [weight, goalWeight, 146, 150],
+      },
+    ],
+  };
+  const BarChartConfig = {
+    yAxisInterval: 25,
     backgroundGradientFrom: 'white',
     backgroundGradientTo: 'white',
     decimalPlaces: 1,
@@ -64,6 +73,17 @@ const GraphScreen = ({ route }) => {
     style: {
       borderRadius: 10,
     },
+    fillShadowGradient: '#fff',
+  };
+
+  const lineChartConfig = {
+    backgroundColor: '#ffffff',
+    backgroundGradientFrom: '#ffffff',
+    backgroundGradientFromOpacity: 0,
+    backgroundGradientTo: '#ffffff',
+    backgroundGradientToOpacity: 0,
+    color: (opacity = 1) => `rgba(0, 61, 128, ${opacity})`,
+    labelColor: (opacity = 1) => `transparent`,
     fillShadowGradient: '#fff',
   };
 
@@ -151,7 +171,15 @@ const GraphScreen = ({ route }) => {
          width={325}
          height={300}
          yAxisLabel={'lbs'}
-         chartConfig={chartConfig}
+         chartConfig={BarChartConfig}
+       /> 
+        <LineChart
+        style={{ position: 'absolute', bottom: 25, right: -7, borderRadius: 10 }}
+         data={lineData}
+         width={325}
+         height={300}
+         yAxisLabel={'lbs'}
+         chartConfig={lineChartConfig}
        /> 
         </View> 
       </View>
@@ -224,7 +252,7 @@ const styles = StyleSheet.create({
   },
   bottomLeftContainer: {
     position: "absolute",
-    bottom: 10,
+    bottom: 15,
     left: 10,
     flexDirection: "row",
   },
@@ -239,7 +267,7 @@ const styles = StyleSheet.create({
   },
   bottomRightContainer: {
     position: "absolute",
-    bottom: 10,
+    bottom: 15,
     right: 10,
     flexDirection: "row",
   },
