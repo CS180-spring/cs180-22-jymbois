@@ -28,8 +28,7 @@ const HomeScreen = () => {
 
 	const [isActive, setIsActive] = React.useState(false);
 	const [isPaused, setIsPaused] = React.useState(false);
-	const [showButtons, setShowButtons] = React.useState(true); // Add showButtons state variable
-	const [startButton, setStartButton] = React.useState("Start"); // Add startButton state variable
+	const [selectedWorkout, setSelectedWorkout] = useState(null);
 	const countRef = React.useRef(null);
 	const workoutData = [
 		{
@@ -100,10 +99,6 @@ const HomeScreen = () => {
 		setIsPaused(false);
 	};
 
-	const toggleTimerModal = () => {
-		setShowTimerModal(!showTimerModal);
-	};
-
 	const handleTimerChange = (value, type) => {
 		if (type === "hour") {
 			setTimer((timer) => {
@@ -120,27 +115,8 @@ const HomeScreen = () => {
 		}
 	};
 
-	const handleModeChange = (mode) => {
-		// Add handleModeChange function
-		setMode(mode);
-		resetTimer();
-	};
-
 	const [buttonTitle, setButtonTitle] = useState("Stopwatch");
 	const [buttonColor, setButtonColor] = useState("#9b59b6"); // purple
-
-	const toggleTimerMode = () => {
-		if (mode === "stopwatch") {
-			setMode("timer");
-			setButtonTitle("Mode1");
-			// setButtonColor("#00FF00"); // lime green
-		} else {
-			setMode("stopwatch");
-			setButtonTitle("Mode2");
-			// setButtonColor("#9b59b6"); // purple
-		}
-		resetTimer();
-	};
 
 	const renderItem = ({ item, index }) => (
 		<TouchableOpacity
@@ -152,7 +128,7 @@ const HomeScreen = () => {
 					height: itemHeight,
 				},
 			]}
-			onPress={() => navigation.navigate(item.routeName)}
+			onPress={() => setSelectedWorkout(item.routeName)}
 		>
 			<View style={[styles.leftContent2]}>
 				<Text style={styles.subtitle3}>5-10 Exercises</Text>
@@ -165,6 +141,250 @@ const HomeScreen = () => {
 
 	return (
 		<View style={styles.container}>
+			<Modal
+				visible={selectedWorkout === "Workout1"}
+				animationType="slide"
+				onRequestClose={() => setSelectedWorkout(null)}
+			>
+				<View style={styles.modalContainer1}>
+					<Text style={styles.WorkoutTitle}>Workouts</Text>
+
+					<View style={styles.workoutList}>
+						<ScrollView>
+							<View style={styles.workoutPosts}>
+								<View style={styles.workoutLeftContent}>
+									<Text style={styles.workoutSubtitle}>Bench</Text>
+									<Text style={styles.workoutSubtitle2}>4 Sets</Text>
+									<Text style={styles.workoutSubtitle3}>5-8 Reps</Text>
+									<Text style={styles.workoutSubtitle4}>Goal: 15min</Text>
+								</View>
+
+								<View style={styles.workoutRightContent}>
+									<Image
+										source={require("./images/Larry-Wheels.png")}
+										style={styles.image3}
+									/>
+								</View>
+							</View>
+
+							<View style={styles.workoutPosts}>
+								<View style={styles.workoutLeftContent}>
+									<Text style={styles.workoutSubtitle}>Incline Dumbells</Text>
+									<Text style={styles.workoutSubtitle2}>4 Sets</Text>
+									<Text style={styles.workoutSubtitle3}>8-12 Reps</Text>
+									<Text style={styles.workoutSubtitle4}>Goal: 15min</Text>
+								</View>
+
+								<View style={styles.workoutRightContent}>
+									<Image
+										source={require("./images/incline.jpeg")}
+										style={styles.image3}
+									/>
+								</View>
+							</View>
+
+							<View style={styles.workoutPosts}>
+								<View style={styles.workoutLeftContent}>
+									<Text style={styles.workoutSubtitle}>Chest Flys</Text>
+									<Text style={styles.workoutSubtitle2}>4 Sets</Text>
+									<Text style={styles.workoutSubtitle3}>8-12 Reps</Text>
+									<Text style={styles.workoutSubtitle4}>Goal: 15min</Text>
+								</View>
+
+								<View style={styles.workoutRightContent}>
+									<Image
+										source={require("./images/chestFlys.png")}
+										style={styles.image3}
+									/>
+								</View>
+							</View>
+
+							<View style={styles.workoutPosts}>
+								<View style={styles.workoutLeftContent}>
+									<Text style={styles.workoutSubtitle}>Chest Flys</Text>
+									<Text style={styles.workoutSubtitle2}>4 Sets</Text>
+									<Text style={styles.workoutSubtitle3}>8-12 Reps</Text>
+									<Text style={styles.workoutSubtitle4}>Goal: 15min</Text>
+								</View>
+
+								<View style={styles.workoutRightContent}>
+									<Image
+										source={require("./images/cbumDaddy.jpg")}
+										style={styles.image3}
+									/>
+								</View>
+							</View>
+						</ScrollView>
+					</View>
+
+					<TouchableOpacity onPress={() => setSelectedWorkout(null)}>
+						<Text style={styles.closeModalTextWorkout}>X</Text>
+					</TouchableOpacity>
+				</View>
+			</Modal>
+
+			<Modal
+				visible={selectedWorkout === "Workout2"}
+				animationType="slide"
+				onRequestClose={() => setSelectedWorkout(null)}
+			>
+				<View style={styles.modalContainer1}>
+					<Text style={styles.WorkoutTitle}>Workouts</Text>
+
+					<View style={styles.workoutList}>
+						<ScrollView>
+							<View style={styles.workoutPosts}>
+								<View style={styles.workoutLeftContent}>
+									<Text style={styles.workoutSubtitle}>Barbell Rows</Text>
+									<Text style={styles.workoutSubtitle2}>4 Sets</Text>
+									<Text style={styles.workoutSubtitle3}>5-8 Reps</Text>
+									<Text style={styles.workoutSubtitle4}>Goal: 15min</Text>
+								</View>
+
+								<View style={styles.workoutRightContent}>
+									<Image
+										source={require("./images/barbellRows.jpeg")}
+										style={styles.image3}
+									/>
+								</View>
+							</View>
+
+							<View style={styles.workoutPosts}>
+								<View style={styles.workoutLeftContent}>
+									<Text style={styles.workoutSubtitle}>Lat Pulldowns</Text>
+									<Text style={styles.workoutSubtitle2}>4 Sets</Text>
+									<Text style={styles.workoutSubtitle3}>8-12 Reps</Text>
+									<Text style={styles.workoutSubtitle4}>Goal: 15min</Text>
+								</View>
+
+								<View style={styles.workoutRightContent}>
+									<Image
+										source={require("./images/latPulldown.jpeg")}
+										style={styles.image3}
+									/>
+								</View>
+							</View>
+
+							<View style={styles.workoutPosts}>
+								<View style={styles.workoutLeftContent}>
+									<Text style={styles.workoutSubtitle}>Pull Ups</Text>
+									<Text style={styles.workoutSubtitle2}>4 Sets</Text>
+									<Text style={styles.workoutSubtitle3}>8-12 Reps</Text>
+									<Text style={styles.workoutSubtitle4}>Goal: 15min</Text>
+								</View>
+
+								<View style={styles.workoutRightContent}>
+									<Image
+										source={require("./images/pullUps.jpeg")}
+										style={styles.image3}
+									/>
+								</View>
+							</View>
+
+							<View style={styles.workoutPosts}>
+								<View style={styles.workoutLeftContent}>
+									<Text style={styles.workoutSubtitle}>Cable Rows</Text>
+									<Text style={styles.workoutSubtitle2}>4 Sets</Text>
+									<Text style={styles.workoutSubtitle3}>8-12 Reps</Text>
+									<Text style={styles.workoutSubtitle4}>Goal: 15min</Text>
+								</View>
+
+								<View style={styles.workoutRightContent}>
+									<Image
+										source={require("./images/cableRows.jpg")}
+										style={styles.image3}
+									/>
+								</View>
+							</View>
+						</ScrollView>
+					</View>
+
+					<TouchableOpacity onPress={() => setSelectedWorkout(null)}>
+						<Text style={styles.closeModalTextWorkout}>X</Text>
+					</TouchableOpacity>
+				</View>
+			</Modal>
+
+			<Modal
+				visible={selectedWorkout === "Workout3"}
+				animationType="slide"
+				onRequestClose={() => setSelectedWorkout(null)}
+			>
+				<View style={styles.modalContainer1}>
+					<Text style={styles.WorkoutTitle}>Workouts</Text>
+
+					<View style={styles.workoutList}>
+						<ScrollView>
+							<View style={styles.workoutPosts}>
+								<View style={styles.workoutLeftContent}>
+									<Text style={styles.workoutSubtitle}>Squat</Text>
+									<Text style={styles.workoutSubtitle2}>4 Sets</Text>
+									<Text style={styles.workoutSubtitle3}>5-8 Reps</Text>
+									<Text style={styles.workoutSubtitle4}>Goal: 15min</Text>
+								</View>
+
+								<View style={styles.workoutRightContent}>
+									<Image
+										source={require("./images/squat.jpeg")}
+										style={styles.image3}
+									/>
+								</View>
+							</View>
+
+							<View style={styles.workoutPosts}>
+								<View style={styles.workoutLeftContent}>
+									<Text style={styles.workoutSubtitle}>Leg Press</Text>
+									<Text style={styles.workoutSubtitle2}>4 Sets</Text>
+									<Text style={styles.workoutSubtitle3}>8-12 Reps</Text>
+									<Text style={styles.workoutSubtitle4}>Goal: 15min</Text>
+								</View>
+
+								<View style={styles.workoutRightContent}>
+									<Image
+										source={require("./images/legPress.jpeg")}
+										style={styles.image3}
+									/>
+								</View>
+							</View>
+
+							<View style={styles.workoutPosts}>
+								<View style={styles.workoutLeftContent}>
+									<Text style={styles.workoutSubtitle}>Leg Extensions</Text>
+									<Text style={styles.workoutSubtitle2}>4 Sets</Text>
+									<Text style={styles.workoutSubtitle3}>8-12 Reps</Text>
+									<Text style={styles.workoutSubtitle4}>Goal: 15min</Text>
+								</View>
+
+								<View style={styles.workoutRightContent}>
+									<Image
+										source={require("./images/legExtension.jpeg")}
+										style={styles.image3}
+									/>
+								</View>
+							</View>
+
+							<View style={styles.workoutPosts}>
+								<View style={styles.workoutLeftContent}>
+									<Text style={styles.workoutSubtitle}>Chest Flys</Text>
+									<Text style={styles.workoutSubtitle2}>4 Sets</Text>
+									<Text style={styles.workoutSubtitle3}>8-12 Reps</Text>
+									<Text style={styles.workoutSubtitle4}>Goal: 15min</Text>
+								</View>
+
+								<View style={styles.workoutRightContent}>
+									<Image
+										source={require("./images/legCurls.jpg")}
+										style={styles.image3}
+									/>
+								</View>
+							</View>
+						</ScrollView>
+					</View>
+					<TouchableOpacity onPress={() => setSelectedWorkout(null)}>
+						<Text style={styles.closeModalTextWorkout}>X</Text>
+					</TouchableOpacity>
+				</View>
+			</Modal>
 			<Modal visible={showTimerModal} animationType="slide">
 				<View style={styles.timerModal}>
 					<View style={styles.timerContainer}>
@@ -196,34 +416,6 @@ const HomeScreen = () => {
 							<Text style={styles.startBtn}>Resume</Text>
 						</TouchableOpacity>
 					)}
-
-					{mode === "timer" && (
-						<View style={styles.timerControl}>
-							<TouchableOpacity style={styles.timerControlButton}>
-								<MaterialIcons name="add" size={24} color="white" />
-								<Text style={styles.timerControlButtonText}>1 Min</Text>
-							</TouchableOpacity>
-							<TouchableOpacity style={styles.timerControlButton}>
-								<MaterialIcons name="remove" size={24} color="white" />
-								<Text style={styles.timerControlButtonText}>1 Min</Text>
-							</TouchableOpacity>
-							<TouchableOpacity style={styles.timerControlButton}>
-								<MaterialIcons name="add" size={24} color="white" />
-								<Text style={styles.timerControlButtonText}>10 Sec</Text>
-							</TouchableOpacity>
-							<TouchableOpacity style={styles.timerControlButton}>
-								<MaterialIcons name="remove" size={24} color="white" />
-								<Text style={styles.timerControlButtonText}>10 Sec</Text>
-							</TouchableOpacity>
-						</View>
-					)}
-
-					{/* <TouchableOpacity
-						style={[styles.timerModeButton, { backgroundColor: buttonColor }]}
-						onPress={toggleTimerMode}
-					>
-						<Text style={styles.timerModeText}>{buttonTitle}</Text>
-					</TouchableOpacity> */}
 
 					<TouchableOpacity onPress={() => setShowTimerModal(false)}>
 						<Text style={styles.closeModalText}>Close</Text>
@@ -387,6 +579,19 @@ const createThemedStyles = (isDarkMode) => StyleSheet.create({
 		left: 0,
 		top: 15,
 	},
+
+	image3: {
+		width: 160,
+		height: 116,
+		marginRight: 4,
+		position: "absolute",
+		right: 0,
+		top: 13,
+
+		borderRadius: 7,
+		borderWidth: 0.5,
+		borderColor: "#013220",
+	},
 	contentContainer: {
 		flex: 6.3,
 		flexDirection: "row",
@@ -496,6 +701,7 @@ const createThemedStyles = (isDarkMode) => StyleSheet.create({
 		color: isDarkMode ? "#FFFFFF" : "#4A4A4A",
 		marginTop: -2,
 	},
+
 	workoutsDone: {
 		fontSize: 60,
 		fontWeight: "bold",
@@ -675,5 +881,86 @@ const createThemedStyles = (isDarkMode) => StyleSheet.create({
 		fontWeight: "bold",
 		fontSize: 20,
 	},
-});	
+	modalContainer1: {
+		flex: 1,
+		height: "auto",
+		width: "100%",
+		padding: 20,
+		backgroundColor: "#F2F6F9",
+	},
+
+	WorkoutTitle: {
+		fontWeight: "bold",
+		top: 60,
+		fontSize: 27,
+		left: 15,
+	},
+	closeModalTextWorkout: {
+		fontSize: 15,
+		fontWeight: 700,
+		top: -573,
+		left: 140,
+		alignSelf: "center",
+	},
+	workoutList: {
+		top: 76,
+		flexDirection: "column",
+	},
+	workoutPosts: {
+		flex: 1,
+		flexDirection: "row",
+
+		padding: 16,
+		borderRadius: 10,
+		width: "100%",
+		backgroundColor: "#FFFFFF",
+		shadowColor: "#000",
+		shadowOffset: {
+			width: 2,
+			height: 2,
+		},
+		shadowOpacity: 0.11,
+		shadowRadius: 5,
+		elevation: 5,
+		minHeight: 140,
+		alignSelf: "center",
+		marginBottom: 12, // Add margin bottom
+	},
+	workoutLeftContent: {
+		flexDirection: "column",
+		flex: 1,
+		left: 15,
+		position: "absolute",
+	},
+	workoutSubtitle: {
+		fontSize: 17,
+		fontWeight: "bold",
+		top: 15,
+	},
+	workoutSubtitle2: {
+		fontSize: 15,
+		fontWeight: "bold",
+		color: "grey",
+		marginTop: 25,
+	},
+	workoutSubtitle3: {
+		fontSize: 15,
+		fontWeight: "bold",
+		color: "grey",
+		marginTop: 15,
+	},
+
+	workoutSubtitle4: {
+		fontSize: 15,
+		fontWeight: "bold",
+		color: "grey",
+		marginTop: 15,
+	},
+	workoutRightContent: {
+		flex: 1,
+		position: "absolute",
+		right: 10,
+	},
+});
+
 export default HomeScreen;

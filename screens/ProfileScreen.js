@@ -5,6 +5,7 @@ import {
 	StyleSheet,
 	Switch,
 	TouchableOpacity,
+  ScrollView,
   } from "react-native";
   import React from "react";
   import { FontAwesome } from "@expo/vector-icons";
@@ -26,6 +27,7 @@ import {
 	}
   
 	return (
+  <ScrollView>
 	  <View style={styles.container}>
 		<Image
 		  style={styles.image}
@@ -54,6 +56,7 @@ import {
 			  value={value}
 			/>
 		  </View>
+   
 		))}
   
 		<TouchableOpacity style={styles.logout}>
@@ -71,7 +74,7 @@ import {
 		  source={styles.logoImage.source}
 		/>
 	  </View>
-	  
+	  </ScrollView>
 	  );
 	};
 	
@@ -142,3 +145,4 @@ import {
 	
 		});
 	  };
+
