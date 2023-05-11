@@ -57,13 +57,12 @@ const GraphScreen = ({ route }) => {
     ],
   };
   const chartConfig = {
-    borderRadius: 30,
-    backgroundGradientFrom: '#57C84D',
-    backgroundGradientTo: '#C5E8B7',
+    backgroundGradientFrom: 'white',
+    backgroundGradientTo: 'white',
     decimalPlaces: 1,
-    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+    color: (opacity = 1) => `rgba(0, 61, 128, ${opacity})`,
     style: {
-      borderRadius: 16,
+      borderRadius: 10,
     },
     fillShadowGradient: '#fff',
   };
@@ -147,10 +146,10 @@ const GraphScreen = ({ route }) => {
           </View>
         </Modal>
        <BarChart
-        style={{flex: 1,  marginTop: 50, borderRadius: 16}}
+        style={{flex: 1,  marginTop: 50, borderRadius: 10}}
          data={barData}
          width={325}
-         height={250}
+         height={300}
          yAxisLabel={'lbs'}
          chartConfig={chartConfig}
        /> 
@@ -168,7 +167,7 @@ const styles = StyleSheet.create({
 		height: "auto",
 	},
   titleContainer: {
-		height: "10%",
+		height: "12%",
 		justifyContent: "flex-start",
 		flexDirection: "row",
 	},
@@ -180,7 +179,7 @@ const styles = StyleSheet.create({
   activityContent: {
     flex: 1,
     padding: 20,
-    borderRadius: 30,
+    borderRadius: 10,
     maxWidth: 370,
     backgroundColor: "#FFFFFF",
     shadowColor: "#000",
@@ -192,12 +191,12 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 10,
     height: 300,
-    marginLeft: 5,
+    marginLeft: 10,
   },
   barGraphContainer: {
     flex: 3,
     padding: 20,
-    borderRadius: 30,
+    borderRadius: 10,
     maxWidth: 370,
     backgroundColor: "#FFFFFF",
     shadowColor: "#000",
@@ -208,7 +207,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.11,
     shadowRadius: 5,
     elevation: 10,
-    marginLeft: 5,
+    marginLeft: 10,
     marginTop: 20,
     marginBottom: 20,
   },
