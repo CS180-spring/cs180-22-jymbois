@@ -7,19 +7,29 @@ import { getDatabase, ref, set } from "firebase/database";
 import { auth } from "../configuration/firebaseConfig"; 
 
 const saveTokenToDatabase = async (token, isPushNotificationsEnabled) => {
-  if(!isPushNotificationsEnabled) token = ""; 
+  if(!isPushNotificationsEnabled){
+    token = "";
+    Notifications.setNotificationHandler({
+      handleNotification: async()=>({
+        shouldPlaySound: false,
+        shouldSetBadge: false,
+        shouldSetBadge: false,
+      })
+    })
+  }
+  else{
+    Notifications.setNotificationHandler({
+      handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: true,
+        shouldSetBadge: true,
+      }),
+    });
+  } 
   const user = auth.currentUser.uid;
   dbRef = ref(database, "users/" + user + "/pushToken");
   await set(dbRef, token);
 };
-
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: true,
-  }),
-});
 
 export const usePushRegister = (isPushNotificationsEnabled) => {
   const [expoPushToken, setExpoPushToken] = useState('');
