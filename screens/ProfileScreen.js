@@ -56,7 +56,7 @@ import {
 			  value={value}
 			/>
 		  </View>
-    </ScrollView>
+   
 		))}
   
 		<TouchableOpacity style={styles.logout}>
@@ -74,7 +74,7 @@ import {
 		  source={styles.logoImage.source}
 		/>
 	  </View>
-	  
+	  </ScrollView>
 	  );
 	};
 	
