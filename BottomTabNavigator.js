@@ -55,7 +55,7 @@ const BottomTabNavigator = () => {
       />
       <Tab.Screen 
         name="Progress" 
-        component={ProgressScreen} 
+        component={ProgressStack} 
         options={{
           tabBarIcon: ({ color, size }) => (
             <AntDesign name="linechart" color={color} size={size} />

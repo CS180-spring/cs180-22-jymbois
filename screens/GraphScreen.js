@@ -9,6 +9,9 @@ import {
   TouchableWithoutFeedback,
   Modal,
 } from 'react-native';
+import {
+  BarChart,
+} from 'react-native-chart-kit'
   //import CircularProgress from 'react-native-circular-progress-indicator';
 
 const GraphScreen = ({ route }) => {
@@ -35,19 +38,78 @@ const GraphScreen = ({ route }) => {
     }
     return (100 - answer);
   };
-  
+  const ContentBox = ({ title, children }) => {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title}>{title}</Text>
+        <View style={styles.content}>
+          <Text>{children}</Text>
+        </View>
+      </View>
+    );
+  };
+  const barData = {
+    labels: ['Today', 'Goal', 'June', 'July'],
+    datasets: [
+      {
+        data: [weight, goalWeight, 150, 180],
+      },
+    ],
+  };
+  const chartConfig = {
+    borderRadius: 30,
+    backgroundGradientFrom: '#57C84D',
+    backgroundGradientTo: '#C5E8B7',
+    decimalPlaces: 1,
+    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+    style: {
+      borderRadius: 16,
+    },
+    fillShadowGradient: '#fff',
+  };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
-        <View style={styles.progressBarContainer}>
-          <Text style={styles.progressText}>{progress}%</Text>
+      <View style={styles.titleContainer}>
+				<View style={[styles.smallContentTitle]}>
+					<Text style={styles.title}>Your Progress</Text>
+					<Text style={styles.subtitle2}>See How You Improve</Text>
+				</View>
+			</View>
+      <View style={[styles.contentContainer]}>
+      <View style={styles.activityContent}>
+      <Text style={styles.title2}>Weekly Activities</Text>
+      <Text style={styles.activityText}>You have done 5 activities this week.
+        Keep it up</Text>
+      <View style={styles.bottomLeftContainer}>
+        <View style={styles.activityRow}>
+          <Text style={styles.bottomLeftText}>Push</Text>
+          <Text style={styles.bottomLeftNumber}>3</Text>
         </View>
-        <TouchableOpacity
-          style={styles.plusButton}
+        <View style={styles.activityRow}>
+          <Text style={styles.bottomLeftText}>Pull</Text>
+          <Text style={styles.bottomLeftNumber}>7</Text>
+        </View>
+        <View style={styles.activityRow}>
+          <Text style={styles.bottomLeftText}>Legs</Text>
+          <Text style={styles.bottomLeftNumber}>11</Text>
+        </View>
+      </View>
+      <View style={styles.bottomRightContainer}>
+      <View style={styles.activityRow}>
+        <Text style={styles.bottomRightText}>Total Time:</Text>
+        <Text style={styles.bottomRightNumber}>2h 30m</Text>
+      </View>
+      </View>
+			</View>
+       <View style={styles.barGraphContainer}>  
+       <Text style={styles.title2}>Goal Progression</Text> 
+       <TouchableOpacity
+       style={styles.goalButtonContainer}
           onPress={() => setModalVisible(true)}
         >
-          <Text style={styles.plusButtonText}>+</Text>
+          <Text style={styles.goalButton}>Add Goal -{">"} </Text>
         </TouchableOpacity>
         <Modal
           animationType="slide"
@@ -84,20 +146,123 @@ const GraphScreen = ({ route }) => {
             </View>
           </View>
         </Modal>
+       <BarChart
+        style={{flex: 1,  marginTop: 50, borderRadius: 16}}
+         data={barData}
+         width={325}
+         height={250}
+         yAxisLabel={'lbs'}
+         chartConfig={chartConfig}
+       /> 
+        </View> 
+      </View>
+      
       </View>
     </TouchableWithoutFeedback>
   );
 };
 const styles = StyleSheet.create({
   container: {
+		flex: 1,
+		backgroundColor: "#FFFFFF",
+		height: "auto",
+	},
+  titleContainer: {
+		height: "10%",
+		justifyContent: "flex-start",
+		flexDirection: "row",
+	},
+  contentContainer: {
+		flex: 1,
+    backgroundColor: "#FFFFFF",
+		height: "auto",
+	},
+  activityContent: {
     flex: 1,
+    padding: 20,
+    borderRadius: 30,
+    maxWidth: 370,
+    backgroundColor: "#FFFFFF",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 2,
+      height: 2,
+    },
+    shadowOpacity: 0.11,
+    shadowRadius: 5,
+    elevation: 10,
+    height: 300,
+    marginLeft: 5,
+  },
+  barGraphContainer: {
+    flex: 3,
+    padding: 20,
+    borderRadius: 30,
+    maxWidth: 370,
+    backgroundColor: "#FFFFFF",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 2,
+      height: 2,
+    },
+    shadowOpacity: 0.11,
+    shadowRadius: 5,
+    elevation: 10,
+    marginLeft: 5,
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  activityText: {
+    fontSize: 15,
+    borderBottomWidth: 1,
+    marginTop: 30,
+    marginLeft: 10,
+  },
+  activityText2: {
+    fontSize: 15,
+    marginTop: 30,
+    marginLeft: 10,
+  },
+  bottomLeftContainer: {
+    position: "absolute",
+    bottom: 10,
+    left: 10,
+    flexDirection: "row",
+  },
+  bottomLeftText: {
+    fontWeight: "bold",
+    fontSize: 14,
+    marginRight: 10,
+  },
+  bottomLeftNumber: {
+    fontSize: 14,
+    marginRight: 10,
+  },
+  bottomRightContainer: {
+    position: "absolute",
+    bottom: 10,
+    right: 10,
+    flexDirection: "row",
+  },
+  bottomRightText: {
+    fontWeight: "bold",
+    fontSize: 14,
+    marginLeft: 10,
+  },
+  bottomRightNumber: {
+    fontSize: 14,
+    marginLeft: 10,
+  },
+  activityRow: {
+    flexDirection: 'column',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    justifyContent: 'center',
+    marginTop: 10,
   },
   progressBarContainer: {
     width: 200,
     height: 200,
-    borderRadius: 100,
+    borderRadius: 150,
     backgroundColor: 'white',
     alignItems: 'top',
     justifyContent: 'center',
@@ -133,16 +298,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
   },
-  plusButton: {
+  goalButtonContainer: {
     position: 'absolute',
-    top: 30,
-    right: 20,
-    backgroundColor: '#8BC34A',
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    alignItems: 'center',
-    justifyContent: 'center',
+    right: 100,
+		
   },
   popupContainer: {
     position: 'absolute',
@@ -197,6 +356,7 @@ const styles = StyleSheet.create({
   },
   progressText: {
     position: 'absolute',
+    marginRight: 50,
     fontSize: 30,
     fontWeight: 'bold',
     color: 'black',
@@ -220,6 +380,45 @@ const styles = StyleSheet.create({
     borderLeftColor: '#B8860B',
     borderBottomColor: '#B8860B',
     transform: [{ rotateZ: '-90deg' }],
+  },
+	title2Container: {
+		flexDirection: "column",
+		justifyContent: "center",
+		alignItems: "center",
+	},
+  subtitle2: {
+		fontSize: 20,
+		// fontWeight: "bold",
+		color: "#4A4A4A",
+		marginBottom: 10,
+		marginLeft: 17,
+		marginTop: 5,
+	},
+  title: {
+		fontSize: 26,
+		fontWeight: "bold",
+		color: "#4A4A4A",
+		marginLeft: 15,
+	},
+  title2: {
+    fontSize: 15,
+    fontWeight: "bold",
+    color: "#4A4A4A",
+    position: "absolute",
+    top: 15,
+    marginLeft: 15,
+  },
+  smallContentTitle: {
+		flex: 1,
+		flexDirection: "column",
+	},
+  goalButton: {
+    fontSize: 15,
+    fontWeight: "bold",
+    color: "#1363DF",
+    position: "absolute",
+    top: 15,
+    marginRight: 40,
   },
 });
 
