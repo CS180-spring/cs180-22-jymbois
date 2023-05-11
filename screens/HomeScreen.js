@@ -13,12 +13,14 @@ import {
 } from "react-native";
 import React, { useState, useRef } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
-
+import ThemeContext from "../hooks/ThemeContext";
 import { useNavigation } from "@react-navigation/native";
 import { ref, set } from "firebase/database";
 import database from "../configuration/firebaseConfig";
 
 const HomeScreen = () => {
+	const { isDarkMode, toggleTheme } = React.useContext(ThemeContext);
+	const styles = createThemedStyles(isDarkMode);
 	const navigation = useNavigation();
 	const [showTimerModal, setShowTimerModal] = React.useState(false);
 	const [mode, setMode] = React.useState("stopwatch"); // Add mode state variable
@@ -26,8 +28,7 @@ const HomeScreen = () => {
 
 	const [isActive, setIsActive] = React.useState(false);
 	const [isPaused, setIsPaused] = React.useState(false);
-	const [showButtons, setShowButtons] = React.useState(true); // Add showButtons state variable
-	const [startButton, setStartButton] = React.useState("Start"); // Add startButton state variable
+	const [selectedWorkout, setSelectedWorkout] = useState(null);
 	const countRef = React.useRef(null);
 	const workoutData = [
 		{
@@ -98,10 +99,6 @@ const HomeScreen = () => {
 		setIsPaused(false);
 	};
 
-	const toggleTimerModal = () => {
-		setShowTimerModal(!showTimerModal);
-	};
-
 	const handleTimerChange = (value, type) => {
 		if (type === "hour") {
 			setTimer((timer) => {
@@ -118,27 +115,8 @@ const HomeScreen = () => {
 		}
 	};
 
-	const handleModeChange = (mode) => {
-		// Add handleModeChange function
-		setMode(mode);
-		resetTimer();
-	};
-
 	const [buttonTitle, setButtonTitle] = useState("Stopwatch");
 	const [buttonColor, setButtonColor] = useState("#9b59b6"); // purple
-
-	const toggleTimerMode = () => {
-		if (mode === "stopwatch") {
-			setMode("timer");
-			setButtonTitle("Mode1");
-			// setButtonColor("#00FF00"); // lime green
-		} else {
-			setMode("stopwatch");
-			setButtonTitle("Mode2");
-			// setButtonColor("#9b59b6"); // purple
-		}
-		resetTimer();
-	};
 
 	const renderItem = ({ item, index }) => (
 		<TouchableOpacity
@@ -150,7 +128,7 @@ const HomeScreen = () => {
 					height: itemHeight,
 				},
 			]}
-			onPress={() => navigation.navigate(item.routeName)}
+			onPress={() => setSelectedWorkout(item.routeName)}
 		>
 			<View style={[styles.leftContent2]}>
 				<Text style={styles.subtitle3}>5-10 Exercises</Text>
@@ -163,6 +141,250 @@ const HomeScreen = () => {
 
 	return (
 		<View style={styles.container}>
+			<Modal
+				visible={selectedWorkout === "Workout1"}
+				animationType="slide"
+				onRequestClose={() => setSelectedWorkout(null)}
+			>
+				<View style={styles.modalContainer1}>
+					<Text style={styles.WorkoutTitle}>Workouts</Text>
+
+					<View style={styles.workoutList}>
+						<ScrollView>
+							<View style={styles.workoutPosts}>
+								<View style={styles.workoutLeftContent}>
+									<Text style={styles.workoutSubtitle}>Bench</Text>
+									<Text style={styles.workoutSubtitle2}>4 Sets</Text>
+									<Text style={styles.workoutSubtitle3}>5-8 Reps</Text>
+									<Text style={styles.workoutSubtitle4}>Goal: 15min</Text>
+								</View>
+
+								<View style={styles.workoutRightContent}>
+									<Image
+										source={require("./images/Larry-Wheels.png")}
+										style={styles.image3}
+									/>
+								</View>
+							</View>
+
+							<View style={styles.workoutPosts}>
+								<View style={styles.workoutLeftContent}>
+									<Text style={styles.workoutSubtitle}>Incline Dumbells</Text>
+									<Text style={styles.workoutSubtitle2}>4 Sets</Text>
+									<Text style={styles.workoutSubtitle3}>8-12 Reps</Text>
+									<Text style={styles.workoutSubtitle4}>Goal: 15min</Text>
+								</View>
+
+								<View style={styles.workoutRightContent}>
+									<Image
+										source={require("./images/incline.jpeg")}
+										style={styles.image3}
+									/>
+								</View>
+							</View>
+
+							<View style={styles.workoutPosts}>
+								<View style={styles.workoutLeftContent}>
+									<Text style={styles.workoutSubtitle}>Chest Flys</Text>
+									<Text style={styles.workoutSubtitle2}>4 Sets</Text>
+									<Text style={styles.workoutSubtitle3}>8-12 Reps</Text>
+									<Text style={styles.workoutSubtitle4}>Goal: 15min</Text>
+								</View>
+
+								<View style={styles.workoutRightContent}>
+									<Image
+										source={require("./images/chestFlys.png")}
+										style={styles.image3}
+									/>
+								</View>
+							</View>
+
+							<View style={styles.workoutPosts}>
+								<View style={styles.workoutLeftContent}>
+									<Text style={styles.workoutSubtitle}>Chest Flys</Text>
+									<Text style={styles.workoutSubtitle2}>4 Sets</Text>
+									<Text style={styles.workoutSubtitle3}>8-12 Reps</Text>
+									<Text style={styles.workoutSubtitle4}>Goal: 15min</Text>
+								</View>
+
+								<View style={styles.workoutRightContent}>
+									<Image
+										source={require("./images/cbumDaddy.jpg")}
+										style={styles.image3}
+									/>
+								</View>
+							</View>
+						</ScrollView>
+					</View>
+
+					<TouchableOpacity onPress={() => setSelectedWorkout(null)}>
+						<Text style={styles.closeModalTextWorkout}>X</Text>
+					</TouchableOpacity>
+				</View>
+			</Modal>
+
+			<Modal
+				visible={selectedWorkout === "Workout2"}
+				animationType="slide"
+				onRequestClose={() => setSelectedWorkout(null)}
+			>
+				<View style={styles.modalContainer1}>
+					<Text style={styles.WorkoutTitle}>Workouts</Text>
+
+					<View style={styles.workoutList}>
+						<ScrollView>
+							<View style={styles.workoutPosts}>
+								<View style={styles.workoutLeftContent}>
+									<Text style={styles.workoutSubtitle}>Barbell Rows</Text>
+									<Text style={styles.workoutSubtitle2}>4 Sets</Text>
+									<Text style={styles.workoutSubtitle3}>5-8 Reps</Text>
+									<Text style={styles.workoutSubtitle4}>Goal: 15min</Text>
+								</View>
+
+								<View style={styles.workoutRightContent}>
+									<Image
+										source={require("./images/barbellRows.jpeg")}
+										style={styles.image3}
+									/>
+								</View>
+							</View>
+
+							<View style={styles.workoutPosts}>
+								<View style={styles.workoutLeftContent}>
+									<Text style={styles.workoutSubtitle}>Lat Pulldowns</Text>
+									<Text style={styles.workoutSubtitle2}>4 Sets</Text>
+									<Text style={styles.workoutSubtitle3}>8-12 Reps</Text>
+									<Text style={styles.workoutSubtitle4}>Goal: 15min</Text>
+								</View>
+
+								<View style={styles.workoutRightContent}>
+									<Image
+										source={require("./images/latPulldown.jpeg")}
+										style={styles.image3}
+									/>
+								</View>
+							</View>
+
+							<View style={styles.workoutPosts}>
+								<View style={styles.workoutLeftContent}>
+									<Text style={styles.workoutSubtitle}>Pull Ups</Text>
+									<Text style={styles.workoutSubtitle2}>4 Sets</Text>
+									<Text style={styles.workoutSubtitle3}>8-12 Reps</Text>
+									<Text style={styles.workoutSubtitle4}>Goal: 15min</Text>
+								</View>
+
+								<View style={styles.workoutRightContent}>
+									<Image
+										source={require("./images/pullUps.jpeg")}
+										style={styles.image3}
+									/>
+								</View>
+							</View>
+
+							<View style={styles.workoutPosts}>
+								<View style={styles.workoutLeftContent}>
+									<Text style={styles.workoutSubtitle}>Cable Rows</Text>
+									<Text style={styles.workoutSubtitle2}>4 Sets</Text>
+									<Text style={styles.workoutSubtitle3}>8-12 Reps</Text>
+									<Text style={styles.workoutSubtitle4}>Goal: 15min</Text>
+								</View>
+
+								<View style={styles.workoutRightContent}>
+									<Image
+										source={require("./images/cableRows.jpg")}
+										style={styles.image3}
+									/>
+								</View>
+							</View>
+						</ScrollView>
+					</View>
+
+					<TouchableOpacity onPress={() => setSelectedWorkout(null)}>
+						<Text style={styles.closeModalTextWorkout}>X</Text>
+					</TouchableOpacity>
+				</View>
+			</Modal>
+
+			<Modal
+				visible={selectedWorkout === "Workout3"}
+				animationType="slide"
+				onRequestClose={() => setSelectedWorkout(null)}
+			>
+				<View style={styles.modalContainer1}>
+					<Text style={styles.WorkoutTitle}>Workouts</Text>
+
+					<View style={styles.workoutList}>
+						<ScrollView>
+							<View style={styles.workoutPosts}>
+								<View style={styles.workoutLeftContent}>
+									<Text style={styles.workoutSubtitle}>Squat</Text>
+									<Text style={styles.workoutSubtitle2}>4 Sets</Text>
+									<Text style={styles.workoutSubtitle3}>5-8 Reps</Text>
+									<Text style={styles.workoutSubtitle4}>Goal: 15min</Text>
+								</View>
+
+								<View style={styles.workoutRightContent}>
+									<Image
+										source={require("./images/squat.jpeg")}
+										style={styles.image3}
+									/>
+								</View>
+							</View>
+
+							<View style={styles.workoutPosts}>
+								<View style={styles.workoutLeftContent}>
+									<Text style={styles.workoutSubtitle}>Leg Press</Text>
+									<Text style={styles.workoutSubtitle2}>4 Sets</Text>
+									<Text style={styles.workoutSubtitle3}>8-12 Reps</Text>
+									<Text style={styles.workoutSubtitle4}>Goal: 15min</Text>
+								</View>
+
+								<View style={styles.workoutRightContent}>
+									<Image
+										source={require("./images/legPress.jpeg")}
+										style={styles.image3}
+									/>
+								</View>
+							</View>
+
+							<View style={styles.workoutPosts}>
+								<View style={styles.workoutLeftContent}>
+									<Text style={styles.workoutSubtitle}>Leg Extensions</Text>
+									<Text style={styles.workoutSubtitle2}>4 Sets</Text>
+									<Text style={styles.workoutSubtitle3}>8-12 Reps</Text>
+									<Text style={styles.workoutSubtitle4}>Goal: 15min</Text>
+								</View>
+
+								<View style={styles.workoutRightContent}>
+									<Image
+										source={require("./images/legExtension.jpeg")}
+										style={styles.image3}
+									/>
+								</View>
+							</View>
+
+							<View style={styles.workoutPosts}>
+								<View style={styles.workoutLeftContent}>
+									<Text style={styles.workoutSubtitle}>Chest Flys</Text>
+									<Text style={styles.workoutSubtitle2}>4 Sets</Text>
+									<Text style={styles.workoutSubtitle3}>8-12 Reps</Text>
+									<Text style={styles.workoutSubtitle4}>Goal: 15min</Text>
+								</View>
+
+								<View style={styles.workoutRightContent}>
+									<Image
+										source={require("./images/legCurls.jpg")}
+										style={styles.image3}
+									/>
+								</View>
+							</View>
+						</ScrollView>
+					</View>
+					<TouchableOpacity onPress={() => setSelectedWorkout(null)}>
+						<Text style={styles.closeModalTextWorkout}>X</Text>
+					</TouchableOpacity>
+				</View>
+			</Modal>
 			<Modal visible={showTimerModal} animationType="slide">
 				<View style={styles.timerModal}>
 					<View style={styles.timerContainer}>
@@ -195,34 +417,6 @@ const HomeScreen = () => {
 						</TouchableOpacity>
 					)}
 
-					{mode === "timer" && (
-						<View style={styles.timerControl}>
-							<TouchableOpacity style={styles.timerControlButton}>
-								<MaterialIcons name="add" size={24} color="white" />
-								<Text style={styles.timerControlButtonText}>1 Min</Text>
-							</TouchableOpacity>
-							<TouchableOpacity style={styles.timerControlButton}>
-								<MaterialIcons name="remove" size={24} color="white" />
-								<Text style={styles.timerControlButtonText}>1 Min</Text>
-							</TouchableOpacity>
-							<TouchableOpacity style={styles.timerControlButton}>
-								<MaterialIcons name="add" size={24} color="white" />
-								<Text style={styles.timerControlButtonText}>10 Sec</Text>
-							</TouchableOpacity>
-							<TouchableOpacity style={styles.timerControlButton}>
-								<MaterialIcons name="remove" size={24} color="white" />
-								<Text style={styles.timerControlButtonText}>10 Sec</Text>
-							</TouchableOpacity>
-						</View>
-					)}
-
-					{/* <TouchableOpacity
-						style={[styles.timerModeButton, { backgroundColor: buttonColor }]}
-						onPress={toggleTimerMode}
-					>
-						<Text style={styles.timerModeText}>{buttonTitle}</Text>
-					</TouchableOpacity> */}
-
 					<TouchableOpacity onPress={() => setShowTimerModal(false)}>
 						<Text style={styles.closeModalText}>Close</Text>
 					</TouchableOpacity>
@@ -243,7 +437,7 @@ const HomeScreen = () => {
 				<View style={[styles.leftContent]}>
 					<Text style={styles.subtitle}>Finished:</Text>
 					<Text style={styles.workoutsDone}>5 </Text>
-					<Text style={(styles.workoutsText, { height: itemHeight })}>
+					<Text style={(styles.workoutText, { height: itemHeight })}>
 						Workouts Completed
 					</Text>
 				</View>
@@ -293,10 +487,11 @@ const HomeScreen = () => {
 		</View>
 	);
 };
-const styles = StyleSheet.create({
+
+const createThemedStyles = (isDarkMode) => StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: "#FFFFFF",
+		backgroundColor: isDarkMode ? "#000" : "#FFFFFF",
 		height: "auto",
 	},
 	smallContent: {
@@ -307,7 +502,7 @@ const styles = StyleSheet.create({
 		width: 350, // add maxWidth property
 		padding: 16,
 		borderRadius: 10,
-		backgroundColor: "#FFFFFF",
+		backgroundColor: isDarkMode ? "#222222" : "#FFFFFF",
 		shadowColor: "#000",
 		shadowOffset: {
 			width: 2,
@@ -317,7 +512,6 @@ const styles = StyleSheet.create({
 		shadowRadius: 5,
 		elevation: 5,
 		maxHeight: 80,
-
 		alignSelf: "center",
 		position: "relative",
 		marginBottom: 22,
@@ -334,12 +528,11 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		marginLeft: 8,
 		marginTop: 2,
-		color: "#CDCDCD",
+		color: isDarkMode ? "#CDCDCD" : "#000000",
 	},
 
 	titleContainer: {
 		flex: 1,
-
 		justifyContent: "flex-start",
 		flexDirection: "row",
 		marginTop: 15,
@@ -350,14 +543,12 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 	title2: {
-		// alignSelf: "center",
 		marginBottom: 16,
-		// justifyContent: "center",
-		// justifyContent: "top",
 		fontSize: 21,
 		fontWeight: "bold",
 		left: 20,
 		flex: 1,
+		color: isDarkMode ? "#FFFFFF" : "#4A4A4A",
 	},
 	leftContent2: {
 		flexDirection: "column",
@@ -366,7 +557,7 @@ const styles = StyleSheet.create({
 	title: {
 		fontSize: 26,
 		fontWeight: "bold",
-		color: "#4A4A4A",
+		color: isDarkMode ? "#FFFFFF" : "#4A4A4A",
 		marginLeft: 15,
 	},
 	image: {
@@ -378,6 +569,7 @@ const styles = StyleSheet.create({
 		borderRadius: 45,
 		borderWidth: 2,
 		borderColor: "#013220",
+		
 	},
 	image2: {
 		width: 58,
@@ -387,20 +579,32 @@ const styles = StyleSheet.create({
 		left: 0,
 		top: 15,
 	},
+
+	image3: {
+		width: 160,
+		height: 116,
+		marginRight: 4,
+		position: "absolute",
+		right: 0,
+		top: 13,
+
+		borderRadius: 7,
+		borderWidth: 0.5,
+		borderColor: "#013220",
+	},
 	contentContainer: {
 		flex: 6.3,
 		flexDirection: "row",
 		justifyContent: "space-between",
 		paddingHorizontal: 16,
 		paddingVertical: 16,
-		// marginTop: -40,
 	},
 	leftContent: {
 		flex: 1,
 		padding: 16,
 		borderRadius: 10,
 		maxWidth: 140,
-		backgroundColor: "#FFFFFF",
+		backgroundColor: isDarkMode ? "#222222" : "#FFFFFF",
 		shadowColor: "#000",
 		shadowOffset: {
 			width: 2,
@@ -423,116 +627,109 @@ const styles = StyleSheet.create({
 	},
 	rightContent: {
 		flex: 1,
-		width: 170, // add maxWidth property
+		width: 170,
 		padding: 16,
 		borderRadius: 10,
-		backgroundColor: "#FFFFFF",
-		shadowColor: "#000",
+		backgroundColor: isDarkMode ? "#333" : "#FFFFFF",
+		shadowColor: isDarkMode ? "#FFFFFF" : "#000",
 		shadowOffset: {
-			width: 2,
-			height: 2,
+		width: 2,
+		height: 2,
 		},
 		shadowOpacity: 0.11,
 		shadowRadius: 5,
 		elevation: 5,
 		maxHeight: 80,
-		// alignItems: "center",
 		marginTop: "auto",
-	},
+		},
 	rightContent2: {
 		flex: 1,
 		flexDirection: "column",
-		width: 170, // add maxWidth property
+		width: 170,
 		padding: 16,
 		borderRadius: 10,
-		backgroundColor: "#FFFFFF",
-		shadowColor: "#000",
+		backgroundColor: isDarkMode ? "#333" : "#FFFFFF",
+		shadowColor: isDarkMode ? "#FFFFFF" : "#000",
 		shadowOffset: {
-			width: 2,
-			height: 2,
+		width: 2,
+		height: 2,
 		},
 		shadowOpacity: 0.11,
 		shadowRadius: 5,
 		elevation: 5,
 		maxHeight: 80,
-		// alignItems: "center",
-		// marginBottom: 330,
 	},
 	subtitle: {
 		fontSize: 15,
 		fontWeight: "bold",
-		color: "#4A4A4A",
+		color: isDarkMode ? "#FFFFFF" : "#4A4A4A",
 		marginBottom: 9,
 	},
 	subtitle2: {
 		fontSize: 20,
-		// fontWeight: "bold",
-		color: "#4A4A4A",
+		color: isDarkMode ? "#FFFFFF" : "#4A4A4A",
 		marginBottom: 10,
 		marginLeft: 17,
 		marginTop: 5,
 	},
 	subtitle3: {
 		fontSize: 15,
-		// fontWeight: "bold",
 		color: "#ffff",
 		top: 35,
 		fontFamily: "AppleSDGothicNeo-SemiBold",
 	},
 	subtitle4: {
 		fontSize: 18,
+		color: isDarkMode ? "#FFFFFF" : "#4A4A4A",
 		fontWeight: "bold",
-
 		top: 2,
 	},
 	heading2: {
 		fontFamily: "AppleSDGothicNeo-SemiBold",
+		color: isDarkMode ? "#FFFFFF" : "#4A4A4A",
 		fontSize: 16,
 		top: 10,
 	},
 	listItem: {
 		fontSize: 10,
-		color: "#4A4A4A",
+		color: isDarkMode ? "#FFFFFF" : "#4A4A4A",
 		marginVertical: 4,
 	},
 	goalWeight: {
 		fontSize: 20,
 		fontWeight: "bold",
-		color: "#4A4A4A",
+		color: isDarkMode ? "#FFFFFF" : "#4A4A4A",
 		marginTop: -2,
 	},
+
 	workoutsDone: {
 		fontSize: 60,
 		fontWeight: "bold",
-		color: "#4A4A4A",
+		color: isDarkMode ? "#FFFFFF" : "#4A4A4A",
 		marginTop: 10,
 	},
-	workoutsText: {
-		fontSize: 13,
-
-		color: "#CDCDCD",
+	workoutText: { //IDK WHYY THIS PART IS NOT TURNING WHITE
+		fontSize: 45,
+		fontWeight: "bold",
+		//color: "red", // not even turning red so idk
+		color: isDarkMode ? "#FFFFFF" : "#4A4A4A",
 		marginTop: 8,
 	},
 	flatListContainer: {
 		marginTop: 330,
-		// alignItems: "center",
-		// justifyContent: "center",
 		position: "absolute",
 		width: "100%",
 		alignSelf: "center",
 	},
 	workoutListContainer: {
 		flexDirection: "row",
-		// flexWrap: "wrap",
-		// justifyContent: "space-between",
 	},
 	workoutContainer: {
-		backgroundColor: "#FFFFFF",
-
-		shadowColor: "#000",
+		backgroundColor: isDarkMode ? "#000000" : "#FFFFFF",
+		shadowColor: isDarkMode ? "#FFFFFF" : "#000",
 		shadowOffset: {
-			width: 2,
-			height: 2,
+		width: 2,
+		height: 2,
 		},
 		shadowOpacity: 0.11,
 		shadowRadius: 5,
@@ -542,103 +739,102 @@ const styles = StyleSheet.create({
 		marginBottom: 20,
 		width: "58%",
 		paddingLeft: 140,
-
 		justifyContent: "space-evenly",
-
 		maxHeight: 140,
 		borderRadius: 13,
 	},
-
+		
 	workoutName: {
-		fontSize: 20,
-		fontWeight: "bold",
-		color: "#ffff",
-		position: "absolute",
-		// top: 20,
-		// left: 10,
-	},
-	workoutImage: {
-		width: 80,
-		height: 80,
-		top: 5,
-		right: -13,
-	},
-	timerModal: {
-		flex: 1,
-		justifyContent: "center",
-		alignItems: "center",
-		backgroundColor: "white",
-		padding: 20,
-	},
-	timerContainer: {
-		alignItems: "center",
-		justifyContent: "center",
-		width: 250,
-		height: 250,
-		borderRadius: 250 / 2,
-		backgroundColor: "#E8E8E8",
-	},
-	timerCircle: {
-		alignItems: "center",
-		justifyContent: "center",
-		width: 220,
-		height: 220,
-		borderRadius: 220 / 2,
-		backgroundColor: "white",
-		borderWidth: 2,
-		borderColor: "#7F7F7F",
-	},
-	timerText: {
-		fontSize: 48,
-		fontWeight: "bold",
-	},
-	closeModalText: {
-		fontSize: 16,
-		color: "blue",
-		bottom: -100,
-		left: 0,
-		marginBottom: 60,
-	},
-	startBtn: {
-		backgroundColor: "#4CAF50",
-		color: "white",
-		paddingHorizontal: 32,
-		paddingVertical: 16,
-		borderRadius: 20,
-		fontSize: 24,
-		fontWeight: "bold",
-		margin: 16,
-		shadowColor: "#4CAF50",
-		shadowOpacity: 0.4,
-		shadowOffset: { width: 0, height: 4 },
-		shadowRadius: 8,
-		elevation: 4,
-	},
-	pauseBtn: {
-		backgroundColor: "#FF9800",
-		color: "white",
-		paddingHorizontal: 32,
-		paddingVertical: 16,
-		borderRadius: 20,
-		fontSize: 24,
-		fontWeight: "bold",
-		margin: 16,
-		shadowColor: "#FF9800",
-		shadowOpacity: 0.4,
-		shadowOffset: { width: 0, height: 4 },
-		shadowRadius: 8,
-		elevation: 4,
-	},
+        fontSize: 20,
+        fontWeight: "bold",
+        color: isDarkMode ? "#FFFFFF" : "#FFFFFF",
+        position: "absolute",
+        // top: 20,
+        // left: 10,
+    },
+    workoutImage: {
+        width: 80,
+        height: 80,
+        top: 5,
+        right: -13,
+    },
+    timerModal: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: isDarkMode ? "#000000" : "#FFFFFF",
+        padding: 20,
+    },
+    timerContainer: {
+        alignItems: "center",
+        justifyContent: "center",
+        width: 250,
+        height: 250,
+        borderRadius: 250 / 2,
+        backgroundColor: isDarkMode ? "#222222" : "#E8E8E8",
+    },
+    timerCircle: {
+        alignItems: "center",
+        justifyContent: "center",
+        width: 220,
+        height: 220,
+        borderRadius: 220 / 2,
+        backgroundColor: isDarkMode ? "#333333" : "#FFFFFF",
+        borderWidth: 2,
+        borderColor: isDarkMode ? "#FFFFFF" : "#7F7F7F",
+    },
+    timerText: {
+        fontSize: 48,
+        fontWeight: "bold",
+        color: isDarkMode ? "#FFFFFF" : "#000000",
+    },
+    closeModalText: {
+        fontSize: 16,
+        color: isDarkMode ? "#FFFFFF" : "blue",
+        bottom: -100,
+        left: 0,
+        marginBottom: 60,
+    },
+    startBtn: {
+        backgroundColor: isDarkMode ? "#008000" : "#4CAF50",
+        color: isDarkMode ? "#FFFFFF" : "#FFFFFF",
+        paddingHorizontal: 32,
+        paddingVertical: 16,
+        borderRadius: 20,
+        fontSize: 24,
+        fontWeight: "bold",
+        margin: 16,
+        shadowColor: isDarkMode ? "#008000" : "#4CAF50",
+        shadowOpacity: 0.4,
+        shadowOffset: { width: 0, height: 4 },
+        shadowRadius: 8,
+        elevation: 4,
+    },
+    pauseBtn: {
+        backgroundColor: isDarkMode ? "#FFA500" : "#FF9800",
+        color: isDarkMode ? "#FFFFFF" : "#FFFFFF",
+        paddingHorizontal: 32,
+        paddingVertical: 16,
+        borderRadius: 20,
+        fontSize: 24,
+        fontWeight: "bold",
+        margin: 16,
+        shadowColor: isDarkMode ? "#FFA500" : "#FF9800",
+        shadowOpacity: 0.4,
+        shadowOffset: { width: 0, height: 4 },
+        shadowRadius: 8,
+        elevation: 4,
+    },
 	resetBtn: {
-		backgroundColor: "#F44336",
-		color: "white",
+		backgroundColor: isDarkMode ? "#f1707a" : "#F44336",
+		color: isDarkMode ? "#000" : "white",
 		paddingHorizontal: 32,
 		paddingVertical: 16,
 		borderRadius: 20,
 		fontSize: 24,
 		fontWeight: "bold",
 		margin: 16,
-		shadowColor: "#F44336",
+		shadowColor: isDarkMode ? "#f1707a" : "#F44336",
 		shadowOpacity: 0.4,
 		shadowOffset: { width: 0, height: 4 },
 		shadowRadius: 8,
@@ -659,8 +855,8 @@ const styles = StyleSheet.create({
 		shadowOffset: { width: 0, height: 4 },
 		shadowRadius: 8,
 		elevation: 4,
+		backgroundColor: isDarkMode ? "#a5d6a7" : "#4CAF50",
 	},
-
 	timerModeText: {
 		fontSize: 17,
 		fontWeight: "bold",
@@ -671,9 +867,8 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center",
 	},
-
 	timerControlButton: {
-		backgroundColor: "#4CAF50",
+		backgroundColor: isDarkMode ? "#a5d6a7" : "#4CAF50",
 		borderRadius: 50,
 		paddingVertical: 5,
 		paddingHorizontal: 5,
@@ -685,6 +880,86 @@ const styles = StyleSheet.create({
 		color: "white",
 		fontWeight: "bold",
 		fontSize: 20,
+	},
+	modalContainer1: {
+		flex: 1,
+		height: "auto",
+		width: "100%",
+		padding: 20,
+		backgroundColor: "#F2F6F9",
+	},
+
+	WorkoutTitle: {
+		fontWeight: "bold",
+		top: 60,
+		fontSize: 27,
+		left: 15,
+	},
+	closeModalTextWorkout: {
+		fontSize: 15,
+		fontWeight: 700,
+		top: -573,
+		left: 140,
+		alignSelf: "center",
+	},
+	workoutList: {
+		top: 76,
+		flexDirection: "column",
+	},
+	workoutPosts: {
+		flex: 1,
+		flexDirection: "row",
+
+		padding: 16,
+		borderRadius: 10,
+		width: "100%",
+		backgroundColor: "#FFFFFF",
+		shadowColor: "#000",
+		shadowOffset: {
+			width: 2,
+			height: 2,
+		},
+		shadowOpacity: 0.11,
+		shadowRadius: 5,
+		elevation: 5,
+		minHeight: 140,
+		alignSelf: "center",
+		marginBottom: 12, // Add margin bottom
+	},
+	workoutLeftContent: {
+		flexDirection: "column",
+		flex: 1,
+		left: 15,
+		position: "absolute",
+	},
+	workoutSubtitle: {
+		fontSize: 17,
+		fontWeight: "bold",
+		top: 15,
+	},
+	workoutSubtitle2: {
+		fontSize: 15,
+		fontWeight: "bold",
+		color: "grey",
+		marginTop: 25,
+	},
+	workoutSubtitle3: {
+		fontSize: 15,
+		fontWeight: "bold",
+		color: "grey",
+		marginTop: 15,
+	},
+
+	workoutSubtitle4: {
+		fontSize: 15,
+		fontWeight: "bold",
+		color: "grey",
+		marginTop: 15,
+	},
+	workoutRightContent: {
+		flex: 1,
+		position: "absolute",
+		right: 10,
 	},
 });
 

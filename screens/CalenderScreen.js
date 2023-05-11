@@ -2,24 +2,53 @@ import React, {useState} from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Modal, TextInput, ScrollView} from 'react-native';
 import InputSpinner from 'react-native-input-spinner';
 import  Calendar  from 'react-native-calendars/src/calendar';
+import { writeUserData, createExersisePath, createSet}  from "../hooks/databaseQueries";
+import { auth } from "../configuration/firebaseConfig"; //	Firebase Operations
+import  readData  from '../hooks/databaseQueries';
 
 const CalenderScreen = () => {
   const [showModal1, setShowModal1] = useState(false);
   const [showModal2, setShowModal2] = useState(false);
   const [recordDate, setRecordDate] = useState("");
-  const [text, onChangeText] = React.useState('');
+  const [exerciseName, setExerciseName] = useState('');
   const [nameOfExercise, setNameOfExercise] = useState('');
   const [setNumbers, setSetNumbers] = useState(0);
-  
+  const [weights, setWeights] = useState(Array(setNumbers).fill(0));
+  const [reps, setReps] = useState(Array(setNumbers).fill(0));
+
+ 
   const handleNumberChange = (text) => {
     if (/^\d{0,2}$/.test(text)) { // Regex pattern to validate input between 1 and 100
       setSetNumbers(text);
       //console.log(setNumbers);
     }
   };
-
   const exitCalendarModal = ()=>{
     setShowModal2(false);
+    setSetNumbers(0);
+  }
+  const saveCalendarModal = async ()=>{
+    setShowModal2(false);
+    setNameOfExercise(nameOfExercise);
+    const user = auth.currentUser.uid;
+    if(setNumbers != 0){
+      //write on left array
+      let path = "DatesBoolean/" + recordDate;
+      writeUserData( path,   user, "true");
+      
+
+      //insert the exercise into the right array
+      const path1 = "DatesExerciseLogs/" + recordDate + "/" + user;
+      createExersisePath(path1,exerciseName );
+      for(var i = 1; i <= setNumbers; i++){
+        let data2 = {
+          weight: weights[i],
+          reps: reps[i],
+        }
+        console.log(data2);
+        await createSet( "DatesExerciseLogs/" + recordDate + "/" + user + "/" + exerciseName + "/",   "set " + i, data2);
+      }
+    }
     setSetNumbers(0);
   }
   const handleDayPress = (day) => {
@@ -29,13 +58,24 @@ const CalenderScreen = () => {
     setShowModal1(false);
     setShowModal2(true);
   };
-
+  const handleWeightChange = (index, value) => {
+    const newWeights = [...weights];
+    newWeights[index] = value;
+    setWeights(newWeights);
+  };
+  const handleRepsChange = (index, value) => {
+    const newReps = [...reps];
+    newReps[index] = value;
+    setReps(newReps);
+  };
+  const handleExerciseName = (input) => {
+    setExerciseName(input);
+  }
   const set = [];
   for(let i = 1; i <= setNumbers; i++){
     set.push(
       <View style={styles.exerciseLogs} key={i}>
         <Text style={styles.textStyle}>Set {i}</Text>
-          
           <View styles={styles.log}>
             <Text style={{color: "tan", fontWeight:800, marginLeft: 28}}>Weight</Text>
             
@@ -43,6 +83,8 @@ const CalenderScreen = () => {
             max={1000}
             min={0}
             skin="clean"
+            value={weights[i]}
+            onChange={(value) => handleWeightChange(i, value)}
             />
             </View >
 
@@ -53,6 +95,8 @@ const CalenderScreen = () => {
             max={1000}
             min={0}
             skin="clean"
+            value={reps[i]}
+            onChange={(value) => handleRepsChange(i, value)}
             />
             </View>
         </View>
@@ -66,7 +110,6 @@ const CalenderScreen = () => {
       <Calendar 
         style={styles.calendar} 
         onDayPress={ handleDayPress}
-        initialDate={'2023-04-21'}
         minDate={"2023-04-01"}
         maxDate={"2023-12-31"}
         hideExtraDays={true}
@@ -84,8 +127,8 @@ const CalenderScreen = () => {
        <TextInput
         placeholder= "Exercise Name"
         style={styles.input}
-        onChangeText={onChangeText}
-        value={text}
+        onChangeText={handleExerciseName}
+        value={exerciseName}
 
       />
        <View style={styles.setContainer}>
@@ -101,7 +144,7 @@ const CalenderScreen = () => {
 
        <View style={styles.buttons}>
        <TouchableOpacity 
-        onPress={exitCalendarModal}
+        onPress={saveCalendarModal}
         style={styles.button2}> 
        <Text style={ styles.buttonText }>Save</Text>
       </TouchableOpacity>
