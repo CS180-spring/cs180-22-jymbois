@@ -437,7 +437,7 @@ const HomeScreen = () => {
 				<View style={[styles.leftContent]}>
 					<Text style={styles.subtitle}>Finished:</Text>
 					<Text style={styles.workoutsDone}>5 </Text>
-					<Text style={(styles.workoutText, { height: itemHeight })}>
+					<Text style={(styles.workoutText)}>
 						Workouts Completed
 					</Text>
 				</View>
@@ -502,7 +502,7 @@ const createThemedStyles = (isDarkMode) => StyleSheet.create({
 		width: 350, // add maxWidth property
 		padding: 16,
 		borderRadius: 10,
-		backgroundColor: isDarkMode ? "#222222" : "#FFFFFF",
+		backgroundColor: isDarkMode ? "#333" : "#FFFFFF",
 		shadowColor: "#000",
 		shadowOffset: {
 			width: 2,
@@ -604,7 +604,7 @@ const createThemedStyles = (isDarkMode) => StyleSheet.create({
 		padding: 16,
 		borderRadius: 10,
 		maxWidth: 140,
-		backgroundColor: isDarkMode ? "#222222" : "#FFFFFF",
+		backgroundColor: isDarkMode ? "#333" : "#FFFFFF",
 		shadowColor: "#000",
 		shadowOffset: {
 			width: 2,
@@ -709,11 +709,10 @@ const createThemedStyles = (isDarkMode) => StyleSheet.create({
 		marginTop: 10,
 	},
 	workoutText: { //IDK WHYY THIS PART IS NOT TURNING WHITE
-		fontSize: 45,
-		fontWeight: "bold",
+		fontSize: 16,
 		//color: "red", // not even turning red so idk
-		color: isDarkMode ? "#FFFFFF" : "#4A4A4A",
-		marginTop: 8,
+		color: isDarkMode ? "#CDCDCD" : "#000000",
+		marginTop: 9,
 	},
 	flatListContainer: {
 		marginTop: 330,

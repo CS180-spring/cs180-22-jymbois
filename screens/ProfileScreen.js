@@ -27,7 +27,7 @@ import {
 	}
   
 	return (
-  <ScrollView>
+  
 	  <View style={styles.container}>
 		<Image
 		  style={styles.image}
@@ -65,7 +65,7 @@ import {
 		  </Text>
 		</TouchableOpacity>
   
-		<Text style={{ marginTop: 20, marginBottom: 0, fontSize: 10 }}>
+		<Text style={{ marginTop: 20, marginBottom: 0, fontSize: 10, color: isDarkMode ? "#fff" : "#000", }}>
 		  POWERED BY
 		</Text>
 		<Image
@@ -74,7 +74,7 @@ import {
 		  source={styles.logoImage.source}
 		/>
 	  </View>
-	  </ScrollView>
+
 	  );
 	};
 	
