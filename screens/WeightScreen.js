@@ -67,7 +67,7 @@ const WeightScreen = ({route}) => {
           <TextInput
             style={styles.input}
             value={weight}
-            onChangeText={handleWeightChange}
+            onChangeText={handleWeightInput}
             keyboardType="numeric"
             placeholder="Enter weight in pounds"
             placeholderTextColor="#BDBDBD"
