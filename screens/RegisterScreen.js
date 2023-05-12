@@ -11,7 +11,22 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
+import * as WebBrowser from "expo-web-browser"
+import * as Google from 'expo-auth-session/providers/google'
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+WebBrowser.maybeCompleteAuthSession();
+
 const RegisterScreen = () => {
+
+  const [userInfo, setUserInfo] = React.useState(null);
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    androidClientId: "943556470766-32jq43kig7eu5qoifilglj8siumuqcts.apps.googleusercontent.com",
+    iosClientId: "943556470766-7rosssrctscblvb5tsnssqg7an1tp2tb.apps.googleusercontent.com",
+    webClientId: "943556470766-h28njogtg43aulfh42v7k1t87bf6t5vu.apps.googleusercontent.com",
+    expoClientId: "943556470766-h28njogtg43aulfh42v7k1t87bf6t5vu.apps.googleusercontent.com"
+  })
+
   const navigation = useNavigation();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -32,6 +47,11 @@ const RegisterScreen = () => {
 	const handlePasswordBlur = () => setIsPasswordFocused(false);
   const handleConfirmPasswordFocus = () => setIsConfirmPasswordFocused(true);
 	const handleConfirmPasswordBlur = () => setIsConfirmPasswordFocused(false);
+
+  //  Web: 943556470766-h28njogtg43aulfh42v7k1t87bf6t5vu.apps.googleusercontent.com
+  //  iOS: 943556470766-7rosssrctscblvb5tsnssqg7an1tp2tb.apps.googleusercontent.com
+  //  Android: 943556470766-32jq43kig7eu5qoifilglj8siumuqcts.apps.googleusercontent.com
+
 
 
   const registerButton = () => {
@@ -164,7 +184,7 @@ const RegisterScreen = () => {
         <TouchableOpacity
           style={[styles.button, signUpDisabled && styles.disabledButton]}
           disabled={signUpDisabled} 
-          onPress={registerButton}>
+          onPress={promptAsync}>
           <Text style={styles.buttonText}>SIGN UP</Text>
         </TouchableOpacity>
         <View View style={styles.footer}>

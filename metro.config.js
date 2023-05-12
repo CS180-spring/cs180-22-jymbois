@@ -11,6 +11,7 @@ module.exports = {
           inlineRequires: false,
         },
       }),
+      assetPlugins: ["expo-asset/tools/hashAssetFiles"]
     },
     resolver: {
       sourceExts: ['jsx', 'js', 'ts', 'tsx', 'cjs', 'json'] //add here
