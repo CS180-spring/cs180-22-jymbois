@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^13.0.0",
+    "@react-native-community/datetimepicker": "^7.1.0",
     "@react-native-community/slider": "^4.4.2",
     "@react-native-firebase/app": "^17.4.2",
     "@react-native-firebase/auth": "^17.4.2",
@@ -29,6 +30,7 @@
     "react-native-calendars": "^1.1295.0",
     "react-native-chart-kit": "^6.12.0",
     "react-native-circular-progress-indicator": "^4.4.2",
+    "react-native-countdown-component": "^2.7.1",
     "react-native-gesture-handler": "^2.9.0",
     "react-native-input-spinner": "^1.8.1",
     "react-native-picker-select": "^8.0.4",
