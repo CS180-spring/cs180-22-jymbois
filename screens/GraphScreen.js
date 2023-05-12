@@ -9,6 +9,7 @@ import {
   TouchableWithoutFeedback,
   Modal,
 } from 'react-native';
+import {BarChart,LineChart} from 'react-native-chart-kit'
   //import CircularProgress from 'react-native-circular-progress-indicator';
 
 const GraphScreen = ({ route }) => {
@@ -35,19 +36,100 @@ const GraphScreen = ({ route }) => {
     }
     return (100 - answer);
   };
-  
+  const ContentBox = ({ title, children }) => {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title}>{title}</Text>
+        <View style={styles.content}>
+          <Text>{children}</Text>
+        </View>
+      </View>
+    );
+  };
+
+  const barData = {
+    labels: ['Today', 'Goal', 'June', 'July'],
+    datasets: [
+      {
+        data: [weight, goalWeight, 146, 150],
+      },
+    ],
+  };
+
+  const lineData = {
+    labels: ['Today', 'Goal', 'June', 'July'],
+    datasets: [
+      {
+        data: [weight, goalWeight, 146, 150],
+      },
+    ],
+  };
+  const BarChartConfig = {
+    yAxisInterval: 25,
+    backgroundGradientFrom: 'white',
+    backgroundGradientTo: 'white',
+    decimalPlaces: 1,
+    color: (opacity = 1) => `rgba(0, 61, 128, ${opacity})`,
+    style: {
+      borderRadius: 10,
+    },
+    fillShadowGradient: '#fff',
+  };
+
+  const lineChartConfig = {
+    backgroundColor: '#ffffff',
+    backgroundGradientFrom: '#ffffff',
+    backgroundGradientFromOpacity: 0,
+    backgroundGradientTo: '#ffffff',
+    backgroundGradientToOpacity: 0,
+    color: (opacity = 1) => `rgba(0, 61, 128, ${opacity})`,
+    labelColor: (opacity = 1) => `transparent`,
+    fillShadowGradient: '#fff',
+  };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
-        <View style={styles.progressBarContainer}>
-          <Text style={styles.progressText}>{progress}%</Text>
+      <View style={styles.titleContainer}>
+				<View style={[styles.smallContentTitle]}>
+					<Text style={styles.title}>Your Progress</Text>
+					<Text style={styles.subtitle2}>See How You Improve</Text>
+				</View>
+			</View>
+      <View style={[styles.contentContainer]}>
+      <View style={styles.activityContent}>
+      <Text style={styles.title2}>Weekly Activities</Text>
+      <   Text style={styles.activityText}>
+             You have done <Text style={{fontWeight: 'bold'}}>5</Text> activities this week. Keep it up.
+             </Text>
+      <View style={styles.bottomLeftContainer}>
+        <View style={styles.activityRow}>
+          <Text style={styles.bottomLeftText}>Push</Text>
+          <Text style={styles.bottomLeftNumber}>3</Text>
         </View>
-        <TouchableOpacity
-          style={styles.plusButton}
+        <View style={styles.activityRow}>
+          <Text style={styles.bottomLeftText}>Pull</Text>
+          <Text style={styles.bottomLeftNumber}>7</Text>
+        </View>
+        <View style={styles.activityRow}>
+          <Text style={styles.bottomLeftText}>Legs</Text>
+          <Text style={styles.bottomLeftNumber}>11</Text>
+        </View>
+      </View>
+      <View style={styles.bottomRightContainer}>
+      <View style={styles.activityRow}>
+        <Text style={styles.bottomRightText}>Total Time:</Text>
+        <Text style={styles.bottomRightNumber}>2h 30m</Text>
+      </View>
+      </View>
+			</View>
+       <View style={styles.barGraphContainer}>  
+       <Text style={styles.title2}>Goal Progression</Text> 
+       <TouchableOpacity
+       style={styles.goalButtonContainer}
           onPress={() => setModalVisible(true)}
         >
-          <Text style={styles.plusButtonText}>+</Text>
+          <Text style={styles.goalButton}>Add Goal -{">"} </Text>
         </TouchableOpacity>
         <Modal
           animationType="slide"
@@ -84,20 +166,133 @@ const GraphScreen = ({ route }) => {
             </View>
           </View>
         </Modal>
+       <BarChart
+        style={{flex: 1,  marginTop: 50, borderRadius: 10}}
+         data={barData}
+         width={325}
+         height={300}
+         yAxisLabel={'lbs'}
+         chartConfig={BarChartConfig}
+       /> 
+        <LineChart
+        style={{ position: 'absolute', bottom: 25, right: -7, borderRadius: 10 }}
+         data={lineData}
+         width={325}
+         height={300}
+         yAxisLabel={'lbs'}
+         chartConfig={lineChartConfig}
+       /> 
+        </View> 
+      </View>
+      
       </View>
     </TouchableWithoutFeedback>
   );
 };
 const styles = StyleSheet.create({
   container: {
+		flex: 1,
+		backgroundColor: "#FFFFFF",
+		height: "auto",
+	},
+  titleContainer: {
+		height: "12%",
+		justifyContent: "flex-start",
+		flexDirection: "row",
+	},
+  contentContainer: {
+		flex: 1,
+    backgroundColor: "#FFFFFF",
+		height: "auto",
+	},
+  activityContent: {
     flex: 1,
+    padding: 20,
+    borderRadius: 10,
+    maxWidth: 370,
+    backgroundColor: "#FFFFFF",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 2,
+      height: 2,
+    },
+    shadowOpacity: 0.11,
+    shadowRadius: 5,
+    elevation: 10,
+    height: 300,
+    marginLeft: 10,
+  },
+  barGraphContainer: {
+    flex: 3,
+    padding: 20,
+    borderRadius: 10,
+    maxWidth: 370,
+    backgroundColor: "#FFFFFF",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 2,
+      height: 2,
+    },
+    shadowOpacity: 0.11,
+    shadowRadius: 5,
+    elevation: 10,
+    marginLeft: 10,
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  activityText: {
+    color: "#4A4A4A",
+    fontSize: 15,
+    borderBottomWidth: 1,
+    marginTop: 30,
+    marginRight: 100,
+  },
+  bottomLeftContainer: {
+    position: "absolute",
+    bottom: 15,
+    left: 10,
+    flexDirection: "row",
+  },
+  bottomLeftText: {
+    color: "#4A4A4A",
+    fontSize: 15,
+    fontWeight: "400",
+    marginRight: 10,
+  },
+  bottomLeftNumber: {
+    color: "#4A4A4A",
+    fontWeight: "900",
+    fontSize: 15,
+    marginRight: 10,
+  },
+  bottomRightContainer: {
+    position: "absolute",
+    bottom: 15,
+    right: 10,
+    flexDirection: "row",
+  },
+  bottomRightText: {
+    color: "#4A4A4A",
+    fontSize: 15,
+    fontWeight: "400",
+    marginLeft: 10,
+  },
+  bottomRightNumber: {
+    color: "#4A4A4A",
+    fontWeight: "800",
+    fontSize: 15,
+    marginLeft: 10,
+  },
+  activityRow: {
+    flexDirection: 'column',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    justifyContent: 'center',
+    marginTop: 10,
   },
   progressBarContainer: {
     width: 200,
     height: 200,
-    borderRadius: 100,
+    borderRadius: 150,
     backgroundColor: 'white',
     alignItems: 'top',
     justifyContent: 'center',
@@ -133,16 +328,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
   },
-  plusButton: {
+  goalButtonContainer: {
     position: 'absolute',
-    top: 30,
-    right: 20,
-    backgroundColor: '#8BC34A',
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    alignItems: 'center',
-    justifyContent: 'center',
+    right: 100,
+		
   },
   popupContainer: {
     position: 'absolute',
@@ -197,6 +386,7 @@ const styles = StyleSheet.create({
   },
   progressText: {
     position: 'absolute',
+    marginRight: 50,
     fontSize: 30,
     fontWeight: 'bold',
     color: 'black',
@@ -220,6 +410,45 @@ const styles = StyleSheet.create({
     borderLeftColor: '#B8860B',
     borderBottomColor: '#B8860B',
     transform: [{ rotateZ: '-90deg' }],
+  },
+	title2Container: {
+		flexDirection: "column",
+		justifyContent: "center",
+		alignItems: "center",
+	},
+  subtitle2: {
+		fontSize: 20,
+		// fontWeight: "bold",
+		color: "#4A4A4A",
+		marginBottom: 10,
+		marginLeft: 17,
+		marginTop: 5,
+	},
+  title: {
+		fontSize: 26,
+		fontWeight: "bold",
+		color: "#4A4A4A",
+		marginLeft: 15,
+	},
+  title2: {
+    fontSize: 15,
+    fontWeight: "bold",
+    color: "#4A4A4A",
+    position: "absolute",
+    top: 15,
+    marginLeft: 15,
+  },
+  smallContentTitle: {
+		flex: 1,
+		flexDirection: "column",
+	},
+  goalButton: {
+    fontSize: 15,
+    fontWeight: "bold",
+    color: "#1363DF",
+    position: "absolute",
+    top: 15,
+    marginRight: 40,
   },
 });
 
