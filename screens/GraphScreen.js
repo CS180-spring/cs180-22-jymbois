@@ -99,8 +99,9 @@ const GraphScreen = ({ route }) => {
       <View style={[styles.contentContainer]}>
       <View style={styles.activityContent}>
       <Text style={styles.title2}>Weekly Activities</Text>
-      <Text style={styles.activityText}>You have done 5 activities this week.
-        Keep it up</Text>
+      <   Text style={styles.activityText}>
+             You have done <Text style={{fontWeight: 'bold'}}>5</Text> activities this week. Keep it up.
+             </Text>
       <View style={styles.bottomLeftContainer}>
         <View style={styles.activityRow}>
           <Text style={styles.bottomLeftText}>Push</Text>
@@ -240,15 +241,11 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   activityText: {
+    color: "#4A4A4A",
     fontSize: 15,
     borderBottomWidth: 1,
     marginTop: 30,
-    marginLeft: 10,
-  },
-  activityText2: {
-    fontSize: 15,
-    marginTop: 30,
-    marginLeft: 10,
+    marginRight: 100,
   },
   bottomLeftContainer: {
     position: "absolute",
@@ -257,12 +254,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   bottomLeftText: {
-    fontWeight: "bold",
-    fontSize: 14,
+    color: "#4A4A4A",
+    fontSize: 15,
+    fontWeight: "400",
     marginRight: 10,
   },
   bottomLeftNumber: {
-    fontSize: 14,
+    color: "#4A4A4A",
+    fontWeight: "900",
+    fontSize: 15,
     marginRight: 10,
   },
   bottomRightContainer: {
@@ -272,12 +272,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   bottomRightText: {
-    fontWeight: "bold",
-    fontSize: 14,
+    color: "#4A4A4A",
+    fontSize: 15,
+    fontWeight: "400",
     marginLeft: 10,
   },
   bottomRightNumber: {
-    fontSize: 14,
+    color: "#4A4A4A",
+    fontWeight: "800",
+    fontSize: 15,
     marginLeft: 10,
   },
   activityRow: {
