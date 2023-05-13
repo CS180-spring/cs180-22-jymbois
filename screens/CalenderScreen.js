@@ -1,10 +1,12 @@
 import React, {useState} from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Modal, TextInput, ScrollView, KeyboardAvoidingView, Platform} from 'react-native';
+import { useEffect } from 'react';
 import InputSpinner from 'react-native-input-spinner';
 import  Calendar  from 'react-native-calendars/src/calendar';
 import { writeUserData, createExersisePath, createSet}  from "../hooks/databaseQueries";
 import { auth } from "../configuration/firebaseConfig"; //	Firebase Operations
-import  readData  from '../hooks/databaseQueries';
+import  {readData, checkWorkoutLogs}  from '../hooks/databaseQueries';
+//import GenerateExerciseRecords from "./components/GenerateExerciseRecords.js";
 
 const CalenderScreen = () => {
   const [showExerciseRecord, setShowExerciseRecordModal] = useState(false);
@@ -15,8 +17,7 @@ const CalenderScreen = () => {
   const [setNumbers, setSetNumbers] = useState(0);
   const [weights, setWeights] = useState(Array(setNumbers).fill(0));
   const [reps, setReps] = useState(Array(setNumbers).fill(0));
-
- 
+  const [hasWorkout, setHasWorkout] = useState(false);
   const handleNumberChange = (text) => {
     if (/^\d{0,2}$/.test(text)) { // Regex pattern to validate input between 1 and 100
       setSetNumbers(text);
@@ -79,6 +80,10 @@ const CalenderScreen = () => {
   const exitExerciseRecordModal = () => {
     setShowExerciseRecordModal(false);
   }
+
+
+
+
   const set = [];
   for(let i = 1; i <= setNumbers; i++){
     set.push(
@@ -111,6 +116,27 @@ const CalenderScreen = () => {
     );
   }
 
+  //This part is triggered everytime user select a date
+  //This function check if user have a workout log on that day or not
+  useEffect(() => {
+    const fetchWorkoutLog = async () => {
+      try {
+        const user = auth.currentUser.uid;  // get the current user id
+        const result = await checkWorkoutLogs(recordDate, user);
+        // assuming that result will be "Undefined" if there's no workout
+        setHasWorkout(result === "true");
+        if(result === "true") console.log("You have workout on this day!!!");
+        else console.log("You dont have a workout on this day!!!");
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    if (recordDate) {
+      fetchWorkoutLog();
+    }
+  }, [recordDate]);
+ 
   return (
     
     <ScrollView >  
@@ -125,6 +151,7 @@ const CalenderScreen = () => {
 
       <View style={styles.buttons}>
         <TouchableOpacity 
+
           onPress={selectViewExerciseRecord}
           style={styles.button2}> 
         <Text style={ styles.buttonText }>View Exercise Record</Text>
@@ -197,9 +224,9 @@ const CalenderScreen = () => {
        <ScrollView>
        {
         recordDate && (<Text style={{marginTop: 100, marginLeft: 30 ,color: 'tan', fontWeight: 800, fontSize: 50, }}>{recordDate}</Text>)
-        
        }
-       
+      
+
        <View style={styles.returnButtonContainer}>
         <TouchableOpacity 
           onPress={exitExerciseRecordModal}
@@ -207,8 +234,6 @@ const CalenderScreen = () => {
           <Text style={ styles.buttonText }>Return</Text>
         </TouchableOpacity>
        </View>
-      
-
        </ScrollView>
       </Modal>
 
