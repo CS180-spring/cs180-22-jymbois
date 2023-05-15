@@ -74,7 +74,7 @@ const LoginScreen = () => {
 				//  Successful sign in
 				const user = userCredential.user;
 				console.log("Logged in with: ", email);
-				navigation.navigate("Home"); //	Navigate to User Home Page :)
+				navigation.navigate('Home'); //	Navigate to User Home Page :)
 			})
 			.catch((error) => {
 				//  Error, set to send alert when error occurs
