@@ -5,21 +5,22 @@ import {
 	StyleSheet,
 	Switch,
 	TouchableOpacity,
-  ScrollView,
-  } from "react-native";
+	ScrollView,
+} from "react-native";
   import React from "react";
   import { FontAwesome } from "@expo/vector-icons";
-  import { usePushNotifications, useVacation } from "../hooks/useSwitch";
+  import { useVacation } from "../hooks/useSwitch";
   import ThemeContext from "../hooks/ThemeContext";
   import { auth } from "../configuration/firebaseConfig";
+  import { usePushNotificationToggle } from "../hooks/usePushNotificationToggle";
+  import { usePushRegister } from "../hooks/usePushRegister";
   
   const SettingScreen = () => {
 	const { isDarkMode, toggleTheme } = React.useContext(ThemeContext);
 	const styles = createThemedStyles(isDarkMode);
 	const [isVacation, toggleVacation] = useVacation(false);
-	const [isPushNotifications, togglePushNotifications] = usePushNotifications(
-	  false
-	);
+	const [isPushNotificationsEnabled, togglePushNotifications] = usePushNotificationToggle(false);
+	const expoPushToken = usePushRegister(isPushNotificationsEnabled);
   
 	function logOut() {
 	  console.log(auth.currentUser.email + " logged out...");
@@ -44,7 +45,7 @@ import {
 		{[
 		  ["Dark Mode", isDarkMode, toggleTheme],
 		  ["Vacation Mode", isVacation, toggleVacation],
-		  ["Push Notifications", isPushNotifications, togglePushNotifications],
+		  ["Push Notifications", isPushNotificationsEnabled, togglePushNotifications],
 		].map(([label, value, toggle]) => (
 		  <View key={label} style={styles.notificationContainer}>
 			<Text style={styles.notificationText}>{label}</Text>

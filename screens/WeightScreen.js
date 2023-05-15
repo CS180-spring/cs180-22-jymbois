@@ -8,10 +8,10 @@ import {
 	TouchableWithoutFeedback,
 	Keyboard,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import { auth } from "../configuration/firebaseConfig"; //	Firebase Operations
 import database from "../configuration/firebaseConfig";
 import { ref, set } from "firebase/database";
+
 
 const WeightScreen = ({ route }) => {
 	const [weight, setWeight] = useState("");
@@ -47,6 +47,7 @@ const WeightScreen = ({ route }) => {
 				await set(dbRef, height);
 				dbRef = ref(database, "users/" + user.uid + "/weight");
 				await set(dbRef, weight);
+				
 				console.log(user.email + " logged in!");
 			} catch (error) {
 				console.log(error);
