@@ -59,7 +59,7 @@ import {
    
 		))}
   
-		<TouchableOpacity style={styles.logout}>
+		<TouchableOpacity style={styles.logout} onPress={logOut}>
 		  <Text style={{ color: "white", fontSize: 16, fontWeight: "bold" }}>
 			LOG OUT
 		  </Text>

@@ -9,10 +9,92 @@ import {
 	ScrollView,
 	Keyboard,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";	
 import { auth } from "../configuration/firebaseConfig"; //	Firebase Operations
 
+import * as WebBrowser from "expo-web-browser"
+import * as Google from 'expo-auth-session/providers/google'
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+WebBrowser.maybeCompleteAuthSession();
+
 const LoginScreen = () => {
+
+  const [userInfo, setUserInfo] = React.useState(null);
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    androidClientId: "943556470766-32jq43kig7eu5qoifilglj8siumuqcts.apps.googleusercontent.com",
+    iosClientId: "943556470766-7rosssrctscblvb5tsnssqg7an1tp2tb.apps.googleusercontent.com",
+    webClientId: "943556470766-h28njogtg43aulfh42v7k1t87bf6t5vu.apps.googleusercontent.com",
+    expoClientId: "943556470766-h28njogtg43aulfh42v7k1t87bf6t5vu.apps.googleusercontent.com"
+  })
+
+  //  Trigger every time someone signs in with google
+  React.useEffect(() => {
+    handleSignUp();
+    console.log("User Info: ")
+    console.log(userInfo)
+
+	
+
+    if(userInfo)
+    {
+		if(auth.fetchSignInMethodsForEmail(userInfo.email))
+		{
+			auth.signInWithEmailAndPassword(userInfo.email, userInfo.id)
+          		.then((userCredential) => { //  Successful sign in
+            	const user = userCredential.user;
+            	console.log("Logged in with: ", userInfo.email);
+				navigation.navigate("Home")	//	Navigate to User Home Page :)
+          	}).catch((error) => { //  Error, set to send alert when error occurs
+
+				//	Maybe set up message here instead of just an alert window?
+            	const errorCode = error.code;
+            	const errorMessage = error.message;
+            	alert(error.message);
+           })
+		}
+		else{
+			
+		}
+    }
+
+
+  }, [response])
+
+
+  async function handleSignUp() {
+    const user = await AsyncStorage.getItem("@user");
+    if(!user){
+      if(response?.type === "success"){
+        await getUserInfo(response.authentication.accessToken)
+      }
+    }else {
+      setUserInfo(JSON.parse(user))
+    }
+  }
+
+  const getUserInfo = async (token) => 
+  {
+    //  return if there is no token
+    if (!token) return;
+    try {
+      //  Respoonse contains info of user
+      const response = await fetch (
+        "https://www.googleapis.com/userinfo/v2/me",
+        {
+          headers: { Authorization: `Bearer ${token}`},
+        }
+      );
+      const user = await response.json();
+      await AsyncStorage.setItem("@user", JSON.stringify(user));
+      //  Update user state
+      setUserInfo(user);
+    }catch(error)
+    {
+      console.log(error);
+    }
+  }
+
 	const navigation = useNavigation();
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -68,22 +150,6 @@ const LoginScreen = () => {
 
 	const handleLogin = () => {
 		// Run login function here
-		auth
-			.signInWithEmailAndPassword(email, password)
-			.then((userCredential) => {
-				//  Successful sign in
-				const user = userCredential.user;
-				console.log("Logged in with: ", email);
-				navigation.navigate("Home"); //	Navigate to User Home Page :)
-			})
-			.catch((error) => {
-				//  Error, set to send alert when error occurs
-
-				//	Maybe set up message here instead of just an alert window?
-				const errorCode = error.code;
-				const errorMessage = error.message;
-				alert(error.message);
-			});
 	};
 
 	const scrollViewRef = useRef(null);
@@ -111,7 +177,7 @@ const LoginScreen = () => {
 								: styles.inputInactive,
 						]}
 						placeholder="Enter Username"
-						value={email} //	email var set here trhough textbox
+						value={email}	//	email var set here trhough textbox
 						onChangeText={setEmail}
 						onFocus={handleEmailFocus}
 						onBlur={handleEmailBlur}
@@ -144,17 +210,19 @@ const LoginScreen = () => {
 					style={styles.registerButton}
 					onPress={() => navigation.navigate("Register")}
 				>
-					<Text style={styles.registerButtonText}>
-						Don't have an account?{" "}
-						<Text style={{ color: "black", fontWeight: "bold" }}>
-							Click here
-						</Text>
-					</Text>
+					<Text style={styles.registerButtonText}>Don't have an account? <Text style={{color: 'black', fontWeight: 'bold'}}>Click here</Text></Text>
+				</TouchableOpacity>
+				<TouchableOpacity
+					style={styles.registerButton}
+					onPress={() => promptAsync()}
+				>
+					<Text style={{color: 'black', fontWeight: 'bold'}}>Sign In With Google</Text>
 				</TouchableOpacity>
 			</View>
 		</ScrollView>
 	);
 };
+
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
@@ -221,21 +289,18 @@ const styles = StyleSheet.create({
 	},
 
 	button: {
-		width: "40%",
+		width: "70%",
 		height: 50,
 		backgroundColor: "white",
 		justifyContent: "center",
-		borderColor: "#8BC34A",
-		borderWidth: 2,
 		alignItems: "center",
 		borderRadius: 20,
 		marginBottom: 15,
-		shadowColor: "#000",
-		shadowOffset: { width: 0, height: 2 },
-		shadowOpacity: 0.2,
-		shadowRadius: 2,
-		elevation: 2,
-		top: 35,
+		shadowColor: '#000',
+  		shadowOffset: { width: 0, height: 2 },
+  		shadowOpacity: 0.2,
+  		shadowRadius: 2,
+  		elevation: 2
 	},
 	buttonText: {
 		color: "black",
@@ -248,7 +313,6 @@ const styles = StyleSheet.create({
 		backgroundColor: "#fff",
 		justifyContent: "center",
 		alignItems: "center",
-		top: 40,
 	},
 	registerButtonText: {
 		color: "black",
