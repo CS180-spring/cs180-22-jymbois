@@ -56,7 +56,7 @@ export function writeNewPost(childKey, childData) {
 
 
 
-writeNewPost('5StlXUIxmPMGgzFFvXPF0RKICcu1', 'true');
+//writeNewPost('5StlXUIxmPMGgzFFvXPF0RKICcu1', 'true');
 //Function to readData from real-time firebase
 //to use this function readData()
 export async function readData(path) {
@@ -82,7 +82,7 @@ export async function readData(path) {
 export async function checkWorkoutLogs(date, uid){
   try {
     const obj = await readData("DatesBoolean/" + date + "/" + uid );
-    const keys = Object.keys(obj);
+    //const keys = Object.keys(obj);
     //console.log(obj);
     return obj;
   } catch (error) {
@@ -94,6 +94,7 @@ export async function checkWorkoutLogs(date, uid){
 
 
 //Since checkWorkoutLogs is an asynchronous, I have to use try and catch, then use await
+/*
 (async function() {
   try {
     const result = await checkWorkoutLogs("2023-05-05", "5StlXUIxmPMGgzFFvXPF0RKICcu1");
@@ -104,5 +105,38 @@ export async function checkWorkoutLogs(date, uid){
     console.error("Error:", error);
   }
 })();
+*/
 
+//This function is to retrieve data from real-time firebase
+//Store returned datas inside an array so I can generate Uis for them
+export async function retrieveExercises(date, uid){
+  try {
+    const obj = await readData("DatesExerciseLogs/" + date + "/" + uid );
+    //console.log(obj);
+    //const keys = Object.keys(obj);
+    //console.log();
+    return obj;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+}
+
+
+export async function generateUIs1(date, uid) {
+  try {
+    const exercises = await retrieveExercises(date, uid);
+    //console.log(exercises);
+    for (const [exercise, sets] of Object.entries(exercises)) {
+      console.log(`Exercise: ${exercise}`);
+      
+      for (const [setName, setDetails] of Object.entries(sets)) {
+        console.log(`  ${setName}: ${setDetails.reps} reps at ${setDetails.weight} lbs`);
+      }
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
+}
+
+generateUIs1("2023-05-08","KXJjbxWERaggJmj5tcszDGbXxe22");
 
