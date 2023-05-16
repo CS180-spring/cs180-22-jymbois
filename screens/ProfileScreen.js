@@ -11,16 +11,14 @@ import {
   Button,
 } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import { usePushNotifications, useVacation } from '../hooks/useSwitch';
+import { useVacation } from '../hooks/useSwitch';
 import ThemeContext from '../hooks/ThemeContext';
 import { auth } from '../configuration/firebaseConfig';
 import { Picker } from '@react-native-picker/picker';
 import { useNavigation } from '@react-navigation/native';
 import Countdown from './CustomCountDown';
-
-
-
-
+import { usePushNotificationToggle } from "../hooks/usePushNotificationToggle";
+import { usePushRegister } from "../hooks/usePushRegister";
 
 
 const SettingScreen = () => {
@@ -28,7 +26,7 @@ const SettingScreen = () => {
 	const styles = createThemedStyles(isDarkMode);
 	//const [isVacation, toggleVacation] = useVacation(false, navigation);
 	const [isVacation, setIsVacation] = useState(false);
-	const [isPushNotifications, togglePushNotifications] = usePushNotifications(false);
+	const [isPushNotificationsEnabled, togglePushNotifications] = usePushNotificationToggle(false);
 	const [modalVisible, setModalVisible] = useState(false);
 	const [days, setDays] = useState(0);
 	const [hours, setHours] = useState(0);
@@ -36,6 +34,7 @@ const SettingScreen = () => {
 	const [countdownVisible, setCountdownVisible] = useState(false);
 	const [totalDuration, setTotalDuration] = useState(0);
 	const navigation = useNavigation();
+	usePushRegister(isPushNotificationsEnabled);
   
 	const handleVacationModeToggle = () => {
 		if (!isVacation) {
@@ -88,24 +87,24 @@ const SettingScreen = () => {
 		</Text>
   
 		{[
-  			["Dark Mode", isDarkMode, toggleTheme],
-  			["Vacation Mode", isVacation, handleVacationModeToggle],
- 			["Push Notifications", isPushNotifications, togglePushNotifications],
-			].map(([label, value, toggleFunc]) => (
-  		<View key={label} style={styles.notificationContainer}>
-    	<Text style={styles.notificationText}>{label}</Text>
-    	<Switch
-      		trackColor={{ false: "#767577", true: "#013220" }}
-      		thumbColor={value ? "#f4f3f4" : "#f4f3f4"}
-      		ios_backgroundColor="#3e3e3e"
-      		onValueChange={toggleFunc}
-      		value={value}
-    	/>
-  	</View>
-	))}
-
+		  ["Dark Mode", isDarkMode, toggleTheme],
+		  ["Vacation Mode", isVacation, handleVacationModeToggle],
+		  ["Push Notifications", isPushNotificationsEnabled, togglePushNotifications],
+		].map(([label, value, toggle]) => (
+		  <View key={label} style={styles.notificationContainer}>
+			<Text style={styles.notificationText}>{label}</Text>
+			<Switch
+			  trackColor={{ false: "#767577", true: "#013220" }}
+			  thumbColor={value ? "#f4f3f4" : "#f4f3f4"}
+			  ios_backgroundColor="#3e3e3e"
+			  onValueChange={toggle}
+			  value={value}
+			/>
+		  </View>
+   
+		))}
   
-		<TouchableOpacity style={styles.logout}>
+		<TouchableOpacity style={styles.logout} onPress={logOut}>
 		  <Text style={{ color: "white", fontSize: 16, fontWeight: "bold" }}>
 			LOG OUT
 		  </Text>

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "943556470766",
+    "firebase_url": "https://cs180-db-default-rtdb.firebaseio.com",
+    "project_id": "cs180-db",
+    "storage_bucket": "cs180-db.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:943556470766:android:7ffd0fc63d9b18999ed0ff",
+        "android_client_info": {
+          "package_name": "host.exp.exponent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "943556470766-soma4dqnrlasa2qqk9i83iso76julvsm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTmCxmbUYj-8OO2zNqYmNdOepaIZJHhJY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "943556470766-c7dekh92i5ovm8iioqea1dq469u1aarp.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "943556470766-ksv5flujgtpck547d777h1sgincc8n8e.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "host.exp.exponent"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

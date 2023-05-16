@@ -1,43 +1,45 @@
 import React, {useState} from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Modal, TextInput, ScrollView} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Modal, TextInput, ScrollView, KeyboardAvoidingView, Platform} from 'react-native';
+import { useEffect } from 'react';
 import InputSpinner from 'react-native-input-spinner';
 import  Calendar  from 'react-native-calendars/src/calendar';
 import { writeUserData, createExersisePath, createSet}  from "../hooks/databaseQueries";
 import { auth } from "../configuration/firebaseConfig"; //	Firebase Operations
-import  readData  from '../hooks/databaseQueries';
+import  {readData, checkWorkoutLogs, retrieveExercises}  from '../hooks/databaseQueries';
+//import GenerateExerciseRecords from "./components/GenerateExerciseRecords.js";
 
 const CalenderScreen = () => {
-  const [showModal1, setShowModal1] = useState(false);
-  const [showModal2, setShowModal2] = useState(false);
+  const [showExerciseRecord, setShowExerciseRecordModal] = useState(false);
+  const [showExerciseLogModal, setShowExerciseLogModal] = useState(false);
   const [recordDate, setRecordDate] = useState("");
   const [exerciseName, setExerciseName] = useState('');
   const [nameOfExercise, setNameOfExercise] = useState('');
   const [setNumbers, setSetNumbers] = useState(0);
   const [weights, setWeights] = useState(Array(setNumbers).fill(0));
   const [reps, setReps] = useState(Array(setNumbers).fill(0));
-
- 
+  const [hasWorkout, setHasWorkout] = useState(false);
+  const [exercises, setExercises] = useState({});
   const handleNumberChange = (text) => {
     if (/^\d{0,2}$/.test(text)) { // Regex pattern to validate input between 1 and 100
       setSetNumbers(text);
       //console.log(setNumbers);
     }
   };
+
   const exitCalendarModal = ()=>{
-    setShowModal2(false);
+    setShowExerciseLogModal(false);
     setSetNumbers(0);
   }
   const saveCalendarModal = async ()=>{
-    setShowModal2(false);
+    setShowExerciseLogModal(false);
     setNameOfExercise(nameOfExercise);
     const user = auth.currentUser.uid;
     if(setNumbers != 0){
-      //write on left array
+      //write on DatesBooleanArray, Uid:"True"
       let path = "DatesBoolean/" + recordDate;
       writeUserData( path,   user, "true");
       
-
-      //insert the exercise into the right array
+      //insert the exercise into the DateExerciseLogs Uid/ExerciseName/{Set Information}
       const path1 = "DatesExerciseLogs/" + recordDate + "/" + user;
       createExersisePath(path1,exerciseName );
       for(var i = 1; i <= setNumbers; i++){
@@ -55,8 +57,7 @@ const CalenderScreen = () => {
     //console.log(day.dateString);
     setRecordDate(day.dateString);
     console.log(recordDate);
-    setShowModal1(false);
-    setShowModal2(true);
+    
   };
   const handleWeightChange = (index, value) => {
     const newWeights = [...weights];
@@ -71,6 +72,21 @@ const CalenderScreen = () => {
   const handleExerciseName = (input) => {
     setExerciseName(input);
   }
+  const selectViewExerciseRecord = () => {
+    if( recordDate != "") setShowExerciseRecordModal(true);
+  }
+  const selectInsertExerciseRecord = () => {
+    if( recordDate != "") setShowExerciseLogModal(true);
+  }
+  const exitExerciseRecordModal = () => {
+    setShowExerciseRecordModal(false);
+    setExercises({});
+    setHasWorkout(false);
+  }
+
+
+
+
   const set = [];
   for(let i = 1; i <= setNumbers; i++){
     set.push(
@@ -103,6 +119,46 @@ const CalenderScreen = () => {
     );
   }
 
+  //This part is triggered everytime user select a date
+  //This function check if user have a workout log on that day or not
+  useEffect(() => {
+    const fetchWorkoutLog = async () => {
+      try {
+        const user = auth.currentUser.uid;  // get the current user id
+        const result = await checkWorkoutLogs(recordDate, user);
+        // assuming that result will be "Undefined" if there's no workout
+        setHasWorkout(result === "true");
+        if(result === "true") console.log("You have workout on this day!!!" + recordDate);
+        else console.log("You dont have a workout on this day!!!" + recordDate);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    if (recordDate) {
+      fetchWorkoutLog();
+    }
+  }, [recordDate]);
+
+  //This function is to generate Uis 
+  useEffect(() => {
+    const generateUis = async () => {
+      try {
+        const user = auth.currentUser.uid;  // get the current user id
+        const exercises = await retrieveExercises(recordDate, user);
+        setExercises(exercises);
+        
+        
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    if (hasWorkout) {
+      generateUis();
+    }
+  }, [hasWorkout]);
+ 
   return (
     
     <ScrollView >  
@@ -113,12 +169,40 @@ const CalenderScreen = () => {
         minDate={"2023-04-01"}
         maxDate={"2023-12-31"}
         hideExtraDays={true}
+        markedDates={{
+          [recordDate]: {
+            selected: true,
+            selectedColor: 'tan', // or any color you want for the selected date
+          }
+        }}
       />
 
+      <View style={styles.buttons}>
+        <TouchableOpacity 
+
+          onPress={selectViewExerciseRecord}
+          style={styles.button3}> 
+        <Text style={ styles.buttonText }>View Exercise Record</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity 
+          onPress={selectInsertExerciseRecord}
+          style={styles.button3}> 
+          <Text style={ styles.buttonText }>Insert Exercise Record</Text>
+        </TouchableOpacity>
+      
+      </View>
+      
+    
       <Modal
-         visible={showModal2} animationType="fade"
+         visible={showExerciseLogModal} animationType="fade"
          style ={styles.exerciseLogModal} 
       >
+        <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style = {{flex: 1}}
+        >
+
        <ScrollView>
        {
         recordDate && (<Text style={{marginTop: 100, marginLeft: 30 ,color: 'tan', fontWeight: 800, fontSize: 50, }}>{recordDate}</Text>)
@@ -157,8 +241,45 @@ const CalenderScreen = () => {
        </View>
 
        </ScrollView>
+       </KeyboardAvoidingView>
       </Modal>
+
+
+      <Modal
+         visible={showExerciseRecord} animationType="fade"
+         style ={styles.exerciseLogModal} 
+      >
+       <ScrollView>
+       {
+        recordDate && (<Text style={{marginTop: 100, marginLeft: 30 ,color: 'tan', fontWeight: 800, fontSize: 50, }}>{recordDate}</Text>)
+       }
+
+    <View style={styles.exercisesBox}>
+      { hasWorkout ? Object.entries(exercises).map(([exercise, sets], index) => (
+        <View key={index} style = {styles.exerciseBox}>
+          <Text style={{ fontWeight: 'bold', fontSize: 20, color: "tan", }}>{exercise}</Text>
+          {Object.entries(sets).map(([setName, setDetails], index) => (
+            <Text key={index} style={{  fontSize: 14, color: "tan", }}>
+              {setName}: {setDetails.reps} reps at {setDetails.weight} lbs
+            </Text>
+          ))}
+        </View>
+      )) : null}
+    </View>
+
+       <View style={styles.returnButtonContainer}>
+        <TouchableOpacity 
+          onPress={exitExerciseRecordModal}
+          style={styles.button2}> 
+          <Text style={ styles.buttonText }>Return</Text>
+        </TouchableOpacity>
+       </View>
+       </ScrollView>
+      </Modal>
+
+
     </ScrollView>
+
   );
 }
 const styles = StyleSheet.create({
@@ -274,33 +395,58 @@ const styles = StyleSheet.create({
     color: "tan", 
     fontWeight:800,
   },
+  returnButtonContainer:{
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  exerciseBox: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    margin: 10,
+    padding: 10,
+    borderColor: "tan",
+    borderRadius: 10, // Adjust as needed
+    borderWidth: 1,
+   // Android shadow properties
+  elevation: 5,
+
+  // iOS shadow properties
+  shadowColor: "#000",
+  shadowOffset: {
+    width: 0,
+    height: 2,
+  },
+  shadowOpacity: 0.35,
+  shadowRadius: 3.84,
+},
+button3: {
+  backgroundColor: 'tan',
+  borderRadius: 20, // Increase for more rounded corners
+  borderColor: '#D2B48C', // Similar to tan, adjust as needed
+  borderWidth: 1, // Set to create a border around the button
+  margin: 40,
+  padding: 10,
+  width: 110,
+  alignItems: 'center',
+  justifyContent: 'center', // Center the text vertically
+
+  // Android shadow properties
+  elevation: 5,
+
+  // iOS shadow properties
+  shadowColor: "#000",
+  shadowOffset: {
+    width: 0,
+    height: 2,
+  },
+  shadowOpacity: 0.25,
+  shadowRadius: 3.84,
+},
 });
 
 
 export default CalenderScreen;
 
-/*
-<View style={styles.exerciseLogs}>
-        <Text style={styles.textStyle}>Set {setNumbers}</Text>
-          
-          <View styles={styles.log}>
-            <Text style={{color: "tan", fontWeight:800, marginLeft: 28}}>Weight</Text>
-            
-            <InputSpinner style={styles.numberInput1}
-            max={1000}
-            min={0}
-            skin="clean"
-            />
-            </View >
-
-            <View style={{color: "tan", fontWeight:800, marginLeft:0}}>
-            <Text style={{color: "tan", fontWeight:800, marginLeft: 23}}>No. Reps</Text>
-            
-            <InputSpinner style={styles.numberInput1}
-            max={1000}
-            min={0}
-            skin="clean"
-            />
-            </View>
-        </View>
-*/
