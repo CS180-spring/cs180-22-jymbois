@@ -12,6 +12,8 @@ import {
 import { useNavigation } from "@react-navigation/native";	
 import { auth } from "../configuration/firebaseConfig"; //	Firebase Operations
 
+import { writeUserData, readData}  from "../hooks/databaseQueries";
+
 import * as WebBrowser from "expo-web-browser"
 import * as Google from 'expo-auth-session/providers/google'
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -38,8 +40,9 @@ const LoginScreen = () => {
 
     if(userInfo)
     {
-		if(auth.fetchSignInMethodsForEmail(userInfo.email))
+		if(auth.fetchSignInMethodsForEmail(userInfo.email).length > 0)
 		{
+
 			auth.signInWithEmailAndPassword(userInfo.email, userInfo.id)
           		.then((userCredential) => { //  Successful sign in
             	const user = userCredential.user;
@@ -54,7 +57,12 @@ const LoginScreen = () => {
            })
 		}
 		else{
-			
+			console.log(userInfo)	//	For debugging
+			navigation.navigate("Gender", {
+				email: userInfo.email,
+				username: userInfo.given_name,
+				pw: userInfo.id,	//	Not sure what else to use here, we need a pw to sign in :/
+			});
 		}
     }
 
@@ -149,7 +157,22 @@ const LoginScreen = () => {
 	const handlePasswordBlur = () => setIsPasswordFocused(false);
 
 	const handleLogin = () => {
-		// Run login function here
+		auth
+			.signInWithEmailAndPassword(email, password)
+			.then((userCredential) => {
+				//  Successful sign in
+				const user = userCredential.user;
+				console.log("Logged in with: ", email);
+				navigation.navigate("Home"); //	Navigate to User Home Page :)
+			})
+			.catch((error) => {
+				//  Error, set to send alert when error occurs
+
+				//	Maybe set up message here instead of just an alert window?
+				const errorCode = error.code;
+				const errorMessage = error.message;
+				alert(error.message);
+			});
 	};
 
 	const scrollViewRef = useRef(null);
