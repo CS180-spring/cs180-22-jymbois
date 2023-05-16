@@ -38,22 +38,12 @@ const GraphScreen = ({ route }) => {
     }
     return (100 - answer);
   };
-  const ContentBox = ({ title, children }) => {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.title}>{title}</Text>
-        <View style={styles.content}>
-          <Text>{children}</Text>
-        </View>
-      </View>
-    );
-  };
 
   const barData = {
     labels: ['Today', 'Goal', 'June', 'July'],
     datasets: [
       {
-        data: [weight, goalWeight, 146, 150],
+        data: [weight, goalWeight, 146, 220],
       },
     ],
   };
@@ -62,12 +52,13 @@ const GraphScreen = ({ route }) => {
     labels: ['Today', 'Goal', 'June', 'July'],
     datasets: [
       {
-        data: [weight, goalWeight, 146, 150],
+        data: [weight, goalWeight, 146, 220],
       },
     ],
   };
   const BarChartConfig = {
-    yAxisInterval: 25,
+    yAxisMaxVaule: 400,
+    yAxisMinVaule: 0,
     backgroundGradientFrom: isDarkMode ? '#333': 'white',
     backgroundGradientTo: isDarkMode ? '#333': 'white',
     decimalPlaces: 1,
@@ -174,7 +165,11 @@ const GraphScreen = ({ route }) => {
          width={325}
          height={300}
          yAxisLabel={'lbs'}
+         yAxisInterval={1}
          chartConfig={BarChartConfig}
+         fromNumber={400}
+         fromZero={true}
+         showValuesOnTopOfBars={true}
        /> 
         <LineChart
         style={{ position: 'absolute', bottom: 24.2, right: -5, borderRadius: 10 }}
@@ -183,6 +178,9 @@ const GraphScreen = ({ route }) => {
          height={300}
          yAxisLabel={'lbs'}
          chartConfig={lineChartConfig}
+          fromNumber={400}
+         fromZero={true}
+         bezier 
        /> 
         </View> 
       </View>
