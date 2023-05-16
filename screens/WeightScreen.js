@@ -47,6 +47,13 @@ const WeightScreen = ({ route }) => {
 				await set(dbRef, height);
 				dbRef = ref(database, "users/" + user.uid + "/weight");
 				await set(dbRef, weight);
+				// Going to add variables for push notifications, vacation mode, and dark mode
+				dbRef = ref(database, "users/" + user.uid + "/isPushEnabled");
+				await set(dbRef, false);
+				dbRef = ref(database, "users/" + user.uid + "/isVacationEnabled");
+				await set(dbRef, false);
+				dbRef = ref(database, "users/" + user.uid + "/isDarkEnabled");
+				await set(dbRef, false);
 				
 				console.log(user.email + " logged in!");
 			} catch (error) {

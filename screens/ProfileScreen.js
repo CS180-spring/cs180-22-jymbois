@@ -7,20 +7,42 @@ import {
 	TouchableOpacity,
 	ScrollView,
 } from "react-native";
-  import React from "react";
+  import React, { useEffect } from "react";
   import { FontAwesome } from "@expo/vector-icons";
   import { useVacation } from "../hooks/useSwitch";
   import ThemeContext from "../hooks/ThemeContext";
   import { auth } from "../configuration/firebaseConfig";
   import { usePushNotificationToggle } from "../hooks/usePushNotificationToggle";
   import { usePushRegister } from "../hooks/usePushRegister";
+import { retrieveIsPush, writeIsPush } from '../hooks/databaseQueries';
   
   const SettingScreen = () => {
 	const { isDarkMode, toggleTheme } = React.useContext(ThemeContext);
 	const styles = createThemedStyles(isDarkMode);
 	const [isVacation, toggleVacation] = useVacation(false);
-	const [isPushNotificationsEnabled, togglePushNotifications] = usePushNotificationToggle(false);
-	const expoPushToken = usePushRegister(isPushNotificationsEnabled);
+	const [isPushNotificationsEnabled, setIsPushNotificationsEnabled] = usePushNotificationToggle(false);
+	usePushRegister(isPushNotificationsEnabled);
+
+	useEffect(() => {
+		const fetchData = async () => {
+		  try {
+			const pushEnabled = await retrieveIsPush();
+			setIsPushNotificationsEnabled(pushEnabled);
+		  } catch (error) {
+			console.error("Error: ", error);
+			writeIsPush(false);
+			setIsPushNotificationsEnabled(false);
+		  }
+		};
+	
+		fetchData();
+	  }, []);
+	  
+	
+	  const togglePushNotifications = () => {
+		setIsPushNotificationsEnabled(!isPushNotificationsEnabled);
+		writeIsPush(!isPushNotificationsEnabled);
+	  };
   
 	function logOut() {
 	  console.log(auth.currentUser.email + " logged out...");

@@ -1,6 +1,7 @@
 import { useState } from 'react';
+import { retrieveIsPush, writeIsPush } from './databaseQueries';
 
-export const usePushNotificationToggle = (initialValue = false) => {
+export const usePushNotificationToggle = (initialValue) => {
   const [isPushNotificationsEnabled, setIsPushNotificationsEnabled] = useState(initialValue);
 
   const togglePushNotifications = () => {

@@ -138,5 +138,25 @@ export async function generateUIs1(date, uid) {
   }
 }
 
+// Code for retrieving isPushEnabled, isVacationEnabled, isDarkEnables
+
+export async function retrieveIsPush(){
+  const user = auth.currentUser.uid;
+  try {
+    const obj = await readData("users/" + user + "/isPushEnabled");
+    console.log("This is IsPush: ", obj);
+    return obj;
+
+  } catch(error){
+    console.error("Error: ", error);
+    return false;
+  }
+}
+export function writeIsPush(value) {
+  const user = auth.currentUser.uid;
+  const db = getDatabase();
+  const path = "users/" + user+ "/isPushEnabled"; 
+  return set(ref(db, path), value);
+}
 generateUIs1("2023-05-08","KXJjbxWERaggJmj5tcszDGbXxe22");
 
