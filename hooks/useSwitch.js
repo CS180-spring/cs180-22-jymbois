@@ -16,11 +16,3 @@ export const useVacation = (initialValue) => {
   return [value, vacationMode];
 };
 
-export const usePushNotifications = (initialValue) => {
-    const [value, setValue] = useState(initialValue);
-  
-    const pushNotifications = () => setValue(!value);
-  
-    return [value, pushNotifications];
-  };
-
