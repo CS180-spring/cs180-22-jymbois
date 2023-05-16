@@ -69,6 +69,7 @@ const SettingScreen = () => {
 	  console.log(auth.currentUser.email + " logged out...");
 	  auth.signOut();
 	}
+	// const remainingSeconds = Math.floor((finishInstance - new Date().getTime()) / 1000);
   
 	return (
 		<View style={{flex: 1, backgroundColor: isDarkMode ? "#000" : "#fff"}}>
@@ -119,6 +120,8 @@ const SettingScreen = () => {
   source={styles.logoImage.source}
 />
 </View>
+
+
 <Modal
 animationType="slide"
 transparent={false}
@@ -185,8 +188,9 @@ onRequestClose={() => setCountdownVisible(false)}>
   <Text style={styles.modalTitle2}>Hope you are Having Fun!          See you in ... </Text>
  
   <Countdown onFinish={handleCountdownFinish} seconds={totalDuration} isDarkMode={isDarkMode} />
-
-
+  <TouchableOpacity style={styles.cancelCounter} onPress={handleCountdownFinish}>
+  <Text style={styles.buttonText}> End Vacation </Text>
+  </TouchableOpacity>
 </View>
 </Modal>
 </ScrollView>
@@ -322,6 +326,13 @@ cancelButton: {
   paddingHorizontal: 20,
   borderRadius: 5,
 },
+cancelCounter: {
+	backgroundColor: '#999',
+	paddingVertical: 10,
+	paddingHorizontal: 20,
+	borderRadius: 5,
+	marginTop: 20,
+  },
 buttonText: {
   color: '#fff',
   fontSize: 16,
