@@ -15,8 +15,6 @@ import { usePushNotifications, useVacation } from '../hooks/useSwitch';
 import ThemeContext from '../hooks/ThemeContext';
 import { auth } from '../configuration/firebaseConfig';
 import { Picker } from '@react-native-picker/picker';
-import CountDown from 'react-native-countdown-component';
-import moment from 'moment';
 import { useNavigation } from '@react-navigation/native';
 import Countdown from './CustomCountDown';
 
@@ -127,7 +125,7 @@ transparent={false}
 visible={modalVisible}
 onRequestClose={() => setModalVisible(false)}>
 <View style={styles.modalContainer}>
-  <Text style={styles.modalTitle}>Set Vacation Duration</Text>
+  <Text style={styles.modalTitle}>How long are you going to be gone for?</Text>
   <View style={styles.pickersContainer}>
 	<View style={styles.pickerWrapper}>
 	  <Text style={styles.pickerLabel}>Days</Text>
@@ -183,9 +181,11 @@ animationType="slide"
 transparent={false}
 visible={countdownVisible}
 onRequestClose={() => setCountdownVisible(false)}>
-<View style={styles.modalContainer}>
-  <Text style={styles.modalTitle}>Countdown Timer</Text>
-  <Countdown seconds={totalDuration} onFinish={handleCountdownFinish} />
+<View style={styles.modalContainer2}>
+  <Text style={styles.modalTitle2}>Hope you are Having Fun!          See you in ... </Text>
+ 
+  <Countdown onFinish={handleCountdownFinish} seconds={totalDuration} isDarkMode={isDarkMode} />
+
 
 </View>
 </Modal>
@@ -258,18 +258,33 @@ user: {
   fontWeight: "bold",
   color: isDarkMode ? "#fff" : "#000",
 },
-modalContainer: {
+modalContainer: { // change this if u want to change the background color of the whole countdown page
   flex: 1,
   justifyContent: 'center',
   alignItems: 'center',
-  backgroundColor: isDarkMode ? '#000' : '#fff',
+  backgroundColor: isDarkMode ? '#000' : '#fff', // or #fff6e5
 },
+modalContainer2: { // change this if u want to change the background color of the whole countdown page
+	flex: 1,
+	justifyContent: 'center',
+	alignItems: 'center',
+	backgroundColor: isDarkMode ? '#003' : '#fff', // or #fff6e5
+  },
 modalTitle: {
-  fontSize: 24,
+  fontSize: 27,
   fontWeight: 'bold',
-  marginBottom: 20,
+  marginTop: -100,
+  marginBottom: 80,
+  marginLeft: 15,
   color: isDarkMode ? '#fff' : '#000',
 },
+modalTitle2: {
+	fontSize: 27,
+	fontWeight: 'bold',
+	marginBottom: 20,
+	marginLeft: 20,
+	color: isDarkMode ? '#fff' : '#000',
+  },
 pickersContainer: {
   flexDirection: 'row',
   justifyContent: 'center',
