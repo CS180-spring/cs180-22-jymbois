@@ -10,6 +10,7 @@ import {
   Modal,
 } from 'react-native';
 import {BarChart,LineChart} from 'react-native-chart-kit'
+import ThemeContext from "../hooks/ThemeContext";
   //import CircularProgress from 'react-native-circular-progress-indicator';
 
 const GraphScreen = ({ route }) => {
@@ -17,7 +18,8 @@ const GraphScreen = ({ route }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [progress, setProgress] = useState(0);
   const { weight } = route.params;
-
+  const { isDarkMode } = React.useContext(ThemeContext);
+  const styles = createThemedStyles(isDarkMode);
   
 
   const handleGoalWeightChange = (text) => {
@@ -36,22 +38,12 @@ const GraphScreen = ({ route }) => {
     }
     return (100 - answer);
   };
-  const ContentBox = ({ title, children }) => {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.title}>{title}</Text>
-        <View style={styles.content}>
-          <Text>{children}</Text>
-        </View>
-      </View>
-    );
-  };
 
   const barData = {
     labels: ['Today', 'Goal', 'June', 'July'],
     datasets: [
       {
-        data: [weight, goalWeight, 146, 150],
+        data: [weight, goalWeight, 146, 220],
       },
     ],
   };
@@ -60,16 +52,17 @@ const GraphScreen = ({ route }) => {
     labels: ['Today', 'Goal', 'June', 'July'],
     datasets: [
       {
-        data: [weight, goalWeight, 146, 150],
+        data: [weight, goalWeight, 146, 220],
       },
     ],
   };
   const BarChartConfig = {
-    yAxisInterval: 25,
-    backgroundGradientFrom: 'white',
-    backgroundGradientTo: 'white',
+    yAxisMaxVaule: 400,
+    yAxisMinVaule: 0,
+    backgroundGradientFrom: isDarkMode ? '#333': 'white',
+    backgroundGradientTo: isDarkMode ? '#333': 'white',
     decimalPlaces: 1,
-    color: (opacity = 1) => `rgba(0, 61, 128, ${opacity})`,
+    color: (opacity = 1) => isDarkMode ? `rgba(255, 255, 255, ${opacity})` : `rgba(0, 61, 128, ${opacity})`,
     style: {
       borderRadius: 10,
     },
@@ -82,7 +75,7 @@ const GraphScreen = ({ route }) => {
     backgroundGradientFromOpacity: 0,
     backgroundGradientTo: '#ffffff',
     backgroundGradientToOpacity: 0,
-    color: (opacity = 1) => `rgba(0, 61, 128, ${opacity})`,
+    color: (opacity = 1) => isDarkMode ? `rgba(255, 255, 255, ${opacity})` : `rgba(0, 61, 128, ${opacity})`,
     labelColor: (opacity = 1) => `transparent`,
     fillShadowGradient: '#fff',
   };
@@ -172,15 +165,22 @@ const GraphScreen = ({ route }) => {
          width={325}
          height={300}
          yAxisLabel={'lbs'}
+         yAxisInterval={1}
          chartConfig={BarChartConfig}
+         fromNumber={400}
+         fromZero={true}
+         showValuesOnTopOfBars={true}
        /> 
         <LineChart
-        style={{ position: 'absolute', bottom: 25, right: -7, borderRadius: 10 }}
+        style={{ position: 'absolute', bottom: 24.2, right: -5, borderRadius: 10 }}
          data={lineData}
          width={325}
          height={300}
          yAxisLabel={'lbs'}
          chartConfig={lineChartConfig}
+          fromNumber={400}
+         fromZero={true}
+         bezier 
        /> 
         </View> 
       </View>
@@ -189,10 +189,11 @@ const GraphScreen = ({ route }) => {
     </TouchableWithoutFeedback>
   );
 };
-const styles = StyleSheet.create({
+const createThemedStyles = (isDarkMode) => {
+  return StyleSheet.create({
   container: {
 		flex: 1,
-		backgroundColor: "#FFFFFF",
+		backgroundColor: isDarkMode ? "black" : "#FFFFFF",
 		height: "auto",
 	},
   titleContainer: {
@@ -202,7 +203,7 @@ const styles = StyleSheet.create({
 	},
   contentContainer: {
 		flex: 1,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: isDarkMode ? "black" : "#FFFFFF",
 		height: "auto",
 	},
   activityContent: {
@@ -210,7 +211,7 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 10,
     maxWidth: 370,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: isDarkMode ? "#333" : "#FFFFFF",
     shadowColor: "#000",
     shadowOffset: {
       width: 2,
@@ -227,7 +228,7 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 10,
     maxWidth: 370,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: isDarkMode ? "#333" : "#FFFFFF",
     shadowColor: "#000",
     shadowOffset: {
       width: 2,
@@ -241,7 +242,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   activityText: {
-    color: "#4A4A4A",
+    color: isDarkMode ? '#fff' : '#000',
     fontSize: 15,
     borderBottomWidth: 1,
     marginTop: 30,
@@ -254,13 +255,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   bottomLeftText: {
-    color: "#4A4A4A",
+    color: isDarkMode ? '#fff' : '#000',
     fontSize: 15,
     fontWeight: "400",
     marginRight: 10,
   },
   bottomLeftNumber: {
-    color: "#4A4A4A",
+    color: isDarkMode ? '#fff' : '#000',
     fontWeight: "900",
     fontSize: 15,
     marginRight: 10,
@@ -272,13 +273,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   bottomRightText: {
-    color: "#4A4A4A",
+    color: isDarkMode ? '#fff' : '#000',
     fontSize: 15,
     fontWeight: "400",
     marginLeft: 10,
   },
   bottomRightNumber: {
-    color: "#4A4A4A",
+    color: isDarkMode ? '#fff' : '#000',
     fontWeight: "800",
     fontSize: 15,
     marginLeft: 10,
@@ -419,7 +420,7 @@ const styles = StyleSheet.create({
   subtitle2: {
 		fontSize: 20,
 		// fontWeight: "bold",
-		color: "#4A4A4A",
+		color: isDarkMode ? '#fff' : '#000',
 		marginBottom: 10,
 		marginLeft: 17,
 		marginTop: 5,
@@ -427,13 +428,13 @@ const styles = StyleSheet.create({
   title: {
 		fontSize: 26,
 		fontWeight: "bold",
-		color: "#4A4A4A",
+		color: isDarkMode ? '#fff' : '#000',
 		marginLeft: 15,
 	},
   title2: {
     fontSize: 15,
     fontWeight: "bold",
-    color: "#4A4A4A",
+    color: isDarkMode ? '#fff' : '#000',
     position: "absolute",
     top: 15,
     marginLeft: 15,
@@ -445,12 +446,13 @@ const styles = StyleSheet.create({
   goalButton: {
     fontSize: 15,
     fontWeight: "bold",
-    color: "#1363DF",
+    color: isDarkMode ? "#8BC34A": "#1363DF",
     position: "absolute",
     top: 15,
     marginRight: 40,
   },
 });
+};
 
 
 export default GraphScreen

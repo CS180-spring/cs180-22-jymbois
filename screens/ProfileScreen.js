@@ -108,19 +108,19 @@ const SettingScreen = () => {
 		  <Text style={{ color: "white", fontSize: 16, fontWeight: "bold" }}>
 			LOG OUT
 		  </Text>
-		  </TouchableOpacity>
-
-<Text style={{ marginTop: 20, marginBottom: 0, fontSize: 10 }}>
-  POWERED BY
-</Text>
-<Image
-  style={{ width: 120, height: 200, marginTop: -65 }}
-  resizeMode="contain"
-  source={styles.logoImage.source}
-/>
-</View>
 
 
+		</TouchableOpacity>
+  
+		<Text style={{ marginTop: 20, marginBottom: 0, fontSize: 10, color: isDarkMode ? "#fff" : "#000", }}>
+		  POWERED BY
+		</Text>
+		<Image
+		  style={{ width: 120, height: 200, marginTop: -65 }}
+		  resizeMode="contain"
+		  source={styles.logoImage.source}
+		/>
+	  </View>
 <Modal
 animationType="slide"
 transparent={false}

@@ -29,7 +29,11 @@ const ProgressScreen = () => {
 
   const weightOptions = [];
   for (let i = 0; i <= 400; i += 1) {
-    weightOptions.push(<Picker.Item key={i} label={`${i} lbs`} value={i.toString()} />)
+    weightOptions.push(<Picker.Item 
+      key={i} 
+      label={`${i} lbs`} 
+      value={i.toString()} 
+      />)
   }
 
   const { isDarkMode } = React.useContext(ThemeContext);
@@ -48,6 +52,7 @@ const ProgressScreen = () => {
             selectedValue={weight}
             onValueChange={handleWeightChange}
             style={styles.picker}
+            itemStyle={{ color: isDarkMode ? '#fff' : '#000' }}
           >
             {weightOptions}
           </Picker>
@@ -73,8 +78,10 @@ const createThemedStyles = (isDarkMode) => {
       backgroundColor: isDarkMode ? '#000' : '#fff',
     },
     picker: {
-      width: "70%",
-      height: 150,
+      width: 250,
+      height: undefined,
+      flex:'row',
+      color:'red',
     },
     selectedWeightText: {
       marginTop: 70,
@@ -161,12 +168,7 @@ const createThemedStyles = (isDarkMode) => {
     pickerContainer: {
       flex: 1,
       height: undefined,
-      maxHeight: 100,
-    },
-    picker: {
-      width: 200,
-      height: undefined,
-      flex:'row',
+      maxHeight: 125,
     },
   });
 };
