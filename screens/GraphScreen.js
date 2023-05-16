@@ -57,8 +57,6 @@ const GraphScreen = ({ route }) => {
     ],
   };
   const BarChartConfig = {
-    yAxisMaxVaule: 400,
-    yAxisMinVaule: 0,
     backgroundGradientFrom: isDarkMode ? '#333': 'white',
     backgroundGradientTo: isDarkMode ? '#333': 'white',
     decimalPlaces: 1,
@@ -165,7 +163,6 @@ const GraphScreen = ({ route }) => {
          width={325}
          height={300}
          yAxisLabel={'lbs'}
-         yAxisInterval={1}
          chartConfig={BarChartConfig}
          fromNumber={400}
          fromZero={true}
@@ -178,6 +175,7 @@ const GraphScreen = ({ route }) => {
          height={300}
          yAxisLabel={'lbs'}
          chartConfig={lineChartConfig}
+         withHorizontalLines={false}
           fromNumber={400}
          fromZero={true}
          bezier 
