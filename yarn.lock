@@ -5185,7 +5185,7 @@ expo-keep-awake@~12.0.1:
   resolved "https://registry.npmjs.org/expo-keep-awake/-/expo-keep-awake-12.0.1.tgz"
   integrity sha512-hqeCnb4033TyuZaXs93zTK7rjVJ3bywXATyMmKmKkLEsH2PKBAl/VmjlCOPQL/2Ncqz6aj7Wo//tjeJTARBD4g==
 
-expo-linking@~4.0.0:
+expo-linking@^4.0.1, expo-linking@~4.0.0:
   version "4.0.1"
   resolved "https://registry.npmjs.org/expo-linking/-/expo-linking-4.0.1.tgz"
   integrity sha512-geRMmKLhtaCigptRzOGW8ZZJKGl47gyu0KFtQOtGf26ELxyt/AietgQjyzF24i7cVD08TnWUJDHgWZkpRHTa7g==

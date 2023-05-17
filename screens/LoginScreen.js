@@ -13,6 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 import { auth, signInWithCredential } from "../configuration/firebaseConfig"; //	Firebase Operations
 import * as AuthSession from "expo-auth-session";
 import { FacebookAuthProvider } from "firebase/auth";
+import { Linking } from "expo-linking";
 
 import * as Facebook from "expo-facebook";
 
@@ -121,15 +122,16 @@ const LoginScreen = () => {
 		clientId: "193394110292389",
 		scopes: ["public_profile", "email"],
 	};
+	const redirectUris = [
+		"https://auth.expo.io/@howie315/jym-bros",
+		"https://auth.expo.io/@vmsandoval25/GymBois",
+		"https://auth.expo.io/@gloza/GymBois",
+	];
 
 	const handleFacebookLogin = async () => {
 		try {
 			setIsLoading(true);
-			const redirectUris = [
-				"https://auth.expo.io/@howie315/jym-bros",
-				"https://auth.expo.io/@vmsandoval25/GymBois",
-				"https://auth.expo.io/@gloza/GymBois",
-			];
+
 			// Open the Facebook OAuth flow
 			const response = await AuthSession.startAsync({
 				authUrl:
@@ -140,12 +142,6 @@ const LoginScreen = () => {
 					)}` +
 					`&response_type=token` +
 					`&scope=${encodeURIComponent(facebookConfig.scopes.join(","))}`,
-				// authUrl:
-				// 	`https://www.facebook.com/v13.0/dialog/oauth?` +
-				// 	`client_id=${facebookConfig.clientId}` +
-				// 	`&redirect_uri=${encodeURIComponent(redirectUris.join(","))}` +
-				// 	`&response_type=token` +
-				// 	`&scope=${encodeURIComponent(facebookConfig.scopes.join(","))}`,
 			});
 
 			if (response.type === "success") {
@@ -156,15 +152,46 @@ const LoginScreen = () => {
 				const facebookCredential = FacebookAuthProvider.credential(accessToken);
 
 				// Sign in with the Facebook credential
-				await auth.signInWithCredential(facebookCredential);
+				const { user, additionalUserInfo } = await auth.signInWithCredential(
+					facebookCredential,
+				);
 
-				// The user is now signed in with Facebook
-				console.log("Logged in with Facebook");
+				// Check if the user already exists with a different sign-in method
+				if (
+					additionalUserInfo &&
+					additionalUserInfo.providerId === "firebase" &&
+					additionalUserInfo.isNewUser
+				) {
+					// User is a new user, proceed with normal login flow
+					console.log("Logged in with Facebook as a new user");
+				} else {
+					// User already exists with a different sign-in method
+					console.log(
+						"Facebook account already linked with a different sign-in method",
+					);
+
+					// TODO: Handle the case where the user wants to link their Facebook account
+					// with the existing account associated with the same email address.
+					// You can prompt the user to choose whether they want to link the accounts
+					// or sign in with the existing account using a different provider.
+					// You can use the following code to link the Facebook credential to the existing account:
+					//
+					const currentUser = auth.currentUser;
+					await currentUser.linkWithCredential(facebookCredential);
+					//
+					// After linking the accounts, you can handle the navigation or other actions accordingly.
+				}
 
 				// TODO: Navigate to the desired screen after login
-				navigation.navigate("Home"); //	Navigate to User Home Page :)
+				navigation.navigate("Home"); // Navigate to User Home Page :)
 			} else if (response.type === "error") {
 				console.log("Facebook login error:", response.error);
+
+				// Access the error code if available
+				const signInError = response.error;
+				if (signInError.code) {
+					console.log("Error code:", signInError.code);
+				}
 			}
 		} catch (error) {
 			console.log("Error occurred during Facebook login:", error);
@@ -172,6 +199,7 @@ const LoginScreen = () => {
 			setIsLoading(false);
 		}
 	};
+
 	const handleEmailLayout = (event) => {
 		setEmailInputPosition({
 			x: event.nativeEvent.layout.x,
