@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "GymBois",
-    "slug": "GymBois",
+    "slug": "jym-bros",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -31,8 +31,9 @@
     "scheme": "gymbois",
     "extra": {
       "eas": {
-        "projectId": "26af9e75-6d71-4dc5-9eaa-70189713c81d"
+        "projectId": "f232be4c-cf8d-47d3-89e7-c9d0e9e555d9"
       }
-    }
+    },
+    "owner": "howie315"
   }
 }
