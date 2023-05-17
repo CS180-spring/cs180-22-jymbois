@@ -10,12 +10,10 @@ import {
 	Keyboard,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import {
-	auth,
-	FacebookAuthProvider,
-	signInWithCredential,
-} from "../configuration/firebaseConfig"; //	Firebase Operations
+import { auth, signInWithCredential } from "../configuration/firebaseConfig"; //	Firebase Operations
 import * as AuthSession from "expo-auth-session";
+import { FacebookAuthProvider } from "firebase/auth";
+
 import * as Facebook from "expo-facebook";
 
 import { writeUserData, readData } from "../hooks/databaseQueries";
@@ -38,7 +36,7 @@ const LoginScreen = () => {
 		expoClientId:
 			"943556470766-h28njogtg43aulfh42v7k1t87bf6t5vu.apps.googleusercontent.com",
 	});
-
+	console.log(AuthSession.makeRedirectUri({}));
 	//  Trigger every time someone signs in with google
 	React.useEffect(() => {
 		handleSignUp();
@@ -127,29 +125,38 @@ const LoginScreen = () => {
 	const handleFacebookLogin = async () => {
 		try {
 			setIsLoading(true);
-
+			const redirectUris = [
+				"https://auth.expo.io/@howie315/jym-bros",
+				"https://auth.expo.io/@vmsandoval25/GymBois",
+				"https://auth.expo.io/@gloza/GymBois",
+			];
 			// Open the Facebook OAuth flow
 			const response = await AuthSession.startAsync({
 				authUrl:
 					`https://www.facebook.com/v13.0/dialog/oauth?` +
 					`client_id=${facebookConfig.clientId}` +
-					`&redirect_uri=${AuthSession.makeRedirectUri({
-						native: "gymbois://",
-					})}` +
+					`&redirect_uri=${encodeURIComponent(
+						"https://auth.expo.io/@howie315/jym-bros",
+					)}` +
 					`&response_type=token` +
 					`&scope=${encodeURIComponent(facebookConfig.scopes.join(","))}`,
+				// authUrl:
+				// 	`https://www.facebook.com/v13.0/dialog/oauth?` +
+				// 	`client_id=${facebookConfig.clientId}` +
+				// 	`&redirect_uri=${encodeURIComponent(redirectUris.join(","))}` +
+				// 	`&response_type=token` +
+				// 	`&scope=${encodeURIComponent(facebookConfig.scopes.join(","))}`,
 			});
 
 			if (response.type === "success") {
 				// Get the Facebook access token from the response
-				const { access_token: accessToken } = response.params;
+				const accessToken = response.params.access_token;
 
 				// Create a Facebook credential
-				const facebookCredential =
-					firebase.auth.FacebookAuthProvider.credential(accessToken);
+				const facebookCredential = FacebookAuthProvider.credential(accessToken);
 
 				// Sign in with the Facebook credential
-				await firebase.auth().signInWithCredential(facebookCredential);
+				await auth.signInWithCredential(facebookCredential);
 
 				// The user is now signed in with Facebook
 				console.log("Logged in with Facebook");
