@@ -132,14 +132,25 @@ const LoginScreen = () => {
 		try {
 			setIsLoading(true);
 
+			// Determine the base URL depending on the environment
+			let redirectBaseUrl = "";
+			if (__DEV__) {
+				// Development environment
+				redirectBaseUrl = "http://localhost:19006";
+			} else {
+				// Production environment
+				redirectBaseUrl = "https://auth.expo.io/@howie315/jym-bros";
+			}
+
+			// Create the complete redirect URL
+			const redirectUri = `${redirectBaseUrl}/redirect`;
+
 			// Open the Facebook OAuth flow
 			const response = await AuthSession.startAsync({
 				authUrl:
 					`https://www.facebook.com/v13.0/dialog/oauth?` +
 					`client_id=${facebookConfig.clientId}` +
-					`&redirect_uri=${encodeURIComponent(
-						"https://auth.expo.io/@howie315/jym-bros",
-					)}` +
+					`&redirect_uri=${encodeURIComponent(redirectUri)}` +
 					`&response_type=token` +
 					`&scope=${encodeURIComponent(facebookConfig.scopes.join(","))}`,
 			});
