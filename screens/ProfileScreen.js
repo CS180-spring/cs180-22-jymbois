@@ -119,7 +119,7 @@ const SettingScreen = () => {
   
 		{[
 		  ["Dark Mode", isDarkMode, toggleTheme],
-		  ["Vacation Mode", isVacation, setIsVacation],
+		  ["Vacation Mode", isVacation, handleVacationModeToggle],
 		  ["Push Notifications", isPushNotificationsEnabled, setIsPushNotificationsEnabled],
 		].map(([label, value, toggle]) => (
 		  <View key={label} style={styles.notificationContainer}>

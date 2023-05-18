@@ -21,8 +21,9 @@ const ThemeProvider = ({ children }) => {
   }, []);
 
   const toggleTheme = () => {
-    writeIsDark(!isDarkMode);
-    setIsDarkMode(!isDarkMode);
+    const mode = !isDarkMode;
+    writeIsDark(mode);
+    setIsDarkMode(mode);
   };
 
   return (
