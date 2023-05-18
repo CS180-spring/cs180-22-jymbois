@@ -10,15 +10,13 @@ import {
 	Keyboard,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";	
-import { auth,resetPassword } from "../configuration/firebaseConfig"; //	Firebase Operations
-
+import { auth, resetPassword } from "../configuration/firebaseConfig"; //	Firebase Operations
 import { writeUserData, readData}  from "../hooks/databaseQueries";
 
 import * as WebBrowser from "expo-web-browser"
 import * as Google from 'expo-auth-session/providers/google'
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as AuthSession from 'expo-auth-session';
-
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -188,79 +186,88 @@ const LoginScreen = () => {
 
 
 	const githubClientId = "f5c15da3c245afa8bd09";
-	const githubClientSecret = "6dfaa781dfd723c1639cd6b49a72fb6a794d8304";
-	const [githubAccessToken, setGithubAccessToken] = useState("");
-
-	const handleGithubSignIn = async () => {
+    const githubClientSecret = "6dfaa781dfd723c1639cd6b49a72fb6a794d8304";
+    const [githubAccessToken, setGithubAccessToken] = useState("");
+    const handleGithubSignIn = async () => {
+		// Remove user data from AsyncStorage
 		await AsyncStorage.removeItem("@user");
-		const user = await AsyncStorage.getItem("@user");
-	  
+	
 		try {
-		  const redirectUrl = AuthSession.makeRedirectUri({ useProxy: true });
-		  const authUrl = `https://github.com/login/oauth/authorize?client_id=${githubClientId}&redirect_uri=${encodeURIComponent(redirectUrl)}`;
-	  
-		  const result = await AuthSession.startAsync({ authUrl });
-	  
-		  if (result.type === "success" && result.url) {
-			const { params } = result;
-	  
-			const tokenResponse = await fetch("https://github.com/login/oauth/access_token", {
-			  method: "POST",
-			  headers: {
-				Accept: "application/json",
-				"Content-Type": "application/json",
-			  },
-			  body: JSON.stringify({
-				client_id: githubClientId,
-				client_secret: githubClientSecret,
-				code: params.code,
-			  }),
-			});
-	  
-			const tokenResult = await tokenResponse.json();
-			const { access_token: accessToken } = tokenResult;
-	  
-			if (accessToken) {
-			  setGithubAccessToken(accessToken);
-	  
-			  const userResponse = await fetch("https://api.github.com/user", {
-				headers: {
-				  Authorization: `Bearer ${accessToken}`,
-				},
-			  });
-	  
-			  const user = await userResponse.json();
-			  await AsyncStorage.setItem("@user", JSON.stringify(user));
-	  
-			  // Handle user data here
-			  console.log(user);
-			  
-			  if(auth.fetchSignInMethodsForEmail(user.login).length > 0)
-			  {
-				auth.signInWithEmailAndPassword(user.login, user.id.toString())
-				  .then((userCredential) => {
-					const user = userCredential.user;
-					console.log("Logged in with: ", user.login);
-					navigation.navigate("Home")
-				  }).catch((error) => {
-					const errorCode = error.code;
-					const errorMessage = error.message;
-					alert(error.message);
-				  })
-			  }
-			  else {
-				navigation.navigate("Gender", {
-				  email: user.login,
-				  username: user.name,
-				  pw: user.id.toString(),
+			const redirectUrl = AuthSession.makeRedirectUri({ useProxy: true });
+			const authUrl = `https://github.com/login/oauth/authorize?client_id=${githubClientId}&redirect_uri=${encodeURIComponent(redirectUrl)}`;
+	
+			const result = await AuthSession.startAsync({ authUrl });
+	
+			if (result.type === "success" && result.url) {
+				const { params } = result;
+	
+				const tokenResponse = await fetch("https://github.com/login/oauth/access_token", {
+					method: "POST",
+					headers: {
+						Accept: "application/json",
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({
+						client_id: githubClientId,
+						client_secret: githubClientSecret,
+						code: params.code,
+					}),
 				});
-			  }
+	
+				const tokenResult = await tokenResponse.json();
+				const { access_token: accessToken } = tokenResult;
+	
+				if (accessToken) {
+					setGithubAccessToken(accessToken);
+	
+					const userResponse = await fetch("https://api.github.com/user", {
+						headers: {
+							Authorization: `Bearer ${accessToken}`,
+						},
+					});
+	
+					const user = await userResponse.json();
+					await AsyncStorage.setItem("@user", JSON.stringify(user));
+	
+					let githubEmail = user.email;
+					if (githubEmail === null) {
+						githubEmail = `${user.login}@github.com`;
+					}
+	
+					auth.fetchSignInMethodsForEmail(githubEmail)
+						.then((methods) => {
+							if (methods.length > 0) {
+								auth.signInWithEmailAndPassword(githubEmail, user.id.toString())
+									.then((userCredential) => {
+										const user = userCredential.user;
+										console.log("Logged in with: ", githubEmail);
+										navigation.navigate("Home");
+									})
+									.catch((error) => {
+										const errorCode = error.code;
+										const errorMessage = error.message;
+										alert(error.message);
+									});
+							}
+							else {
+								navigation.navigate("Gender", {
+									email: githubEmail,
+									username: user.name,
+									pw: user.id.toString(),
+								});
+							}
+						})
+						.catch((error) => {
+							console.error("Error while fetching sign-in methods:", error);
+						});
+				}
 			}
-		  }
-		} catch (error) {
-		  console.error("Error occurred during GitHub sign-in:", error);
+		} 
+		catch (error) {
+			console.error("Error occurred during GitHub sign-in:", error);
 		}
-	  };
+	};
+
 	  
 	
 
