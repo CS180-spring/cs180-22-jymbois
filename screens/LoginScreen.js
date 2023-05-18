@@ -177,12 +177,12 @@ const LoginScreen = () => {
 
 	const scrollViewRef = useRef(null);
 	//github shits..
-	const handleGithubLogout = async () => {
+	const handleGithubLogout = async () => { //something is wrong here because it is not login out but 
 		await AsyncStorage.removeItem('@user');
 		setGithubAccessToken('');
 		AuthSession.dismiss
 	  };
-	AuthSession.dismiss();
+	
 
 
 	const githubClientId = "f5c15da3c245afa8bd09";
@@ -384,7 +384,7 @@ const styles = StyleSheet.create({
 	logo: {
 		width: 240,
 		height: 240,
-		marginTop: -190,
+		marginTop: -100,
 		marginBottom: 20,
 	},
 	heading: {
