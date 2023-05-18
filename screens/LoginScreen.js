@@ -178,10 +178,11 @@ const LoginScreen = () => {
 	};
 
 	const scrollViewRef = useRef(null);
-	
+	//github shits..
 	const handleGithubLogout = async () => {
 		await AsyncStorage.removeItem('@user');
 		setGithubAccessToken('');
+		AuthSession.dismiss
 	  };
 	AuthSession.dismiss();
 
@@ -331,8 +332,8 @@ const LoginScreen = () => {
 				</TouchableOpacity>
 				<TouchableOpacity style={styles.registerButton} onPress={async () => {
     				await handleGithubLogout();
-    				handleGithubSignIn();
-				}}>
+   					handleGithubSignIn();
+					}}>
     				<Text style={{ color: "black", fontWeight: "bold" }}>Sign In With GitHub</Text>
 				</TouchableOpacity>
 			</View>
