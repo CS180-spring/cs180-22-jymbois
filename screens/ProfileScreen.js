@@ -13,8 +13,8 @@ import {
   import ThemeContext from "../hooks/ThemeContext";
   import { auth } from "../configuration/firebaseConfig";
   import { usePushNotificationToggle } from "../hooks/usePushNotificationToggle";
-  import { usePushRegister } from "../hooks/usePushRegister";
-import { retrieveIsPush, writeIsPush } from '../hooks/databaseQueries';
+import { retrieveIsDark, retrieveIsPush, writeIsDark, writeIsPush } from '../hooks/databaseQueries';
+import { usePushRegister } from "../hooks/usePushRegister";
   
   const SettingScreen = () => {
 	const { isDarkMode, toggleTheme } = React.useContext(ThemeContext);
@@ -22,27 +22,6 @@ import { retrieveIsPush, writeIsPush } from '../hooks/databaseQueries';
 	const [isVacation, toggleVacation] = useVacation(false);
 	const [isPushNotificationsEnabled, setIsPushNotificationsEnabled] = usePushNotificationToggle(false);
 	usePushRegister(isPushNotificationsEnabled);
-
-	useEffect(() => {
-		const fetchData = async () => {
-		  try {
-			const pushEnabled = await retrieveIsPush();
-			setIsPushNotificationsEnabled(pushEnabled);
-		  } catch (error) {
-			console.error("Error: ", error);
-			writeIsPush(false);
-			setIsPushNotificationsEnabled(false);
-		  }
-		};
-	
-		fetchData();
-	  }, []);
-	  
-	
-	  const togglePushNotifications = () => {
-		setIsPushNotificationsEnabled(!isPushNotificationsEnabled);
-		writeIsPush(!isPushNotificationsEnabled);
-	  };
   
 	function logOut() {
 	  console.log(auth.currentUser.email + " logged out...");
@@ -67,7 +46,7 @@ import { retrieveIsPush, writeIsPush } from '../hooks/databaseQueries';
 		{[
 		  ["Dark Mode", isDarkMode, toggleTheme],
 		  ["Vacation Mode", isVacation, toggleVacation],
-		  ["Push Notifications", isPushNotificationsEnabled, togglePushNotifications],
+		  ["Push Notifications", isPushNotificationsEnabled, setIsPushNotificationsEnabled],
 		].map(([label, value, toggle]) => (
 		  <View key={label} style={styles.notificationContainer}>
 			<Text style={styles.notificationText}>{label}</Text>

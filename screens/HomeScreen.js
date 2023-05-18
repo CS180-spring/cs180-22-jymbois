@@ -14,7 +14,7 @@ import {
 import React, { useState, useRef } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import ThemeContext from "../hooks/ThemeContext";
-import { useNavigation } from "@react-navigation/native";
+import { ThemeProvider, useNavigation } from "@react-navigation/native";
 import { ref, set } from "firebase/database";
 import database from "../configuration/firebaseConfig";
 

@@ -138,7 +138,7 @@ export async function generateUIs1(date, uid) {
   }
 }
 
-// Code for retrieving isPushEnabled, isVacationEnabled, isDarkEnables
+// Code for retrieving isPushEnabled
 
 export async function retrieveIsPush(){
   const user = auth.currentUser.uid;
@@ -149,6 +149,7 @@ export async function retrieveIsPush(){
 
   } catch(error){
     console.error("Error: ", error);
+    writeIsPush(false);
     return false;
   }
 }
@@ -158,5 +159,29 @@ export function writeIsPush(value) {
   const path = "users/" + user+ "/isPushEnabled"; 
   return set(ref(db, path), value);
 }
+
+// writing queries for isDark
+
+export async function retrieveIsDark(){
+  const user = auth.currentUser.uid;
+  try{
+    const obj = await readData("users/" + user + "/isDarkEnabled");
+    console.log("This is isDark: " ,obj);
+    return obj;
+  }
+  catch(error){
+    console.log("Error: ", error);
+    writeIsDark(false);
+    return false;
+  }
+}
+
+export function writeIsDark(value){
+  const user = auth.currentUser.uid;
+  const db = getDatabase();
+  const path = "users/" + user + "/isDarkEnabled";
+  return set(ref(db, path), value);
+}
+
 generateUIs1("2023-05-08","KXJjbxWERaggJmj5tcszDGbXxe22");
 
