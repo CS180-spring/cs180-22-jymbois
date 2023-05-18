@@ -11,7 +11,9 @@ import {
 	Modal,
 	Picker,
 } from "react-native";
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect } from 'react';
+import { readData } from "../hooks/databaseQueries";
+import { auth } from '../configuration/firebaseConfig';
 import { MaterialIcons } from "@expo/vector-icons";
 import ThemeContext from "../hooks/ThemeContext";
 import { ThemeProvider, useNavigation } from "@react-navigation/native";
@@ -19,6 +21,35 @@ import { ref, set } from "firebase/database";
 import database from "../configuration/firebaseConfig";
 
 const HomeScreen = () => {
+
+	const [userId, setUserId] = useState(null);
+ 	const [currentWeight, setCurrentWeight] = useState('');
+
+
+	 useEffect(() => {
+   		const user = auth.currentUser;
+    	if (user) {
+      	setUserId(user.uid);
+    	}
+	}, []);
+
+
+  	useEffect(() => {
+    	const fetchData = async () => {
+      	try {
+        	const userData = await readData(`users/${userId}`);
+        	setCurrentWeight(userData.weight);
+      	} catch (error) {
+        	console.error(error);
+      	}
+    	};
+
+
+    	if (userId) {
+      	fetchData();
+    	}
+  	}, [userId]);
+
 	const { isDarkMode, toggleTheme } = React.useContext(ThemeContext);
 	const styles = createThemedStyles(isDarkMode);
 	const navigation = useNavigation();
@@ -437,15 +468,15 @@ const HomeScreen = () => {
 				<View style={[styles.leftContent]}>
 					<Text style={styles.subtitle}>Finished:</Text>
 					<Text style={styles.workoutsDone}>5 </Text>
-					<Text style={(styles.workoutText, { height: itemHeight })}>
+					<Text style={(styles.workoutText)}>
 						Workouts Completed
 					</Text>
 				</View>
 				<View style={styles.rightContainer}>
 					<View style={[styles.rightContent, { marginBottom: 16 }]}>
-						<Text style={styles.subtitle}>Goal weight:</Text>
+						<Text style={styles.subtitle}>Current Weight:</Text>
 						<View style={[styles.smallContent]}>
-							<Text style={styles.goalWeight}>140</Text>
+							<Text style={styles.goalWeight}>{currentWeight}</Text>
 							<Text style={styles.pounds}>lbs</Text>
 						</View>
 					</View>
@@ -502,7 +533,7 @@ const createThemedStyles = (isDarkMode) => StyleSheet.create({
 		width: 350, // add maxWidth property
 		padding: 16,
 		borderRadius: 10,
-		backgroundColor: isDarkMode ? "#222222" : "#FFFFFF",
+		backgroundColor: isDarkMode ? "#333" : "#FFFFFF",
 		shadowColor: "#000",
 		shadowOffset: {
 			width: 2,
@@ -604,7 +635,7 @@ const createThemedStyles = (isDarkMode) => StyleSheet.create({
 		padding: 16,
 		borderRadius: 10,
 		maxWidth: 140,
-		backgroundColor: isDarkMode ? "#222222" : "#FFFFFF",
+		backgroundColor: isDarkMode ? "#333" : "#FFFFFF",
 		shadowColor: "#000",
 		shadowOffset: {
 			width: 2,
@@ -709,11 +740,10 @@ const createThemedStyles = (isDarkMode) => StyleSheet.create({
 		marginTop: 10,
 	},
 	workoutText: { //IDK WHYY THIS PART IS NOT TURNING WHITE
-		fontSize: 45,
-		fontWeight: "bold",
+		fontSize: 16,
 		//color: "red", // not even turning red so idk
-		color: isDarkMode ? "#FFFFFF" : "#4A4A4A",
-		marginTop: 8,
+		color: isDarkMode ? "#CDCDCD" : "#000000",
+		marginTop: 9,
 	},
 	flatListContainer: {
 		marginTop: 330,
