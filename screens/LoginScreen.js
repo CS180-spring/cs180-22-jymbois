@@ -331,6 +331,8 @@ const LoginScreen = () => {
 				>
 					<Text style={styles.registerButtonText}>Don't have an account? <Text style={{color: 'black', fontWeight: 'bold'}}>Click here</Text></Text>
 				</TouchableOpacity>
+			
+			{/*	This is the old one, if the word sign in with is preffered keep this and delete the one below 
 				<TouchableOpacity
 					style={styles.registerButton}
 					onPress={() => promptAsync()}
@@ -342,7 +344,33 @@ const LoginScreen = () => {
    					handleGithubSignIn();
 					}}>
     				<Text style={{ color: "black", fontWeight: "bold" }}>Sign In With GitHub</Text>
-				</TouchableOpacity>
+				</TouchableOpacity> */}
+
+			{/*change this if u preffer the old one with words :( */ }
+			<View style={styles.logoContainer}>
+  				<TouchableOpacity
+    				style={styles.registerButton}
+    				onPress={() => promptAsync()}
+  				>
+    			<Image
+      				source={require("./images/google.png")} 
+      				style={styles.logoLogin}
+    			/>
+ 				</TouchableOpacity>
+
+  				<TouchableOpacity 
+    				style={styles.registerButton} 
+    				onPress={async () => {
+      				await handleGithubLogout();
+      				handleGithubSignIn();
+    			}}
+  				>
+    			<Image
+      				source={require("./images/github.png")} 
+      				style={styles.logoLogin}
+    			/>
+  				</TouchableOpacity>
+			</View>
 			</View>
 		</ScrollView>
 	);
@@ -442,6 +470,16 @@ const styles = StyleSheet.create({
 	registerButtonText: {
 		color: "black",
 		fontSize: 16,
+	},
+	logoContainer: {
+		flexDirection: 'row', 
+		justifyContent: 'center', 
+		width: 50
+	  },
+	logoLogin: {
+		width: 30,
+		height: 30,
+
 	},
 });
 
