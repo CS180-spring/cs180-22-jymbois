@@ -138,5 +138,6 @@ export async function generateUIs1(date, uid) {
   }
 }
 
-generateUIs1("2023-05-08","KXJjbxWERaggJmj5tcszDGbXxe22");
+//These helper functions are for editing or deleting an exercise record
+//:3
 
