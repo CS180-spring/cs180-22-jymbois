@@ -1,18 +1,12 @@
 import { useState } from 'react';
 
-export const useDark = (initialValue) => {
-  const [value, setValue] = useState(initialValue);
-
-  const darkMode = () => setValue(!value);
-
-  return [value, darkMode];
-};
-
 export const useVacation = (initialValue) => {
-  const [value, setValue] = useState(initialValue);
+  const [isVacation, setIsVacation] = useState(initialValue);
 
-  const vacationMode = () => setValue(!value);
+  const vacationMode = () => {
+    setIsVacation(!isVacation);
+  };
 
-  return [value, vacationMode];
+  return [isVacation, vacationMode];
 };
 
