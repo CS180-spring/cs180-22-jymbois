@@ -442,18 +442,20 @@ const styles = StyleSheet.create({
 	},
 
 	button: {
-		width: "70%",
+		width: "40%",
 		height: 50,
 		backgroundColor: "white",
 		justifyContent: "center",
 		alignItems: "center",
-		borderRadius: 20,
+		borderRadius: 25,
 		marginBottom: 15,
-		shadowColor: '#000',
-  		shadowOffset: { width: 0, height: 2 },
-  		shadowOpacity: 0.2,
-  		shadowRadius: 2,
-  		elevation: 2
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 2 },
+		shadowOpacity: 0.2,
+		shadowRadius: 2,
+		elevation: 2,
+		borderColor: "#8BC34A",
+		borderWidth: 2,
 	},
 	buttonText: {
 		color: "black",
