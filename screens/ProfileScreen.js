@@ -255,7 +255,7 @@ editIconContainer: {
   marginTop: -20,
 },
 logout: {
-  width: "70%",
+  width: "40%",
   height: 50,
   backgroundColor: "#013220",
   justifyContent: "center",

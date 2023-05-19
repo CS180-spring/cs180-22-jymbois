@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
 		marginBottom: 50,
 		marginTop: -100,
 		textAlign: "center",
-		fontFamily: "OpenSans-Regular",
+		//fontFamily: "OpenSans",         //this is giving error so i just remove it open sans is not supported 
 	},
 	weightContainer: {
 		justifyContent: "center",
