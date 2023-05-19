@@ -106,10 +106,9 @@ const SettingScreen = () => {
 		<View style={{flex: 1, backgroundColor: isDarkMode ? "#000" : "#fff"}}>
 		<ScrollView contentContainerStyle={{ flexGrow: 1 }}>
 		  <View style={styles.container}>
-		<Image
-		  style={styles.image}
-		  source={require("./images/default-profile.png")}
-		/>
+		<View style={styles.profileContainer}>
+		
+		</View>
 		<View style={styles.editIconContainer}>
 		  <FontAwesome name="pencil" size={20} color="white" />
 		</View>
@@ -242,6 +241,12 @@ height: '100%',
 flex: 1,
 alignItems: "center",
 backgroundColor: isDarkMode ? "#000" : "#fff",
+},
+profileContainer: {
+	  width: "100%",
+	  alignItems: "center",
+	  marginTop: 50,
+	  backgroundColor: isDarkMode ? "#000" : "blue",
 },
 image: {
   width: "34%",
