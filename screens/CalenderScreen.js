@@ -192,7 +192,7 @@ const CalenderScreen = () => {
           onPress={selectViewExerciseRecord}
           style={styles.viewERButton}> 
         <Text style={ styles.calendarButtonTextTop }>View</Text>
-        <Text style={ styles.calendarButtonTextBottom }>Exercise Record</Text>
+        <Text style={ styles.calendarButtonTextBottom }>Exercise Records</Text>
         </TouchableOpacity>
 
         <TouchableOpacity 
@@ -216,7 +216,7 @@ const CalenderScreen = () => {
 
        <ScrollView>
        {
-        recordDate && (<Text style={{marginTop: 100, marginLeft: 30 ,color: 'tan', fontWeight: 800, fontSize: 50, }}>{recordDate}</Text>)
+        recordDate && (<Text style={styles.insertERTextTitle}>{recordDate}</Text>)
         
        }
        <TextInput
@@ -227,12 +227,15 @@ const CalenderScreen = () => {
 
       />
        <View style={styles.setContainer}>
-       <Text style={{color:"tan", fontSize: 16, fontWeight: 800}}>No. Set</Text>
+       <Text style={styles.repsText}>No. Set</Text>
        <InputSpinner style={styles.numberInput}
          max={10}
          min={0}
-         color={"#d2b48c"}
-         onChange={handleNumberChange}/>
+         color={"gray"}
+         onChange={handleNumberChange}
+         skin={"modern"}
+         shadow={false}
+         />
        </View>
 
        {set}
@@ -262,7 +265,7 @@ const CalenderScreen = () => {
       >
        <ScrollView>
        {
-        recordDate && (<Text style={{marginTop: 100, marginLeft: 30 ,color: 'tan', fontWeight: 800, fontSize: 50, }}>{recordDate}</Text>)
+        recordDate && (<Text style={ styles.insertERTextTitle}>{recordDate}</Text>)
        }
 
     <View style={styles.exercisesBox}>
@@ -399,21 +402,31 @@ const styles = StyleSheet.create({
    alignItems: 'center',
    justifyContent: 'center',
   },
-  input: {
-    height: 40,
-    margin: 12,
-    borderWidth: 1,
-    padding: 10,
-    borderColor: "tan",
-    borderRadius: 10,
-  },
+    input: {
+      height: 40,
+      margin: 12,
+      borderWidth: 1,
+      padding: 10,
+      borderColor: "black",
+      borderRadius: 10,
+  
+      // iOS shadow properties
+      shadowColor: "black",
+      shadowOffset: {
+        width: 0,
+        height: 1,
+      },
+      shadowOpacity: 0.1,
+      shadowRadius: 10,
+  
+      // Android shadow properties
+      elevation: 1,
+    },
+  
   numberInput: {
-    width: 170,
+    width: 190,
     height: 40,
-    borderWidth: 1,
-    borderColor: 'tan',
     paddingHorizontal: 10,
-    textColor: 'tan',
   },
   setContainer: {
     display: "flex",
@@ -433,11 +446,20 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     alignItems: "center",
     marginTop: 20,
-    height: 100,
+    height: 120,
     borderWidth: 1,
-    borderColor: "tan",
+    borderColor: "black",
     margin: 10,
     borderRadius: 20,
+    
+    elevation: 10, // Increase for more shadow on Android
+  
+    // iOS shadow properties
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 2,
+      height: 2,
+    }
   },
   log: {
     display: "flex",
@@ -524,6 +546,22 @@ insertERButton: {
   shadowOpacity: 0.11,
   shadowRadius: 5,
 },
+  insertERTextTitle:{
+    marginTop: 100,
+    color: 'gray',
+    fontWeight: '700', // this might not work with custom fonts, you'd need a font file that represents the weight you want
+    fontSize: 55,
+    textAlign: "center",
+    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 1,
+  },
+  repsText:{
+    color: "gray", 
+    fontWeight:800, 
+    marginLeft: 23,
+    fontSize: 23,
+  },
 });
 
 export default CalenderScreen;
