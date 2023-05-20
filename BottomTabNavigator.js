@@ -18,15 +18,6 @@ import ThemeContext from "./hooks/ThemeContext";
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-const ProgressStack = () => {
-  return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Progress_" component={ProgressScreen} />
-      <Stack.Screen name="Graph" component={GraphScreen} />
-    </Stack.Navigator>
-  );
-};
-
 const BottomTabNavigator = () => {
   const { isDarkMode } = React.useContext(ThemeContext);
 
@@ -70,7 +61,7 @@ const BottomTabNavigator = () => {
       />
       <Tab.Screen
         name="Progress"
-        component={ProgressStack}
+        component={GraphScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
             <AntDesign name="linechart" color={color} size={size} />
