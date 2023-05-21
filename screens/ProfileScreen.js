@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -10,6 +9,8 @@ import {
   Modal,
   Button,
 } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { readData } from "../hooks/databaseQueries";
 import { FontAwesome } from '@expo/vector-icons';
 import { useVacation } from '../hooks/useSwitch';
 import ThemeContext from '../hooks/ThemeContext';
@@ -69,6 +70,37 @@ const SettingScreen = () => {
 	  auth.signOut();
 	}
 	// const remainingSeconds = Math.floor((finishInstance - new Date().getTime()) / 1000);
+
+	//  to get the username wish me luck
+ 	const [userId, setUserId] = useState(null);
+ 	const [username, setUsername] = useState('');
+
+
+	 useEffect(() => {
+   		const user = auth.currentUser;
+    	if (user) {
+      	setUserId(user.uid);
+    	}
+	}, []);
+
+
+  	useEffect(() => {
+    	const fetchData = async () => {
+      	try {
+        	const userData = await readData(`users/${userId}`);
+        	setUsername(userData.uname);
+      	} catch (error) {
+        	console.error(error);
+      	}
+    	};
+
+
+    	if (userId) {
+      	fetchData();
+    	}
+  	}, [userId]);
+
+
   
 	return (
 		<View style={{flex: 1, backgroundColor: isDarkMode ? "#000" : "#fff"}}>
@@ -83,7 +115,7 @@ const SettingScreen = () => {
 		</View>
   
 		<Text style={styles.welcome}>
-		  Welcome, <Text style={styles.user}>User</Text>
+		  Welcome, <Text style={styles.user}>{username}</Text>
 		</Text>
   
 		{[
