@@ -52,6 +52,8 @@ const CalenderScreen = () => {
       }
     }
     setSetNumbers(0);
+    setWeights(Array(setNumbers).fill(0));
+    setReps(Array(setNumbers).fill(0));
   }
   const handleDayPress = (day) => {
     //console.log(day.dateString);
@@ -61,12 +63,12 @@ const CalenderScreen = () => {
   };
   const handleWeightChange = (index, value) => {
     const newWeights = [...weights];
-    newWeights[index] = value;
+    newWeights[index] = String(value);
     setWeights(newWeights);
   };
   const handleRepsChange = (index, value) => {
     const newReps = [...reps];
-    newReps[index] = value;
+    newReps[index] = String(value);
     setReps(newReps);
   };
   const handleExerciseName = (input) => {
@@ -82,6 +84,8 @@ const CalenderScreen = () => {
     setShowExerciseRecordModal(false);
     setExercises({});
     setHasWorkout(false);
+    setWeights(Array(setNumbers).fill(0));
+    setReps(Array(setNumbers).fill(0));
   }
 
 
@@ -91,29 +95,27 @@ const CalenderScreen = () => {
   for(let i = 1; i <= setNumbers; i++){
     set.push(
       <View style={styles.exerciseLogs} key={i}>
-        <Text style={styles.textStyle}>Set {i}</Text>
+        <Text style={{color: "#6E7E85", fontWeight: 800,}}>Set {i}</Text>
           <View styles={styles.log}>
-            <Text style={{color: "tan", fontWeight:800, marginLeft: 28}}>Weight</Text>
             
-            <InputSpinner style={styles.numberInput1}
-            max={1000}
-            min={0}
-            skin="clean"
-            value={weights[i]}
-            onChange={(value) => handleWeightChange(i, value)}
+            <TextInput
+              style={styles.numberInputWeight}
+              value={weights[i]}
+              onChangeText={(value) => handleWeightChange(i, value)}
+              keyboardType="numeric"
+              placeholder="Weight"
             />
             </View >
 
-            <View style={{color: "tan", fontWeight:800, marginLeft:0}}>
-            <Text style={{color: "tan", fontWeight:800, marginLeft: 23}}>No. Reps</Text>
-            
-            <InputSpinner style={styles.numberInput1}
-            max={1000}
-            min={0}
-            skin="clean"
-            value={reps[i]}
-            onChange={(value) => handleRepsChange(i, value)}
+            <View style={{color: "#6E7E85", fontWeight:800, marginLeft:0}}>
+            <TextInput
+              style={styles.numberInputReps}
+              value={reps[i]}
+            onChangeText={(value) => handleRepsChange(i, value)}
+            keyboardType="numeric"  
+            placeholder="Reps"
             />
+            
             </View>
         </View>
     );
@@ -180,7 +182,7 @@ const CalenderScreen = () => {
           textMonthFontWeight: 'bold',  // Makes month name bold
           textMonthFontSize: 16, // Makes month name font size larger
           arrowColor: 'gray',
-          todayTextColor: 'brown', // Changes the color of the current day
+          todayTextColor: '#7ecfd4', // Changes the color of the current day
         }}
       />
       
@@ -231,7 +233,7 @@ const CalenderScreen = () => {
        <InputSpinner style={styles.numberInput}
          max={10}
          min={0}
-         color={"gray"}
+         color={"#6E7E85"}
          onChange={handleNumberChange}
          skin={"modern"}
          shadow={false}
@@ -242,16 +244,18 @@ const CalenderScreen = () => {
 
        <View style={styles.buttons}>
        <TouchableOpacity 
+        onPress={exitCalendarModal}
+        style={styles.insertModalButtons}> 
+       <Text style={ styles.buttonText }>Cancel</Text>
+      </TouchableOpacity>
+
+       <TouchableOpacity 
         onPress={saveCalendarModal}
-        style={styles.button2}> 
+        style={styles.insertModalButtons}> 
        <Text style={ styles.buttonText }>Save</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity 
-        onPress={exitCalendarModal}
-        style={styles.button2}> 
-       <Text style={ styles.buttonText }>Cancel</Text>
-      </TouchableOpacity>
+     
        </View>
 
        </ScrollView>
@@ -323,7 +327,14 @@ const styles = StyleSheet.create({
     width: 100,
     alignItems: 'center'
   },
-
+  insertModalButtons: {
+    backgroundColor: '#6E7E85', 
+    borderRadius: 10, 
+    margin: 40,
+    padding: 10,
+    width: 100,
+    alignItems: 'center'
+  },
   calendarButtons:{
     display: 'flex',
     flexDirection: 'column',
@@ -344,13 +355,14 @@ const styles = StyleSheet.create({
   },
   
   calendarButtonTextBottom: {
-    color: 'black', 
+    color: 'white', 
     fontSize: 18,
     marginTop: 5,
     marginRight: 130,
+    paddingBottom: 6
   },
   calendarButtonTextTop: {
-    color: 'black', 
+    color: 'white', 
     fontSize: 22,
     fontWeight: 700,
     marginRight: 200,
@@ -402,26 +414,15 @@ const styles = StyleSheet.create({
    alignItems: 'center',
    justifyContent: 'center',
   },
-    input: {
-      height: 40,
-      margin: 12,
-      borderWidth: 1,
-      padding: 10,
-      borderColor: "black",
-      borderRadius: 10,
-  
-      // iOS shadow properties
-      shadowColor: "black",
-      shadowOffset: {
-        width: 0,
-        height: 1,
-      },
-      shadowOpacity: 0.1,
-      shadowRadius: 10,
-  
-      // Android shadow properties
-      elevation: 1,
-    },
+  input: {
+    height: 50,
+    margin: 12,
+    padding: 10,
+    borderColor: "black",
+    borderRadius: 10,
+    borderWidth: 1,
+    
+  },
   
   numberInput: {
     width: 190,
@@ -435,9 +436,43 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 10,
   },
-  numberInput1: {
-    width: 110,
-    height: 40,
+  numberInputWeight: {
+    height: 50,
+    width: 70,
+    borderColor: '"#6E7E85"',
+    paddingLeft: 10,
+    borderRadius: 10,
+    alignSelf: 'center',
+    backgroundColor: '#fff',
+    // Shadow properties for iOS
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    // Shadow properties for Android
+    elevation: 5,
+  },
+  numberInputReps: {
+    height: 50,
+    width: 50,
+    borderColor: '"#6E7E85"',
+    paddingLeft: 10,
+    borderRadius: 10,
+    alignSelf: 'center',
+    backgroundColor: '#fff',
+    // Shadow properties for iOS
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    // Shadow properties for Android
+    elevation: 5,
   },
   exerciseLogs: {
     flex: 1,
@@ -500,7 +535,7 @@ const styles = StyleSheet.create({
   shadowRadius: 3.84,
 },
 viewERButton: {
-  backgroundColor: 'white', // if you haven't defined it already
+  backgroundColor: '#73ca87', // if you haven't defined it already
   borderColor: "black",
   borderWidth: 0, // No border width
   borderRadius: 20,
@@ -524,7 +559,7 @@ viewERButton: {
 },
 
 insertERButton: {
-  backgroundColor: 'white', // if you haven't defined it already
+  backgroundColor: '#73ca87', // if you haven't defined it already
   borderColor: "black",
   borderWidth: 0, // No border width
   borderRadius: 20,
@@ -547,17 +582,18 @@ insertERButton: {
   shadowRadius: 5,
 },
   insertERTextTitle:{
-    marginTop: 100,
-    color: 'gray',
+    marginTop: 70,
+    marginBottom: 20,
+    color: '#6E7E85',
     fontWeight: '700', // this might not work with custom fonts, you'd need a font file that represents the weight you want
-    fontSize: 55,
+    fontSize: 50,
     textAlign: "center",
     textShadowColor: 'rgba(0, 0, 0, 0.75)',
     textShadowOffset: { width: -1, height: 1 },
     textShadowRadius: 1,
   },
   repsText:{
-    color: "gray", 
+    color: "#6E7E85", 
     fontWeight:800, 
     marginLeft: 23,
     fontSize: 23,
