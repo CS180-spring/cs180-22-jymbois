@@ -11,6 +11,9 @@ import {
 } from 'react-native';
 import {BarChart,LineChart} from 'react-native-chart-kit'
 import ThemeContext from "../hooks/ThemeContext";
+import WeightInputModal from './WeightInputModal';
+import { Ionicons } from '@expo/vector-icons';
+
   //import CircularProgress from 'react-native-circular-progress-indicator';
 
   const GraphScreen = ({ route }) => {
@@ -20,6 +23,11 @@ import ThemeContext from "../hooks/ThemeContext";
     const [weight, setWeight] = useState(0); // Initialize weight to zero
     const { isDarkMode } = React.useContext(ThemeContext);
     const styles = createThemedStyles(isDarkMode);
+    const [weightModalVisible, setWeightModalVisible] = useState(false); // to add weight to modal
+    
+  const handleWeightSubmit = (weight) => {
+      setWeight(weight);
+    };
 
   const handleGoalWeightChange = (text) => {
     setGoalWeight(text);
@@ -85,6 +93,12 @@ import ThemeContext from "../hooks/ThemeContext";
 				<View style={[styles.smallContentTitle]}>
 					<Text style={styles.title}>Your Progress</Text>
 					<Text style={styles.subtitle2}>See How You Improve</Text>
+          <TouchableOpacity 
+        style={styles.addButton}
+        onPress={() => setWeightModalVisible(true)}
+    >
+        <Ionicons name="add-circle" size={60} color="red" />
+    </TouchableOpacity>
 				</View>
 			</View>
       <View style={[styles.contentContainer]}>
@@ -448,6 +462,18 @@ const createThemedStyles = (isDarkMode) => {
     position: "absolute",
     top: 15,
     marginRight: 40,
+  },
+  addButton: {
+    position: 'absolute',
+    right: 30,
+    bottom: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'red',
+    borderRadius: 50,
+    width: 60,
+    height: 60,
+    zIndex: 10,
   },
 });
 };
