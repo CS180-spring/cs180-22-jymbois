@@ -6,6 +6,9 @@ import  Calendar  from 'react-native-calendars/src/calendar';
 import { writeUserData, createExersisePath, createSet}  from "../hooks/databaseQueries";
 import { auth } from "../configuration/firebaseConfig"; //	Firebase Operations
 import  {readData, checkWorkoutLogs, retrieveExercises}  from '../hooks/databaseQueries';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 //import GenerateExerciseRecords from "./components/GenerateExerciseRecords.js";
 
 const CalenderScreen = () => {
@@ -130,8 +133,8 @@ const CalenderScreen = () => {
         const result = await checkWorkoutLogs(recordDate, user);
         // assuming that result will be "Undefined" if there's no workout
         setHasWorkout(result === "true");
-        if(result === "true") console.log("You have workout on this day!!!" + recordDate);
-        else console.log("You dont have a workout on this day!!!" + recordDate);
+        //if(result === "true") console.log("You have workout on this day!!!" + recordDate);
+       // else console.log("You dont have a workout on this day!!!" + recordDate);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -192,7 +195,8 @@ const CalenderScreen = () => {
         <TouchableOpacity 
 
           onPress={selectViewExerciseRecord}
-          style={styles.viewERButton}> 
+          style={styles.viewERButton}>
+        <FontAwesome style={styles.viewERButtonLogo}name="search" size={45} color="white"> </FontAwesome>
         <Text style={ styles.calendarButtonTextTop }>View</Text>
         <Text style={ styles.calendarButtonTextBottom }>Exercise Records</Text>
         </TouchableOpacity>
@@ -200,6 +204,7 @@ const CalenderScreen = () => {
         <TouchableOpacity 
           onPress={selectInsertExerciseRecord}
           style={styles.insertERButton}> 
+           <AntDesign style={styles.insertERButtonLogo}name="pluscircleo" size={45} color="white" />
           <Text style={ styles.calendarButtonTextTop }>Insert</Text>
           <Text style={ styles.calendarButtonTextBottom }>Exercise Record</Text>
         </TouchableOpacity>
@@ -253,6 +258,7 @@ const CalenderScreen = () => {
         onPress={saveCalendarModal}
         style={styles.insertModalButtons}> 
        <Text style={ styles.buttonText }>Save</Text>
+       
       </TouchableOpacity>
 
      
@@ -268,30 +274,60 @@ const CalenderScreen = () => {
          style ={styles.exerciseLogModal} 
       >
        <ScrollView>
-       {
-        recordDate && (<Text style={ styles.insertERTextTitle}>{recordDate}</Text>)
-       }
-
-    <View style={styles.exercisesBox}>
-      { hasWorkout ? Object.entries(exercises).map(([exercise, sets], index) => (
-        <View key={index} style = {styles.exerciseBox}>
-          <Text style={{ fontWeight: 'bold', fontSize: 20, color: "tan", }}>{exercise}</Text>
-          {Object.entries(sets).map(([setName, setDetails], index) => (
-            <Text key={index} style={{  fontSize: 14, color: "tan", }}>
-              {setName}: {setDetails.reps} reps at {setDetails.weight} lbs
-            </Text>
-          ))}
-        </View>
-      )) : null}
-    </View>
-
        <View style={styles.returnButtonContainer}>
         <TouchableOpacity 
           onPress={exitExerciseRecordModal}
-          style={styles.button2}> 
-          <Text style={ styles.buttonText }>Return</Text>
+          style={styles.returnButtonViewERmodal}> 
+          <FontAwesome name="calendar" size={35} color="white"> </FontAwesome>
         </TouchableOpacity>
        </View>
+       {
+        recordDate && (<Text style={ styles.viewERTextTitle}>{recordDate}</Text>)
+       }
+
+<View style={styles.exercisesBox}>
+  { hasWorkout ? Object.entries(exercises).map(([exercise, sets], index) => (
+    <View key={index} style = {styles.exerciseBoxes}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Text style={[styles.exerciseTitleText, {color: "#6E7E85"}]}>{exercise}</Text>
+        <TouchableOpacity onPress={() => {/* handle delete exercise here */}}>
+          <FontAwesome name="times-circle" size={30} color="#900" />
+        </TouchableOpacity>
+      </View>
+      <View style={{ borderBottomColor: '#6E7E85', borderBottomWidth: 1, marginVertical: 5 }} />
+      {Object.entries(sets).map(([setName, setDetails], index) => (
+        <View key={index} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+          <Text style={{fontSize: 18, color: "#6E7E85", fontWeight: 'bold'}}>
+            {setName}:
+          </Text>
+          <View style={{alignItems: 'center'}}>
+            <Text style={{ marginBottom: 6, color: "black", fontWeight: 'bold'}}>Reps</Text>
+            <TextInput
+              style={{height: 40, width: 40, borderRadius: 20, borderColor: 'black', borderWidth: 1, marginHorizontal: 5, textAlign: 'center', color: "black"}}
+              placeholder='Reps'
+              value={String(setDetails.reps)}
+              onChangeText={(text) => {/* update reps here */}}
+              placeholderTextColor="black"
+            />
+          </View>
+          <View style={{alignItems: 'center'}}>
+            <Text style={{ marginBottom: 6, color: "black", fontWeight: 'bold'}}>Weight</Text>
+            <TextInput
+              style={{height: 40, width: 40, borderRadius: 20, borderColor: 'black', borderWidth: 1, marginHorizontal: 5, textAlign: 'center', color: "black"}}
+              placeholder='Weight'
+              value={String(setDetails.weight)}
+              onChangeText={(text) => {/* update weight here */}}
+              placeholderTextColor="black"
+            />
+          </View>
+          <TouchableOpacity onPress={() => {/* handle delete set here */}}>
+            <FontAwesome name="close" size={25} color="#900" />
+          </TouchableOpacity>
+        </View>
+      ))}
+    </View>
+  )) : null}
+</View>
        </ScrollView>
       </Modal>
 
@@ -326,6 +362,16 @@ const styles = StyleSheet.create({
     padding: 10,
     width: 100,
     alignItems: 'center'
+  },
+  returnButtonViewERmodal: {
+    backgroundColor: '#6E7E85', 
+    borderRadius: 10, 
+    marginTop: '15%',
+    marginLeft: '-70%',
+    padding: 10,
+    width: 53,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   insertModalButtons: {
     backgroundColor: '#6E7E85', 
@@ -515,24 +561,34 @@ const styles = StyleSheet.create({
   exerciseBox: {
     display: "flex",
     flexDirection: "column",
-    justifyContent: "center",
+    justifyContent: "space-evenly",
     alignItems: "center",
-    margin: 10,
-    padding: 10,
-    borderColor: "tan",
-    borderRadius: 10, // Adjust as needed
-    borderWidth: 1,
-   // Android shadow properties
-  elevation: 5,
-
+  // iOS shadow properties
+    
+},
+exerciseBoxes: {
+  display: "flex",
+  justifyContent: "center",
+  alignContent: "center",
+  width: "90%",
+  marginLeft: "5%", // Center the box by adding equal left and right margins
+  padding: 15,
+  borderRadius: 15,
+  borderWidth: 1,
+  borderColor: "#ddd", // Add a subtle border color
+  backgroundColor: "#f9f9f9", // Light background color
+  overflow: 'hidden',
+  marginBottom: 15,
+  // Android shadow properties
+  elevation: 3, // Add elevation for Android
   // iOS shadow properties
   shadowColor: "#000",
   shadowOffset: {
     width: 0,
     height: 2,
   },
-  shadowOpacity: 0.35,
-  shadowRadius: 3.84,
+  shadowOpacity: 0.23,
+  shadowRadius: 2.62,
 },
 viewERButton: {
   backgroundColor: '#73ca87', // if you haven't defined it already
@@ -568,7 +624,7 @@ insertERButton: {
   marginTop: 30,
   alignItems: 'center',
   justifyContent: 'center',
-
+  position: "relative",
   // Android shadow properties
   elevation: 10, // Increase for more shadow on Android
 
@@ -582,8 +638,21 @@ insertERButton: {
   shadowRadius: 5,
 },
   insertERTextTitle:{
+    position: "relative",
     marginTop: 70,
     marginBottom: 20,
+    color: '#6E7E85',
+    fontWeight: '700', // this might not work with custom fonts, you'd need a font file that represents the weight you want
+    fontSize: 50,
+    textAlign: "center",
+    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 1,
+  },
+  viewERTextTitle:{
+    position: "relative",
+    marginTop: 5,
+    marginBottom: 5,
     color: '#6E7E85',
     fontWeight: '700', // this might not work with custom fonts, you'd need a font file that represents the weight you want
     fontSize: 50,
@@ -598,6 +667,20 @@ insertERButton: {
     marginLeft: 23,
     fontSize: 23,
   },
+  insertERButtonLogo: {
+    position: "absolute",
+    left: "85%",
+  },
+  viewERButtonLogo:{
+    position: "absolute",
+    left: "85%",
+  },
+  exerciseTitleText: {
+    fontWeight: 'bold', 
+    fontSize: 23, 
+    color: "#6E7E85", 
+    marginBottom: 5,
+  }
 });
 
 export default CalenderScreen;

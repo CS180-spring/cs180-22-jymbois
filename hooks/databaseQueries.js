@@ -141,3 +141,6 @@ export async function generateUIs1(date, uid) {
 //These helper functions are for editing or deleting an exercise record
 //:3
 
+//Helper function to delete a whole exercise log including all sets
+//Helper function to delete only 1 set inside of an exercise
+//Helper function to edit exercise name, each set name, each set informations
