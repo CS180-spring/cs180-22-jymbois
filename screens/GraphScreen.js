@@ -55,8 +55,6 @@ import ThemeContext from "../hooks/ThemeContext";
     ],
   };
   const BarChartConfig = {
-    yAxisMaxVaule: 400,
-    yAxisMinVaule: 0,
     backgroundGradientFrom: isDarkMode ? '#333': 'white',
     backgroundGradientTo: isDarkMode ? '#333': 'white',
     decimalPlaces: 1,
@@ -163,7 +161,6 @@ import ThemeContext from "../hooks/ThemeContext";
          width={325}
          height={300}
          yAxisLabel={'lbs'}
-         yAxisInterval={1}
          chartConfig={BarChartConfig}
          fromNumber={400}
          fromZero={true}
@@ -176,6 +173,7 @@ import ThemeContext from "../hooks/ThemeContext";
          height={300}
          yAxisLabel={'lbs'}
          chartConfig={lineChartConfig}
+         withHorizontalLines={false}
           fromNumber={400}
          fromZero={true}
          bezier 
