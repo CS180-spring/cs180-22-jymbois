@@ -11,6 +11,9 @@ import {
 } from 'react-native';
 import {BarChart,LineChart} from 'react-native-chart-kit'
 import ThemeContext from "../hooks/ThemeContext";
+import WeightInputModal from './WeightInputModal';
+import { Ionicons } from '@expo/vector-icons';
+
   //import CircularProgress from 'react-native-circular-progress-indicator';
 
   const GraphScreen = ({ route }) => {
@@ -20,6 +23,11 @@ import ThemeContext from "../hooks/ThemeContext";
     const [weight, setWeight] = useState(0); // Initialize weight to zero
     const { isDarkMode } = React.useContext(ThemeContext);
     const styles = createThemedStyles(isDarkMode);
+    const [weightModalVisible, setWeightModalVisible] = useState(false); // to add weight to modal
+    
+  const handleWeightSubmit = (weight) => {
+      setWeight(weight);
+    };
 
   const handleGoalWeightChange = (text) => {
     setGoalWeight(text);
@@ -85,6 +93,41 @@ import ThemeContext from "../hooks/ThemeContext";
 					<Text style={styles.subtitle2}>See How You Improve</Text>
 				</View>
 			</View>
+      <Modal
+          animationType="slide"
+          transparent={true}
+          visible={weightModalVisible}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <Text style={styles.weightText}>Weight:</Text>
+              <TextInput
+                style={styles.input}
+                value={weight}
+                onChangeText={setWeight}
+                keyboardType="numeric"
+                placeholder="Enter your current weight in pounds"
+                placeholderTextColor="#BDBDBD"
+              />
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => {
+                  console.log('Weight button pressed. Weight:', weight);
+                  setWeightModalVisible(false);
+                }}
+              >
+                <Text style={styles.buttonText}>Add Weight</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.closeButton}
+                onPress={() => setWeightModalVisible(false)}
+              >
+                <Text style={styles.closeButtonText}>Close</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+      
       <View style={[styles.contentContainer]}>
       <View style={styles.activityContent}>
       <Text style={styles.title2}>Weekly Activities</Text>
@@ -112,14 +155,22 @@ import ThemeContext from "../hooks/ThemeContext";
       </View>
       </View>
 			</View>
-       <View style={styles.barGraphContainer}>  
-       <Text style={styles.title2}>Goal Progression</Text> 
+      <View style={styles.barGraphContainer}>  
+       <Text style={styles.title2}>Goal Progression</Text>
+       
        <TouchableOpacity
        style={styles.goalButtonContainer}
           onPress={() => setModalVisible(true)}
         >
           <Text style={styles.goalButton}>Add Goal -{">"} </Text>
         </TouchableOpacity>
+        <TouchableOpacity
+            style={styles.goalButtonContainer2}
+            onPress={() => setWeightModalVisible(true)}
+          >
+            <Text style={styles.goalButton}>Add Weight -{">"} </Text>
+        </TouchableOpacity>
+
         <Modal
           animationType="slide"
           transparent={true}
@@ -303,6 +354,7 @@ const createThemedStyles = (isDarkMode) => {
   goalWeightText: {
     fontSize: 20,
     marginRight: 10,
+    color: isDarkMode ? '#fff' : '#000',
   },
   input: {
     fontSize: 20,
@@ -324,11 +376,6 @@ const createThemedStyles = (isDarkMode) => {
     color: 'white',
     fontSize: 20,
     fontWeight: 'bold',
-  },
-  goalButtonContainer: {
-    position: 'absolute',
-    right: 100,
-		
   },
   popupContainer: {
     position: 'absolute',
@@ -366,11 +413,11 @@ const createThemedStyles = (isDarkMode) => {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: "white",
+    backgroundColor: isDarkMode ? '#000' : '#fff',
   },
   modalContent: {
     width: '80%',
-    backgroundColor: 'white',
+    backgroundColor: isDarkMode ? '#555' : '#fff',
     padding: 20,
     borderRadius: 10,
     alignItems: 'center',
@@ -447,6 +494,24 @@ const createThemedStyles = (isDarkMode) => {
     top: 15,
     marginRight: 40,
   },
+  goalButtonContainer: {
+    flexDirection: 'column',
+    position: 'absolute',
+    right: 100,
+    margin: 15,
+    marginTop: 20,
+		
+  },
+  goalButtonContainer2: {
+    flexDirection: 'column',
+    position: 'absolute',
+    right: 115,
+		
+  },
+  closeButtonText:{
+  color: isDarkMode ? '#fff' : '#000',
+  },
+  
 });
 };
 
