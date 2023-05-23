@@ -13,14 +13,13 @@ import {BarChart,LineChart} from 'react-native-chart-kit'
 import ThemeContext from "../hooks/ThemeContext";
   //import CircularProgress from 'react-native-circular-progress-indicator';
 
-const GraphScreen = ({ route }) => {
-  const [goalWeight, setGoalWeight] = useState('');
-  const [modalVisible, setModalVisible] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const { weight } = route.params;
-  const { isDarkMode } = React.useContext(ThemeContext);
-  const styles = createThemedStyles(isDarkMode);
-  
+  const GraphScreen = ({ route }) => {
+    const [goalWeight, setGoalWeight] = useState('');
+    const [modalVisible, setModalVisible] = useState(false);
+    const [progress, setProgress] = useState(0);
+    const [weight, setWeight] = useState(0); // Initialize weight to zero
+    const { isDarkMode } = React.useContext(ThemeContext);
+    const styles = createThemedStyles(isDarkMode);
 
   const handleGoalWeightChange = (text) => {
     setGoalWeight(text);
@@ -30,8 +29,7 @@ const GraphScreen = ({ route }) => {
   const calculateProgress = () => {
     const goal = parseFloat(goalWeight);
     const current = parseFloat(weight);
-    const answer = ((weight - goal)/goal * 100).toFixed(2);
-    //return (100 -answer);
+    const answer = ((current - goal)/goal * 100).toFixed(2);
     const perfect = (100 - answer);
     if (perfect >= 100){
       return 100;
@@ -57,8 +55,6 @@ const GraphScreen = ({ route }) => {
     ],
   };
   const BarChartConfig = {
-    yAxisMaxVaule: 400,
-    yAxisMinVaule: 0,
     backgroundGradientFrom: isDarkMode ? '#333': 'white',
     backgroundGradientTo: isDarkMode ? '#333': 'white',
     decimalPlaces: 1,
@@ -165,7 +161,6 @@ const GraphScreen = ({ route }) => {
          width={325}
          height={300}
          yAxisLabel={'lbs'}
-         yAxisInterval={1}
          chartConfig={BarChartConfig}
          fromNumber={400}
          fromZero={true}
@@ -178,6 +173,7 @@ const GraphScreen = ({ route }) => {
          height={300}
          yAxisLabel={'lbs'}
          chartConfig={lineChartConfig}
+         withHorizontalLines={false}
           fromNumber={400}
          fromZero={true}
          bezier 
