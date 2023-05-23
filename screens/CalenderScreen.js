@@ -3,9 +3,9 @@ import { StyleSheet, Text, View, TouchableOpacity, Modal, TextInput, ScrollView,
 import { useEffect } from 'react';
 import InputSpinner from 'react-native-input-spinner';
 import  Calendar  from 'react-native-calendars/src/calendar';
-import { writeUserData, createExersisePath, createSet}  from "../hooks/databaseQueries";
+import { writeUserData, createExersisePath, createSet, hasOnlyOneChild}  from "../hooks/databaseQueries";
 import { auth } from "../configuration/firebaseConfig"; //	Firebase Operations
-import  {readData, checkWorkoutLogs, retrieveExercises}  from '../hooks/databaseQueries';
+import  {readData, checkWorkoutLogs, retrieveExercises, deleteER}  from '../hooks/databaseQueries';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -22,6 +22,7 @@ const CalenderScreen = () => {
   const [reps, setReps] = useState(Array(setNumbers).fill(0));
   const [hasWorkout, setHasWorkout] = useState(false);
   const [exercises, setExercises] = useState({});
+ 
   const handleNumberChange = (text) => {
     if (/^\d{0,2}$/.test(text)) { // Regex pattern to validate input between 1 and 100
       setSetNumbers(text);
@@ -57,6 +58,7 @@ const CalenderScreen = () => {
     setSetNumbers(0);
     setWeights(Array(setNumbers).fill(0));
     setReps(Array(setNumbers).fill(0));
+    setExerciseName("");
   }
   const handleDayPress = (day) => {
     //console.log(day.dateString);
@@ -91,6 +93,28 @@ const CalenderScreen = () => {
     setReps(Array(setNumbers).fill(0));
   }
 
+  
+  const deleteExerciseRecord = async (exercise, date, uid) => {
+    try {
+      const pathParent = "DatesExerciseLogs/" + date + "/" + uid + "/";
+      const pathChild = "DatesExerciseLogs/" + date + "/" + uid + "/" + exercise + "/"
+      const oneChild = await hasOnlyOneChild(pathParent );
+      console.log(oneChild);
+      if(oneChild === true){
+        let path1 = "DatesBoolean/" + recordDate + "/";
+        writeUserData(path1, uid, "false");
+        setHasWorkout(false);
+        setExercises({});
+        await deleteER(pathParent);
+      } else {
+        await deleteER(pathChild);
+        const exercises = await retrieveExercises(recordDate, auth.currentUser.uid);
+        setExercises(exercises);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
 
 
@@ -133,8 +157,8 @@ const CalenderScreen = () => {
         const result = await checkWorkoutLogs(recordDate, user);
         // assuming that result will be "Undefined" if there's no workout
         setHasWorkout(result === "true");
-        //if(result === "true") console.log("You have workout on this day!!!" + recordDate);
-       // else console.log("You dont have a workout on this day!!!" + recordDate);
+        if(result === "true") console.log("You have workout on this day!!!" + recordDate);
+       else console.log("You dont have a workout on this day!!!" + recordDate);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -144,6 +168,7 @@ const CalenderScreen = () => {
       fetchWorkoutLog();
     }
   }, [recordDate]);
+
 
   //This function is to generate Uis 
   useEffect(() => {
@@ -287,10 +312,10 @@ const CalenderScreen = () => {
 
 <View style={styles.exercisesBox}>
   { hasWorkout ? Object.entries(exercises).map(([exercise, sets], index) => (
-    <View key={index} style = {styles.exerciseBoxes}>
+    <View key={exercise} style = {styles.exerciseBoxes}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
         <Text style={[styles.exerciseTitleText, {color: "#6E7E85"}]}>{exercise}</Text>
-        <TouchableOpacity onPress={() => {/* handle delete exercise here */}}>
+        <TouchableOpacity onPress={ () =>  deleteExerciseRecord(exercise, recordDate ,auth.currentUser.uid) }>
           <FontAwesome name="times-circle" size={30} color="#900" />
         </TouchableOpacity>
       </View>
@@ -306,7 +331,8 @@ const CalenderScreen = () => {
               style={{height: 40, width: 40, borderRadius: 20, borderColor: 'black', borderWidth: 1, marginHorizontal: 5, textAlign: 'center', color: "black"}}
               placeholder='Reps'
               value={String(setDetails.reps)}
-              onChangeText={(text) => {/* update reps here */}}
+              onChangeText={(text) => {/* update r\
+            eps here */}}
               placeholderTextColor="black"
             />
           </View>

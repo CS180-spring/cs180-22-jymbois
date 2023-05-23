@@ -1,5 +1,5 @@
 import {database} from "../configuration/firebaseConfig";
-import { ref, set, child, get, getDatabase, update, onChildAdded, onChildChanged, onChildRemoved} from "firebase/database"
+import { ref, set, child, get, getDatabase, update, onChildAdded, onChildChanged, onChildRemoved, remove, onValue} from "firebase/database"
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import { auth } from "../configuration/firebaseConfig"; //	Firebase Operations
@@ -139,8 +139,47 @@ export async function generateUIs1(date, uid) {
 }
 
 //These helper functions are for editing or deleting an exercise record
-//:3
+//
 
 //Helper function to delete a whole exercise log including all sets
+
+//Helper function to delete a whole exercise log including all sets
+export async function deleteER(path){
+  const db = getDatabase();
+  
+  await remove(ref(db, path))
+    .then(() => console.log("Exercise Record removed!"))
+    .catch(error => console.error("Error removing data:", error));
+}
+
+
 //Helper function to delete only 1 set inside of an exercise
 //Helper function to edit exercise name, each set name, each set informations
+
+//This function is to check if current path has only 1 child left
+export async function hasOnlyOneChild(path) {
+  const dbRef = ref(getDatabase());
+  const snapshot = await get(child(dbRef, path));
+
+  if (snapshot.exists()) {
+    //console.log(snapshot.val());
+    const data = snapshot.val();
+    const numOfChildren = Object.keys(data).length;
+    return numOfChildren === 1;
+  } else {
+    console.log("No data available");
+    return Promise.resolve("Undefined");
+  }
+};
+
+// Usage
+async function testFunction() {
+  try {
+    const result = await hasOnlyOneChild("DatesExerciseLogs/2023-05-20/KXJjbxWERaggJmj5tcszDGbXxe22/");
+    console.log(result);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+testFunction();
