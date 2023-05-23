@@ -10,13 +10,13 @@ import {
 	Keyboard,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";	
-import { auth } from "../configuration/firebaseConfig"; //	Firebase Operations
-
+import { auth, resetPassword } from "../configuration/firebaseConfig"; //	Firebase Operations
 import { writeUserData, readData}  from "../hooks/databaseQueries";
 
 import * as WebBrowser from "expo-web-browser"
 import * as Google from 'expo-auth-session/providers/google'
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as AuthSession from 'expo-auth-session';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -176,6 +176,102 @@ const LoginScreen = () => {
 	};
 
 	const scrollViewRef = useRef(null);
+	//github shits..
+	const handleGithubLogout = async () => { //something is wrong here because it is not login out but 
+		await AsyncStorage.removeItem('@user');
+		setGithubAccessToken('');
+		AuthSession.dismiss
+	  };
+	
+
+
+	const githubClientId = "f5c15da3c245afa8bd09";
+    const githubClientSecret = "6dfaa781dfd723c1639cd6b49a72fb6a794d8304";
+    const [githubAccessToken, setGithubAccessToken] = useState("");
+    const handleGithubSignIn = async () => {
+		// Remove user data from AsyncStorage
+		await AsyncStorage.removeItem("@user");
+	
+		try {
+			const redirectUrl = AuthSession.makeRedirectUri({ useProxy: true });
+			const authUrl = `https://github.com/login/oauth/authorize?client_id=${githubClientId}&redirect_uri=${encodeURIComponent(redirectUrl)}`;
+	
+			const result = await AuthSession.startAsync({ authUrl });
+	
+			if (result.type === "success" && result.url) {
+				const { params } = result;
+	
+				const tokenResponse = await fetch("https://github.com/login/oauth/access_token", {
+					method: "POST",
+					headers: {
+						Accept: "application/json",
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({
+						client_id: githubClientId,
+						client_secret: githubClientSecret,
+						code: params.code,
+					}),
+				});
+	
+				const tokenResult = await tokenResponse.json();
+				const { access_token: accessToken } = tokenResult;
+	
+				if (accessToken) {
+					setGithubAccessToken(accessToken);
+	
+					const userResponse = await fetch("https://api.github.com/user", {
+						headers: {
+							Authorization: `Bearer ${accessToken}`,
+						},
+					});
+	
+					const user = await userResponse.json();
+					await AsyncStorage.setItem("@user", JSON.stringify(user));
+	
+					let githubEmail = user.email;
+					if (githubEmail === null) {
+						githubEmail = `${user.login}@github.com`;
+					}
+	
+					auth.fetchSignInMethodsForEmail(githubEmail)
+						.then((methods) => {
+							if (methods.length > 0) {
+								auth.signInWithEmailAndPassword(githubEmail, user.id.toString())
+									.then((userCredential) => {
+										const user = userCredential.user;
+										console.log("Logged in with: ", githubEmail);
+										navigation.navigate("Home");
+									})
+									.catch((error) => {
+										const errorCode = error.code;
+										const errorMessage = error.message;
+										alert(error.message);
+									});
+							}
+							else {
+								navigation.navigate("Gender", {
+									email: githubEmail,
+									username: user.name,
+									pw: user.id.toString(),
+								});
+							}
+						})
+						.catch((error) => {
+							console.error("Error while fetching sign-in methods:", error);
+						});
+				}
+			}
+		} 
+		catch (error) {
+			console.error("Error occurred during GitHub sign-in:", error);
+		}
+	};
+
+	  
+	
+
+	 
 
 	return (
 		<ScrollView
@@ -235,12 +331,46 @@ const LoginScreen = () => {
 				>
 					<Text style={styles.registerButtonText}>Don't have an account? <Text style={{color: 'black', fontWeight: 'bold'}}>Click here</Text></Text>
 				</TouchableOpacity>
+			
+			{/*	This is the old one, if the word sign in with is preffered keep this and delete the one below 
 				<TouchableOpacity
 					style={styles.registerButton}
 					onPress={() => promptAsync()}
 				>
 					<Text style={{color: 'black', fontWeight: 'bold'}}>Sign In With Google</Text>
 				</TouchableOpacity>
+				<TouchableOpacity style={styles.registerButton} onPress={async () => {
+    				await handleGithubLogout();
+   					handleGithubSignIn();
+					}}>
+    				<Text style={{ color: "black", fontWeight: "bold" }}>Sign In With GitHub</Text>
+				</TouchableOpacity> */}
+
+			{/*change this if u preffer the old one with words :( */ }
+			<View style={styles.logoContainer}>
+  				<TouchableOpacity
+    				style={styles.registerButton}
+    				onPress={() => promptAsync()}
+  				>
+    			<Image
+      				source={require("./images/google.png")} 
+      				style={styles.logoLogin}
+    			/>
+ 				</TouchableOpacity>
+
+  				<TouchableOpacity 
+    				style={styles.registerButton} 
+    				onPress={async () => {
+      				await handleGithubLogout();
+      				handleGithubSignIn();
+    			}}
+  				>
+    			<Image
+      				source={require("./images/github.png")} 
+      				style={styles.logoLogin}
+    			/>
+  				</TouchableOpacity>
+			</View>
 			</View>
 		</ScrollView>
 	);
@@ -282,7 +412,7 @@ const styles = StyleSheet.create({
 	logo: {
 		width: 240,
 		height: 240,
-		marginTop: -190,
+		marginTop: -100,
 		marginBottom: 20,
 	},
 	heading: {
@@ -312,18 +442,20 @@ const styles = StyleSheet.create({
 	},
 
 	button: {
-		width: "70%",
+		width: "40%",
 		height: 50,
 		backgroundColor: "white",
 		justifyContent: "center",
 		alignItems: "center",
-		borderRadius: 20,
+		borderRadius: 25,
 		marginBottom: 15,
-		shadowColor: '#000',
-  		shadowOffset: { width: 0, height: 2 },
-  		shadowOpacity: 0.2,
-  		shadowRadius: 2,
-  		elevation: 2
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 2 },
+		shadowOpacity: 0.2,
+		shadowRadius: 2,
+		elevation: 2,
+		borderColor: "#8BC34A",
+		borderWidth: 2,
 	},
 	buttonText: {
 		color: "black",
@@ -340,6 +472,16 @@ const styles = StyleSheet.create({
 	registerButtonText: {
 		color: "black",
 		fontSize: 16,
+	},
+	logoContainer: {
+		flexDirection: 'row', 
+		justifyContent: 'center', 
+		width: 50
+	  },
+	logoLogin: {
+		width: 30,
+		height: 30,
+
 	},
 });
 

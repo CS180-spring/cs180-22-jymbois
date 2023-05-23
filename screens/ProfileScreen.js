@@ -25,9 +25,8 @@ import { usePushRegister } from "../hooks/usePushRegister";
 const SettingScreen = () => {
 	const { isDarkMode, toggleTheme } = React.useContext(ThemeContext);
 	const styles = createThemedStyles(isDarkMode);
-	//const [isVacation, toggleVacation] = useVacation(false, navigation);
 	const [isVacation, setIsVacation] = useState(false);
-	const [isPushNotificationsEnabled, togglePushNotifications] = usePushNotificationToggle(false);
+	const [isPushNotificationsEnabled, setIsPushNotificationsEnabled] = usePushNotificationToggle(false);
 	const [modalVisible, setModalVisible] = useState(false);
 	const [days, setDays] = useState(0);
 	const [hours, setHours] = useState(0);
@@ -121,7 +120,7 @@ const SettingScreen = () => {
 		{[
 		  ["Dark Mode", isDarkMode, toggleTheme],
 		  ["Vacation Mode", isVacation, handleVacationModeToggle],
-		  ["Push Notifications", isPushNotificationsEnabled, togglePushNotifications],
+		  ["Push Notifications", isPushNotificationsEnabled, setIsPushNotificationsEnabled],
 		].map(([label, value, toggle]) => (
 		  <View key={label} style={styles.notificationContainer}>
 			<Text style={styles.notificationText}>{label}</Text>
@@ -256,7 +255,7 @@ editIconContainer: {
   marginTop: -20,
 },
 logout: {
-  width: "70%",
+  width: "40%",
   height: 50,
   backgroundColor: "#013220",
   justifyContent: "center",

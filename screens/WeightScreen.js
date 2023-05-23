@@ -47,6 +47,13 @@ const WeightScreen = ({ route }) => {
 				await set(dbRef, height);
 				dbRef = ref(database, "users/" + user.uid + "/weight");
 				await set(dbRef, weight);
+				// Going to add variables for push notifications, vacation mode, and dark mode
+				dbRef = ref(database, "users/" + user.uid + "/isPushEnabled");
+				await set(dbRef, false);
+				dbRef = ref(database, "users/" + user.uid + "/isVacationEnabled");
+				await set(dbRef, false);
+				dbRef = ref(database, "users/" + user.uid + "/isDarkEnabled");
+				await set(dbRef, false);
 				
 				console.log(user.email + " logged in!");
 			} catch (error) {
@@ -107,7 +114,7 @@ const styles = StyleSheet.create({
 		marginBottom: 50,
 		marginTop: -100,
 		textAlign: "center",
-		fontFamily: "OpenSans-Regular",
+		//fontFamily: "OpenSans",         //this is giving error so i just remove it open sans is not supported 
 	},
 	weightContainer: {
 		justifyContent: "center",
