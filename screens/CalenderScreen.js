@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity, Modal, TextInput, ScrollView,
 import { useEffect } from 'react';
 import InputSpinner from 'react-native-input-spinner';
 import  Calendar  from 'react-native-calendars/src/calendar';
-import { writeUserData, createExersisePath, createSet, hasOnlyOneChild}  from "../hooks/databaseQueries";
+import { writeUserData, createExersisePath, createSet, hasOnlyOneChild, editSet}  from "../hooks/databaseQueries";
 import { auth } from "../configuration/firebaseConfig"; //	Firebase Operations
 import  {readData, checkWorkoutLogs, retrieveExercises, deleteER}  from '../hooks/databaseQueries';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -22,7 +22,18 @@ const CalenderScreen = () => {
   const [reps, setReps] = useState(Array(setNumbers).fill(0));
   const [hasWorkout, setHasWorkout] = useState(false);
   const [exercises, setExercises] = useState({});
- 
+  const [tempSets, setTempSets] = useState({});
+
+  const updateTempSets = (setName, field, newValue) => {
+    setTempSets(prevTempSets => ({
+      ...prevTempSets,
+      [setName]: {
+        ...prevTempSets[setName],
+        [field]: newValue === "" ? " " : newValue,
+      },
+    }));
+  }
+
   const handleNumberChange = (text) => {
     if (/^\d{0,2}$/.test(text)) { // Regex pattern to validate input between 1 and 100
       setSetNumbers(text);
@@ -91,16 +102,18 @@ const CalenderScreen = () => {
     setHasWorkout(false);
     setWeights(Array(setNumbers).fill(0));
     setReps(Array(setNumbers).fill(0));
+    setTempSets({});
   }
 
   
   const deleteExerciseRecord = async (exercise, date, uid) => {
     try {
-      const pathParent = "DatesExerciseLogs/" + date + "/" + uid + "/";
-      const pathChild = "DatesExerciseLogs/" + date + "/" + uid + "/" + exercise + "/"
-      const oneChild = await hasOnlyOneChild(pathParent );
+      const pathParent = "DatesExerciseLogs/" + date + "/" + uid;
+      const pathChild = "DatesExerciseLogs/" + date + "/" + uid + "/" + exercise + "/";
+      const oneChild = await hasOnlyOneChild(pathParent);
+
       console.log(oneChild);
-      if(oneChild === true){
+      if(oneChild === "true"){
         let path1 = "DatesBoolean/" + recordDate + "/";
         writeUserData(path1, uid, "false");
         setHasWorkout(false);
@@ -116,6 +129,44 @@ const CalenderScreen = () => {
     }
   }
 
+  const deleteSet = async (exercise, set , date, uid) => {
+    try {
+      const pathParent1 = "DatesExerciseLogs/" + date + "/" + uid + "/";
+      const pathParent2 = "DatesExerciseLogs/" + date + "/" + uid + "/" + exercise;
+      const pathChild = "DatesExerciseLogs/" + date + "/" + uid + "/" + exercise + "/" + set + "/";
+      const oneChild = await hasOnlyOneChild(pathParent1 );
+      const oneChildSet = await hasOnlyOneChild(pathParent2);
+      console.log(pathChild);
+      console.log(pathParent2);
+      console.log("This exercise is the last exercise", oneChild );
+     console.log("This set is the last set of the exercise", oneChildSet );
+      if(oneChild === "true" && oneChildSet === "true"){
+        let path1 = "DatesBoolean/" + recordDate + "/";
+        writeUserData(path1, uid, "false");
+        setHasWorkout(false);
+        setExercises({});
+        await deleteER(pathParent2);
+      } else {
+        await deleteER(pathChild);
+        const exercises = await retrieveExercises(recordDate, auth.currentUser.uid);
+        setExercises(exercises);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const editSetInfo = async (date, uid, exercise, set, newReps, newWeight) => {
+    try {
+      const path = "DatesExerciseLogs/" + date + "/" + uid + "/" + exercise + "/" + set + "/";
+      await editSet(path, newReps, newWeight);
+    
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  
 
 
   const set = [];
@@ -330,9 +381,10 @@ const CalenderScreen = () => {
             <TextInput
               style={{height: 40, width: 40, borderRadius: 20, borderColor: 'black', borderWidth: 1, marginHorizontal: 5, textAlign: 'center', color: "black"}}
               placeholder='Reps'
-              value={String(setDetails.reps)}
-              onChangeText={(text) => {/* update r\
-            eps here */}}
+              value={tempSets[setName]?.reps || String(setDetails.reps)}
+              keyboardType='numeric'
+              onChangeText={(newReps) => updateTempSets(setName, 'reps', newReps)}
+              onEndEditing={() => editSetInfo(recordDate, auth.currentUser.uid, exercise, setName, tempSets[setName]?.reps || setDetails.reps, tempSets[setName]?.weight || setDetails.weight)}
               placeholderTextColor="black"
             />
           </View>
@@ -341,12 +393,14 @@ const CalenderScreen = () => {
             <TextInput
               style={{height: 40, width: 40, borderRadius: 20, borderColor: 'black', borderWidth: 1, marginHorizontal: 5, textAlign: 'center', color: "black"}}
               placeholder='Weight'
-              value={String(setDetails.weight)}
-              onChangeText={(text) => {/* update weight here */}}
+              keyboardType='numeric'
+              value={tempSets[setName]?.weight || String(setDetails.weight)}
+              onChangeText={(newWeight) => updateTempSets(setName, 'weight', newWeight)}
+              onEndEditing={() => editSetInfo(recordDate, auth.currentUser.uid, exercise, setName, tempSets[setName]?.reps || setDetails.reps, tempSets[setName]?.weight || setDetails.weight)}
               placeholderTextColor="black"
             />
           </View>
-          <TouchableOpacity onPress={() => {/* handle delete set here */}}>
+          <TouchableOpacity onPress={() => deleteSet(exercise, setName , recordDate, auth.currentUser.uid)}>
             <FontAwesome name="close" size={25} color="#900" />
           </TouchableOpacity>
         </View>

@@ -12,7 +12,6 @@ let data1 = {
 };
 */
 //To call this function:  writeData("users/user1", data);
-
 export function writeUserData(path, uid, data) {
   const db = getDatabase();
   let testData = {
@@ -36,25 +35,6 @@ export async function createSet(path, setInfo, _setData){
 }
 //const path1 = "DatesExerciseLogs/2023-05-05/5StlXUIxmPMGgzFFvXPF0RKICcu1";
 //      createExersisePath(path1,"Deadlift" );
-
-
-
-export function writeNewPost(childKey, childData) {
-  const db = getDatabase();
-
-  // A post entry.
-  const postData = {
-    [childKey]: childData,
-  };
-
-  // Set the path for the new post
-  const path = 'DatesBoolean/2023-05-05';
-
-  // Write the new post's data at the specified path
-  return update(ref(db, path), postData);
-}
-
-
 
 //writeNewPost('5StlXUIxmPMGgzFFvXPF0RKICcu1', 'true');
 //Function to readData from real-time firebase
@@ -156,23 +136,28 @@ export async function deleteER(path){
 //Helper function to delete only 1 set inside of an exercise
 //Helper function to edit exercise name, each set name, each set informations
 
-//This function is to check if current path has only 1 child left
+//This function is to check if the current path has only 1 child left
+//Helper function to remove set and exercise records
 export async function hasOnlyOneChild(path) {
-  const dbRef = ref(getDatabase());
-  const snapshot = await get(child(dbRef, path));
+  try {
+    const dbRef = ref(getDatabase());
+    const snapshot = await get(child(dbRef, path));
 
-  if (snapshot.exists()) {
-    //console.log(snapshot.val());
-    const data = snapshot.val();
-    const numOfChildren = Object.keys(data).length;
-    return numOfChildren === 1;
-  } else {
-    console.log("No data available");
-    return Promise.resolve("Undefined");
+    if (snapshot.exists()) {
+      const data = snapshot.val();
+      const numOfChildren = Object.keys(data).length;
+      return numOfChildren === 1 ? "true" : "false";
+    } else {
+      console.log("No data available");
+      return "false";
+    }
+  } catch (error) {
+    console.error("An error occurred while checking the number of children:", error);
+    throw error; // or return some default value
   }
 };
 
-// Usage
+/*
 async function testFunction() {
   try {
     const result = await hasOnlyOneChild("DatesExerciseLogs/2023-05-20/KXJjbxWERaggJmj5tcszDGbXxe22/");
@@ -183,3 +168,17 @@ async function testFunction() {
 }
 
 testFunction();
+*/
+
+//This function is to change each set info of a exercise
+export async function editSet(path, newReps, newWeight) {
+  const db = getDatabase();
+  let testData = {
+    reps: newReps,
+    weight:  newWeight,
+  }
+  update(ref(db, path),testData);
+}
+
+//editSet("/DatesExerciseLogs/2023-05-20/KXJjbxWERaggJmj5tcszDGbXxe22/Tricep Extension/set 1/", "25", "60" );
+
