@@ -305,7 +305,7 @@ const LoginScreen = () => {
 					`https://www.facebook.com/v13.0/dialog/oauth?` +
 					`client_id=${facebookConfig.clientId}` +
 					`&redirect_uri=${encodeURIComponent(
-						"https://auth.expo.io/@rovinthegreat/GymBois",
+						"https://auth.expo.io/@howie315/gymbois",
 					)}` +
 					`&response_type=token` +
 					`&scope=${encodeURIComponent(facebookConfig.scopes.join(","))}`,
@@ -460,6 +460,9 @@ const LoginScreen = () => {
 					<TouchableOpacity
 						style={styles.registerButton}
 						onPress={handleFacebookLogin}
+						// onPress={async () => {
+						// 	await handleFacebookLogin;
+						// }}
 					>
 						<Image
 							source={require("./images/facebook.png")}
