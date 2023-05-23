@@ -134,7 +134,7 @@ import ThemeContext from "../hooks/ThemeContext";
                 onChangeText={handleGoalWeightChange}
                 keyboardType="numeric"
                 placeholder="Enter your goal weight in pounds"
-                placeholderTextColor="#BDBDBD"
+                placeholderTextColor={styles.placeholderColor}
               />
               <TouchableOpacity
                 style={styles.button}
@@ -303,17 +303,19 @@ const createThemedStyles = (isDarkMode) => {
   goalWeightText: {
     fontSize: 20,
     marginRight: 10,
+    color: isDarkMode ? '#fff' : '#000',
   },
   input: {
     fontSize: 15,
     height: 50,
     width: 150,
     paddingLeft: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: isDarkMode ? "#333" : "#FFFFFF",
     borderRadius: 10,
+    color: isDarkMode ? '#fff' : '#000',
   },
   button: {
-    backgroundColor: '#8BC34A',
+    backgroundColor: isDarkMode ? '#8BC34A': '#1363DF',
     borderRadius: 10,
     width: '50%',
     height: 30,
@@ -321,56 +323,34 @@ const createThemedStyles = (isDarkMode) => {
     justifyContent: 'center',
   },
   buttonText: {
-    color: 'white',
+    color: isDarkMode ? '#fff' : '#fff',
     fontSize: 15,
     fontWeight: 'bold',
+  },
+  closeButtonText: {
+    color: isDarkMode ? '#fff' : '#000',
+    fontSize: 15,
+    fontWeight: 'bold',
+    marginTop: 10,
   },
   goalButtonContainer: {
     position: 'absolute',
     right: 100,
 		
   },
-  popupContainer: {
-    position: 'absolute',
-    bottom: 90,
-    right: 20,
-    width: 250,
-    backgroundColor: 'white',
-    borderRadius: 10,
-    padding: 20,
-    alignItems: 'center',
-  },
-  popupInput: {
-    fontSize: 20,
-    height: 50,
-    width: '100%',
-    paddingLeft: 20,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 10,
-    marginBottom: 20,
-  },
-  popupButton: {
-    backgroundColor: 'white',
-    borderRadius: 25,
-    width: '100%',
-    height: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  popupButtonText: {
-    color: 'black',
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
+ placeholderColor: {
+    color: isDarkMode ? '#fff' : '#000',
+ },
+ 
   modalContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: "white",
+    backgroundColor: isDarkMode ? "#000" : "#FFFFFF",
   },
   modalContent: {
     width: '80%',
-    backgroundColor: 'white',
+    backgroundColor: isDarkMode ? "#333" : "#FFFFFF",
     padding: 20,
     borderRadius: 10,
     alignItems: 'center',
@@ -381,33 +361,7 @@ const createThemedStyles = (isDarkMode) => {
   shadowRadius: 2,
   elevation: 2
   },
-  progressText: {
-    position: 'absolute',
-    marginRight: 50,
-    fontSize: 30,
-    fontWeight: 'bold',
-    color: 'black',
-  },
-  fullProgress: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    borderRadius: 100,
-    borderWidth: 10,
-    borderColor: '#8BC34A',
-    transform: [{ rotateZ: '-90deg' }],
-  },
-  progressFill: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    borderRadius: 100,
-    borderWidth: 10,
-    borderColor: '#F2F2F2',
-    borderLeftColor: '#B8860B',
-    borderBottomColor: '#B8860B',
-    transform: [{ rotateZ: '-90deg' }],
-  },
+
 	title2Container: {
 		flexDirection: "column",
 		justifyContent: "center",
