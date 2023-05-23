@@ -158,7 +158,7 @@ const GraphScreen = ({ route }) => {
           </View>
         </Modal>
        <BarChart
-        style={{flex: 1,  marginTop: 50, borderRadius: 10}}
+        style={{flex: 1, alignContent:'center', marginTop: 40, borderRadius: 10}}
          data={barData}
          width={325}
          height={300}
@@ -169,7 +169,7 @@ const GraphScreen = ({ route }) => {
          showValuesOnTopOfBars={true}
        /> 
         <LineChart
-        style={{ position: 'absolute', bottom: 24.2, right: -5, borderRadius: 10 }}
+        style={{ alignContent:'center', marginLeft:30, marginBottom:25, borderRadius: 10 }}
          data={lineData}
          width={325}
          height={300}
@@ -307,7 +307,7 @@ const createThemedStyles = (isDarkMode) => {
     marginRight: 10,
   },
   input: {
-    fontSize: 20,
+    fontSize: 15,
     height: 50,
     width: 150,
     paddingLeft: 20,
@@ -316,15 +316,15 @@ const createThemedStyles = (isDarkMode) => {
   },
   button: {
     backgroundColor: '#8BC34A',
-    borderRadius: 25,
+    borderRadius: 10,
     width: '50%',
-    height: 50,
+    height: 30,
     alignItems: 'center',
     justifyContent: 'center',
   },
   buttonText: {
     color: 'white',
-    fontSize: 20,
+    fontSize: 15,
     fontWeight: 'bold',
   },
   goalButtonContainer: {
