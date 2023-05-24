@@ -1,5 +1,5 @@
 import {database} from "../configuration/firebaseConfig";
-import { ref, set, child, get, getDatabase, update, onChildAdded, onChildChanged, onChildRemoved} from "firebase/database"
+import { ref, set, child, get, getDatabase, update, onChildAdded, onChildChanged, onChildRemoved, remove, onValue} from "firebase/database"
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import { auth } from "../configuration/firebaseConfig"; //	Firebase Operations
@@ -12,7 +12,6 @@ let data1 = {
 };
 */
 //To call this function:  writeData("users/user1", data);
-
 export function writeUserData(path, uid, data) {
   const db = getDatabase();
   let testData = {
@@ -36,25 +35,6 @@ export async function createSet(path, setInfo, _setData){
 }
 //const path1 = "DatesExerciseLogs/2023-05-05/5StlXUIxmPMGgzFFvXPF0RKICcu1";
 //      createExersisePath(path1,"Deadlift" );
-
-
-
-export function writeNewPost(childKey, childData) {
-  const db = getDatabase();
-
-  // A post entry.
-  const postData = {
-    [childKey]: childData,
-  };
-
-  // Set the path for the new post
-  const path = 'DatesBoolean/2023-05-05';
-
-  // Write the new post's data at the specified path
-  return update(ref(db, path), postData);
-}
-
-
 
 //writeNewPost('5StlXUIxmPMGgzFFvXPF0RKICcu1', 'true');
 //Function to readData from real-time firebase
@@ -138,6 +118,69 @@ export async function generateUIs1(date, uid) {
   }
 }
 
+//These helper functions are for editing or deleting an exercise record
+//
+
+//Helper function to delete a whole exercise log including all sets
+
+//Helper function to delete a whole exercise log including all sets
+export async function deleteER(path){
+  const db = getDatabase();
+  
+  await remove(ref(db, path))
+    .then(() => console.log("Exercise Record removed!"))
+    .catch(error => console.error("Error removing data:", error));
+}
+
+
+//Helper function to delete only 1 set inside of an exercise
+//Helper function to edit exercise name, each set name, each set informations
+
+//This function is to check if the current path has only 1 child left
+//Helper function to remove set and exercise records
+export async function hasOnlyOneChild(path) {
+  try {
+    const dbRef = ref(getDatabase());
+    const snapshot = await get(child(dbRef, path));
+
+    if (snapshot.exists()) {
+      const data = snapshot.val();
+      const numOfChildren = Object.keys(data).length;
+      return numOfChildren === 1 ? "true" : "false";
+    } else {
+      console.log("No data available");
+      return "false";
+    }
+  } catch (error) {
+    console.error("An error occurred while checking the number of children:", error);
+    throw error; // or return some default value
+  }
+};
+
+/*
+async function testFunction() {
+  try {
+    const result = await hasOnlyOneChild("DatesExerciseLogs/2023-05-20/KXJjbxWERaggJmj5tcszDGbXxe22/");
+    console.log(result);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+testFunction();
+*/
+
+//This function is to change each set info of a exercise
+export async function editSet(path, newReps, newWeight) {
+  const db = getDatabase();
+  let testData = {
+    reps: newReps,
+    weight:  newWeight,
+  }
+  update(ref(db, path),testData);
+}
+
+//editSet("/DatesExerciseLogs/2023-05-20/KXJjbxWERaggJmj5tcszDGbXxe22/Tricep Extension/set 1/", "25", "60" );
 // Code for retrieving isPushEnabled
 
 export async function retrieveIsPush(){
