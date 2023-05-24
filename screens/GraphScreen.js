@@ -11,16 +11,23 @@ import {
 } from 'react-native';
 import {BarChart,LineChart} from 'react-native-chart-kit'
 import ThemeContext from "../hooks/ThemeContext";
+import WeightInputModal from './WeightInputModal';
+import { Ionicons } from '@expo/vector-icons';
+
   //import CircularProgress from 'react-native-circular-progress-indicator';
 
-const GraphScreen = ({ route }) => {
-  const [goalWeight, setGoalWeight] = useState('');
-  const [modalVisible, setModalVisible] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const { weight } = route.params;
-  const { isDarkMode } = React.useContext(ThemeContext);
-  const styles = createThemedStyles(isDarkMode);
-  
+  const GraphScreen = ({ route }) => {
+    const [goalWeight, setGoalWeight] = useState('');
+    const [modalVisible, setModalVisible] = useState(false);
+    const [progress, setProgress] = useState(0);
+    const [weight, setWeight] = useState(0); // Initialize weight to zero
+    const { isDarkMode } = React.useContext(ThemeContext);
+    const styles = createThemedStyles(isDarkMode);
+    const [weightModalVisible, setWeightModalVisible] = useState(false); // to add weight to modal
+    
+  const handleWeightSubmit = (weight) => {
+      setWeight(weight);
+    };
 
   const handleGoalWeightChange = (text) => {
     setGoalWeight(text);
@@ -30,8 +37,7 @@ const GraphScreen = ({ route }) => {
   const calculateProgress = () => {
     const goal = parseFloat(goalWeight);
     const current = parseFloat(weight);
-    const answer = ((weight - goal)/goal * 100).toFixed(2);
-    //return (100 -answer);
+    const answer = ((current - goal)/goal * 100).toFixed(2);
     const perfect = (100 - answer);
     if (perfect >= 100){
       return 100;
@@ -57,8 +63,6 @@ const GraphScreen = ({ route }) => {
     ],
   };
   const BarChartConfig = {
-    yAxisMaxVaule: 400,
-    yAxisMinVaule: 0,
     backgroundGradientFrom: isDarkMode ? '#333': 'white',
     backgroundGradientTo: isDarkMode ? '#333': 'white',
     decimalPlaces: 1,
@@ -89,6 +93,41 @@ const GraphScreen = ({ route }) => {
 					<Text style={styles.subtitle2}>See How You Improve</Text>
 				</View>
 			</View>
+      <Modal
+          animationType="slide"
+          transparent={true}
+          visible={weightModalVisible}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <Text style={styles.weightText}>Weight:</Text>
+              <TextInput
+                style={styles.input}
+                value={weight}
+                onChangeText={setWeight}
+                keyboardType="numeric"
+                placeholder="Enter your current weight in pounds"
+                placeholderTextColor="#BDBDBD"
+              />
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => {
+                  console.log('Weight button pressed. Weight:', weight);
+                  setWeightModalVisible(false);
+                }}
+              >
+                <Text style={styles.buttonText}>Add Weight</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.closeButton}
+                onPress={() => setWeightModalVisible(false)}
+              >
+                <Text style={styles.closeButtonText}>Close</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+      
       <View style={[styles.contentContainer]}>
       <View style={styles.activityContent}>
       <Text style={styles.title2}>Weekly Activities</Text>
@@ -116,14 +155,22 @@ const GraphScreen = ({ route }) => {
       </View>
       </View>
 			</View>
-       <View style={styles.barGraphContainer}>  
-       <Text style={styles.title2}>Goal Progression</Text> 
+      <View style={styles.barGraphContainer}>  
+       <Text style={styles.title2}>Goal Progression</Text>
+       
        <TouchableOpacity
        style={styles.goalButtonContainer}
           onPress={() => setModalVisible(true)}
         >
           <Text style={styles.goalButton}>Add Goal -{">"} </Text>
         </TouchableOpacity>
+        <TouchableOpacity
+            style={styles.goalButtonContainer2}
+            onPress={() => setWeightModalVisible(true)}
+          >
+            <Text style={styles.goalButton}>Add Weight -{">"} </Text>
+        </TouchableOpacity>
+
         <Modal
           animationType="slide"
           transparent={true}
@@ -165,7 +212,6 @@ const GraphScreen = ({ route }) => {
          width={325}
          height={300}
          yAxisLabel={'lbs'}
-         yAxisInterval={1}
          chartConfig={BarChartConfig}
          fromNumber={400}
          fromZero={true}
@@ -178,6 +224,7 @@ const GraphScreen = ({ route }) => {
          height={300}
          yAxisLabel={'lbs'}
          chartConfig={lineChartConfig}
+         withHorizontalLines={false}
           fromNumber={400}
          fromZero={true}
          bezier 
@@ -307,6 +354,7 @@ const createThemedStyles = (isDarkMode) => {
   goalWeightText: {
     fontSize: 20,
     marginRight: 10,
+    color: isDarkMode ? '#fff' : '#000',
   },
   input: {
     fontSize: 20,
@@ -328,11 +376,6 @@ const createThemedStyles = (isDarkMode) => {
     color: 'white',
     fontSize: 20,
     fontWeight: 'bold',
-  },
-  goalButtonContainer: {
-    position: 'absolute',
-    right: 100,
-		
   },
   popupContainer: {
     position: 'absolute',
@@ -370,11 +413,11 @@ const createThemedStyles = (isDarkMode) => {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: "white",
+    backgroundColor: isDarkMode ? '#000' : '#fff',
   },
   modalContent: {
     width: '80%',
-    backgroundColor: 'white',
+    backgroundColor: isDarkMode ? '#555' : '#fff',
     padding: 20,
     borderRadius: 10,
     alignItems: 'center',
@@ -451,6 +494,24 @@ const createThemedStyles = (isDarkMode) => {
     top: 15,
     marginRight: 40,
   },
+  goalButtonContainer: {
+    flexDirection: 'column',
+    position: 'absolute',
+    right: 100,
+    margin: 15,
+    marginTop: 20,
+		
+  },
+  goalButtonContainer2: {
+    flexDirection: 'column',
+    position: 'absolute',
+    right: 115,
+		
+  },
+  closeButtonText:{
+  color: isDarkMode ? '#fff' : '#000',
+  },
+  
 });
 };
 

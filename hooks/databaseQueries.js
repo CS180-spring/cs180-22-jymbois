@@ -181,4 +181,50 @@ export async function editSet(path, newReps, newWeight) {
 }
 
 //editSet("/DatesExerciseLogs/2023-05-20/KXJjbxWERaggJmj5tcszDGbXxe22/Tricep Extension/set 1/", "25", "60" );
+// Code for retrieving isPushEnabled
+
+export async function retrieveIsPush(){
+  const user = auth.currentUser.uid;
+  try {
+    const obj = await readData("users/" + user + "/isPushEnabled");
+    console.log("This is IsPush: ", obj);
+    return obj;
+
+  } catch(error){
+    console.error("Error: ", error);
+    writeIsPush(false);
+    return false;
+  }
+}
+export function writeIsPush(value) {
+  const user = auth.currentUser.uid;
+  const db = getDatabase();
+  const path = "users/" + user+ "/isPushEnabled"; 
+  return set(ref(db, path), value);
+}
+
+// writing queries for isDark
+
+export async function retrieveIsDark(){
+  const user = auth.currentUser.uid;
+  try{
+    const obj = await readData("users/" + user + "/isDarkEnabled");
+    console.log("This is isDark: " ,obj);
+    return obj;
+  }
+  catch(error){
+    console.log("Error: ", error);
+    writeIsDark(false);
+    return false;
+  }
+}
+
+export function writeIsDark(value){
+  const user = auth.currentUser.uid;
+  const db = getDatabase();
+  const path = "users/" + user + "/isDarkEnabled";
+  return set(ref(db, path), value);
+}
+
+generateUIs1("2023-05-08","KXJjbxWERaggJmj5tcszDGbXxe22");
 

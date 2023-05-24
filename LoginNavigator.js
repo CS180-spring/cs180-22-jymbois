@@ -5,6 +5,8 @@ import { AuthProvider } from './hooks/useAuth';
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { NavigationContainer } from "@react-navigation/native";
 import { auth } from './configuration/firebaseConfig';
+import { ThemeProvider } from './hooks/ThemeContext'; 
+
 
 const Stack = createNativeStackNavigator();
 
@@ -30,7 +32,11 @@ function LoginNavigator() {
     }
     else
     {
-        return(<BottomTabNavigator/>)
+      return (
+        <ThemeProvider>
+            <BottomTabNavigator/>
+        </ThemeProvider>
+    );
     }
 }
 
