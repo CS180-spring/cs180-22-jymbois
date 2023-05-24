@@ -11,8 +11,7 @@ import {
 } from 'react-native';
 import {BarChart,LineChart} from 'react-native-chart-kit'
 import ThemeContext from "../hooks/ThemeContext";
-import WeightInputModal from './WeightInputModal';
-import { Ionicons } from '@expo/vector-icons';
+
 
   //import CircularProgress from 'react-native-circular-progress-indicator';
 
@@ -100,7 +99,7 @@ import { Ionicons } from '@expo/vector-icons';
         >
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
-              <Text style={styles.weightText}>Weight:</Text>
+              <Text style={styles.weightText}> Current Weight:</Text>
               <TextInput
                 style={styles.input}
                 value={weight}
@@ -207,7 +206,7 @@ import { Ionicons } from '@expo/vector-icons';
           </View>
         </Modal>
        <BarChart
-        style={{flex: 1,  marginTop: 50, borderRadius: 10}}
+        style={{flex: 1, alignContent:'center', marginTop: 60, borderRadius: 10}}
          data={barData}
          width={325}
          height={300}
@@ -218,14 +217,14 @@ import { Ionicons } from '@expo/vector-icons';
          showValuesOnTopOfBars={true}
        /> 
         <LineChart
-        style={{ position: 'absolute', bottom: 24.2, right: -5, borderRadius: 10 }}
+        style={{ alignContent:'center', marginLeft:30, marginBottom:25, borderRadius: 10 }}
          data={lineData}
          width={325}
          height={300}
          yAxisLabel={'lbs'}
          chartConfig={lineChartConfig}
          withHorizontalLines={false}
-          fromNumber={400}
+         fromNumber={400}
          fromZero={true}
          bezier 
        /> 
@@ -356,68 +355,57 @@ const createThemedStyles = (isDarkMode) => {
     marginRight: 10,
     color: isDarkMode ? '#fff' : '#000',
   },
-  input: {
+  weightText: {
     fontSize: 20,
+    marginRight: 10,
+    color: isDarkMode ? '#fff' : '#000',
+  },
+  input: {
+    fontSize: 15,
     height: 50,
     width: 150,
     paddingLeft: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: isDarkMode ? "#333" : "#FFFFFF",
     borderRadius: 10,
+    color: isDarkMode ? '#fff' : '#000',
   },
   button: {
-    backgroundColor: '#8BC34A',
-    borderRadius: 25,
+    backgroundColor: isDarkMode ? '#8BC34A': '#1363DF',
+    borderRadius: 10,
     width: '50%',
-    height: 50,
+    height: 30,
     alignItems: 'center',
     justifyContent: 'center',
   },
   buttonText: {
-    color: 'white',
-    fontSize: 20,
+    color: isDarkMode ? '#fff' : '#fff',
+    fontSize: 15,
     fontWeight: 'bold',
   },
-  popupContainer: {
+  closeButtonText: {
+    color: isDarkMode ? '#fff' : '#000',
+    fontSize: 15,
+    fontWeight: 'bold',
+    marginTop: 15,
+  },
+  goalButtonContainer: {
     position: 'absolute',
-    bottom: 90,
-    right: 20,
-    width: 250,
-    backgroundColor: 'white',
-    borderRadius: 10,
-    padding: 20,
-    alignItems: 'center',
+    right: 100,
+		
   },
-  popupInput: {
-    fontSize: 20,
-    height: 50,
-    width: '100%',
-    paddingLeft: 20,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 10,
-    marginBottom: 20,
-  },
-  popupButton: {
-    backgroundColor: 'white',
-    borderRadius: 25,
-    width: '100%',
-    height: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  popupButtonText: {
-    color: 'black',
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
+ placeholderColor: {
+    color: isDarkMode ? '#fff' : '#000',
+ },
+ 
   modalContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: isDarkMode ? '#000' : '#fff',
+    backgroundColor: isDarkMode ? "#000" : "#FFFFFF",
   },
   modalContent: {
     width: '80%',
-    backgroundColor: isDarkMode ? '#555' : '#fff',
+    backgroundColor: isDarkMode ? "#333" : "#FFFFFF",
     padding: 20,
     borderRadius: 10,
     alignItems: 'center',
@@ -428,33 +416,7 @@ const createThemedStyles = (isDarkMode) => {
   shadowRadius: 2,
   elevation: 2
   },
-  progressText: {
-    position: 'absolute',
-    marginRight: 50,
-    fontSize: 30,
-    fontWeight: 'bold',
-    color: 'black',
-  },
-  fullProgress: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    borderRadius: 100,
-    borderWidth: 10,
-    borderColor: '#8BC34A',
-    transform: [{ rotateZ: '-90deg' }],
-  },
-  progressFill: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    borderRadius: 100,
-    borderWidth: 10,
-    borderColor: '#F2F2F2',
-    borderLeftColor: '#B8860B',
-    borderBottomColor: '#B8860B',
-    transform: [{ rotateZ: '-90deg' }],
-  },
+
 	title2Container: {
 		flexDirection: "column",
 		justifyContent: "center",
@@ -507,9 +469,6 @@ const createThemedStyles = (isDarkMode) => {
     position: 'absolute',
     right: 115,
 		
-  },
-  closeButtonText:{
-  color: isDarkMode ? '#fff' : '#000',
   },
   
 });
