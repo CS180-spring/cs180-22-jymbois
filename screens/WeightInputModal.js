@@ -8,6 +8,7 @@ import {
   Modal,
 } from 'react-native';
 
+
 const WeightInputModal = ({ visible, onClose, onWeightSubmit }) => {
   const [weightInput, setWeightInput] = useState('');
 

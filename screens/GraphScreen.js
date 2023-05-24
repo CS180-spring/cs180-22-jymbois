@@ -185,7 +185,7 @@ import { Ionicons } from '@expo/vector-icons';
                 onChangeText={handleGoalWeightChange}
                 keyboardType="numeric"
                 placeholder="Enter your goal weight in pounds"
-                placeholderTextColor={styles.placeholderColor}
+                placeholderTextColor="#BDBDBD"
               />
               <TouchableOpacity
                 style={styles.button}
@@ -225,7 +225,7 @@ import { Ionicons } from '@expo/vector-icons';
          yAxisLabel={'lbs'}
          chartConfig={lineChartConfig}
          withHorizontalLines={false}
-          fromNumber={400}
+         fromNumber={400}
          fromZero={true}
          bezier 
        /> 
@@ -382,7 +382,7 @@ const createThemedStyles = (isDarkMode) => {
     color: isDarkMode ? '#fff' : '#000',
     fontSize: 15,
     fontWeight: 'bold',
-    marginTop: 10,
+    marginTop: 15,
   },
   goalButtonContainer: {
     position: 'absolute',
@@ -465,9 +465,6 @@ const createThemedStyles = (isDarkMode) => {
     position: 'absolute',
     right: 115,
 		
-  },
-  closeButtonText:{
-  color: isDarkMode ? '#fff' : '#000',
   },
   
 });
