@@ -11,8 +11,7 @@ import {
 } from 'react-native';
 import {BarChart,LineChart} from 'react-native-chart-kit'
 import ThemeContext from "../hooks/ThemeContext";
-import WeightInputModal from './WeightInputModal';
-import { Ionicons } from '@expo/vector-icons';
+
 
   //import CircularProgress from 'react-native-circular-progress-indicator';
 
@@ -100,7 +99,7 @@ import { Ionicons } from '@expo/vector-icons';
         >
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
-              <Text style={styles.weightText}>Weight:</Text>
+              <Text style={styles.weightText}> Current Weight:</Text>
               <TextInput
                 style={styles.input}
                 value={weight}
@@ -207,7 +206,7 @@ import { Ionicons } from '@expo/vector-icons';
           </View>
         </Modal>
        <BarChart
-        style={{flex: 1, alignContent:'center', marginTop: 40, borderRadius: 10}}
+        style={{flex: 1, alignContent:'center', marginTop: 60, borderRadius: 10}}
          data={barData}
          width={325}
          height={300}
@@ -352,6 +351,11 @@ const createThemedStyles = (isDarkMode) => {
     marginBottom: 20,
   },
   goalWeightText: {
+    fontSize: 20,
+    marginRight: 10,
+    color: isDarkMode ? '#fff' : '#000',
+  },
+  weightText: {
     fontSize: 20,
     marginRight: 10,
     color: isDarkMode ? '#fff' : '#000',
