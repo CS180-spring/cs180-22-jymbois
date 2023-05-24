@@ -31,6 +31,7 @@
     "expo-dev-client": "~2.2.1",
     "expo-device": "~5.2.1",
     "expo-facebook": "^12.2.0",
+    "expo-image-picker": "^14.1.1",
     "expo-notifications": "~0.18.1",
     "expo-random": "~13.1.1",
     "expo-splash-screen": "~0.18.2",
