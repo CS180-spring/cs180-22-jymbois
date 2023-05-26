@@ -203,6 +203,39 @@ export function writeIsPush(value) {
   return set(ref(db, path), value);
 }
 
+
+// Function to store user's weight
+export function writeUserWeight(uid, weight) {
+  const db = getDatabase();
+  const path = `users/${uid}/weightHistory`;
+  const timestamp = Date.now();
+
+  let weightData = {
+    [timestamp]: weight,
+  }
+
+  return update(ref(db, path), weightData);
+}
+// Function to get the most recent user's weight
+export async function getCurrentWeight(uid) {
+  try {
+    const dbRef = ref(getDatabase());
+    const snapshot = await get(child(dbRef, `users/${uid}/weightHistory`));
+
+    if (snapshot.exists()) {
+      let weightHistory = snapshot.val();
+      let latestTimestamp = Math.max(...Object.keys(weightHistory));
+      return Promise.resolve(weightHistory[latestTimestamp]);
+    } else {
+      console.log("No data available");
+      return Promise.resolve("Undefined");
+    }
+  } catch (error) {
+    console.error(error);
+    return Promise.reject(error);
+  }
+}
+
 // writing queries for isDark
 
 export async function retrieveIsDark(){

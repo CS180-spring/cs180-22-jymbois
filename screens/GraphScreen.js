@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { 
   StyleSheet, 
   View,
@@ -13,10 +13,17 @@ import {BarChart,LineChart} from 'react-native-chart-kit'
 import ThemeContext from "../hooks/ThemeContext";
 import WeightInputModal from './WeightInputModal';
 import { Ionicons } from '@expo/vector-icons';
+import { writeUserWeight } from "../hooks/databaseQueries";
+import { auth } from '../configuration/firebaseConfig';
+import RefreshContext, { RefreshProvider } from '../hooks/RefreshContext';
+
 
   //import CircularProgress from 'react-native-circular-progress-indicator';
 
   const GraphScreen = ({ route }) => {
+    const { refreshKey, setRefreshKey } = useContext(RefreshContext);
+    const user = auth.currentUser;
+    const uid = user ? user.uid : null;
     const [goalWeight, setGoalWeight] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
     const [progress, setProgress] = useState(0);
@@ -25,9 +32,24 @@ import { Ionicons } from '@expo/vector-icons';
     const styles = createThemedStyles(isDarkMode);
     const [weightModalVisible, setWeightModalVisible] = useState(false); // to add weight to modal
     
-  const handleWeightSubmit = (weight) => {
-      setWeight(weight);
+    const handleWeightSubmit = async (weight) => {
+      try {
+        const uid = auth.currentUser.uid;
+        if (uid) {
+          setRefreshKey(refreshKey + 1);
+          await writeUserWeight(uid, weight);
+          console.log("current weight added");
+          setWeight(weight);
+          setWeightModalVisible(false);
+        } else {
+          console.error("User not authenticated.");
+        }
+      } catch (error) {
+        console.error("Failed to store weight:", error);
+      }
     };
+    
+    
 
   const handleGoalWeightChange = (text) => {
     setGoalWeight(text);
@@ -103,7 +125,7 @@ import { Ionicons } from '@expo/vector-icons';
               <Text style={styles.weightText}>Weight:</Text>
               <TextInput
                 style={styles.input}
-                value={weight}
+                value={weight.toString()}
                 onChangeText={setWeight}
                 keyboardType="numeric"
                 placeholder="Enter your current weight in pounds"
@@ -112,12 +134,12 @@ import { Ionicons } from '@expo/vector-icons';
               <TouchableOpacity
                 style={styles.button}
                 onPress={() => {
-                  console.log('Weight button pressed. Weight:', weight);
-                  setWeightModalVisible(false);
-                }}
+                handleWeightSubmit(weight);
+              }}
               >
-                <Text style={styles.buttonText}>Add Weight</Text>
-              </TouchableOpacity>
+            <Text style={styles.buttonText}>Add Weight</Text>
+            </TouchableOpacity>
+
               <TouchableOpacity
                 style={styles.closeButton}
                 onPress={() => setWeightModalVisible(false)}
@@ -164,6 +186,7 @@ import { Ionicons } from '@expo/vector-icons';
         >
           <Text style={styles.goalButton}>Add Goal -{">"} </Text>
         </TouchableOpacity>
+        
         <TouchableOpacity
             style={styles.goalButtonContainer2}
             onPress={() => setWeightModalVisible(true)}

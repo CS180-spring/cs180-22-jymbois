@@ -37,7 +37,7 @@
     "expo-splash-screen": "~0.18.2",
     "expo-status-bar": "~1.4.4",
     "expo-web-browser": "~12.1.1",
-    "firebase": "^9.20.0",
+    "firebase": "^9.22.1",
     "firebase-admin": "^11.7.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
