@@ -226,5 +226,12 @@ export function writeIsDark(value){
   return set(ref(db, path), value);
 }
 
+export function updateWeight(value){
+  const user = auth.currentUser.uid;
+  const db = getDatabase();
+  const path = "users/" + user + "/weight";
+  return set(ref(db,path), value);
+}
+
 generateUIs1("2023-05-08","KXJjbxWERaggJmj5tcszDGbXxe22");
 

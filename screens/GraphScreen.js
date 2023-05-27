@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   StyleSheet, 
   View,
@@ -11,6 +11,9 @@ import {
 } from 'react-native';
 import {BarChart,LineChart} from 'react-native-chart-kit'
 import ThemeContext from "../hooks/ThemeContext";
+import { readData } from "../hooks/databaseQueries";
+import { auth } from '../configuration/firebaseConfig';
+import { updateData } from 'firebase/functions';
 
 
   //import CircularProgress from 'react-native-circular-progress-indicator';
@@ -23,7 +26,33 @@ import ThemeContext from "../hooks/ThemeContext";
     const { isDarkMode } = React.useContext(ThemeContext);
     const styles = createThemedStyles(isDarkMode);
     const [weightModalVisible, setWeightModalVisible] = useState(false); // to add weight to modal
+    const [userId, setUserId] = useState(null);
+    const [currentWeight, setCurrentWeight] = useState('');
     
+    useEffect(() => {
+      const user = auth.currentUser;
+     if (user) {
+       setUserId(user.uid);
+     }
+ }, []);
+
+
+   useEffect(() => {
+     const fetchData = async () => {
+       try {
+         const userData = await readData(`users/${userId}`);
+         setCurrentWeight(userData.weight);
+       } catch (error) {
+         console.error(error);
+       }
+     };
+
+
+     if (userId) {
+       fetchData();
+     }
+   }, [userId]);
+
   const handleWeightSubmit = (weight) => {
       setWeight(weight);
     };
@@ -45,10 +74,10 @@ import ThemeContext from "../hooks/ThemeContext";
   };
 
   const barData = {
-    labels: ['Today', 'Goal', 'June', 'July'],
+    labels: ['Today current weight', 'Goal', 'June', 'July'],
     datasets: [
       {
-        data: [weight, goalWeight, 146, 220],
+        data: [currentWeight, goalWeight, 146, 220],
       },
     ],
   };
@@ -57,7 +86,7 @@ import ThemeContext from "../hooks/ThemeContext";
     labels: ['Today', 'Goal', 'June', 'July'],
     datasets: [
       {
-        data: [weight, goalWeight, 146, 220],
+        data: [currentWeight, goalWeight, 146, 220],
       },
     ],
   };
@@ -103,7 +132,7 @@ import ThemeContext from "../hooks/ThemeContext";
               <TextInput
                 style={styles.input}
                 value={weight}
-                onChangeText={setWeight}
+                onChangeText={setCurrentWeight}
                 keyboardType="numeric"
                 placeholder="Enter your current weight in pounds"
                 placeholderTextColor="#BDBDBD"
@@ -111,7 +140,7 @@ import ThemeContext from "../hooks/ThemeContext";
               <TouchableOpacity
                 style={styles.button}
                 onPress={() => {
-                  console.log('Weight button pressed. Weight:', weight);
+                  console.log('Weight button pressed. Weight:', currentWeight);
                   setWeightModalVisible(false);
                 }}
               >

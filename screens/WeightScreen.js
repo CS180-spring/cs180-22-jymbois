@@ -11,6 +11,7 @@ import {
 import { auth } from "../configuration/firebaseConfig"; //	Firebase Operations
 import database from "../configuration/firebaseConfig";
 import { ref, set } from "firebase/database";
+import { updateWeight } from "../hooks/databaseQueries";
 
 
 const WeightScreen = ({ route }) => {
