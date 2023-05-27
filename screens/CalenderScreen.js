@@ -9,6 +9,7 @@ import  {readData, checkWorkoutLogs, retrieveExercises, deleteER}  from '../hook
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import ThemeContext from '../hooks/ThemeContext';
 //import GenerateExerciseRecords from "./components/GenerateExerciseRecords.js";
 
 const CalenderScreen = () => {
@@ -23,6 +24,9 @@ const CalenderScreen = () => {
   const [hasWorkout, setHasWorkout] = useState(false);
   const [exercises, setExercises] = useState({});
   const [tempSets, setTempSets] = useState({});
+  //dark mode
+  const { isDarkMode, toggleTheme } = React.useContext(ThemeContext);
+  const styles = createThemedStyles(isDarkMode);
 
   const updateTempSets = (setName, field, newValue) => {
     setTempSets(prevTempSets => ({
@@ -243,9 +247,10 @@ const CalenderScreen = () => {
   return (
     
     <ScrollView  style={styles.body}>  
+   
       <Calendar 
-        style={styles.calendar} 
-        onDayPress={ handleDayPress}
+         style={{ ...styles.calendar, backgroundColor:  isDarkMode ? "#000" : "#FFFFFF"}} 
+         onDayPress={handleDayPress}
         minDate={"2023-04-01"}
         maxDate={"2099-12-31"}
         hideExtraDays={true}
@@ -256,14 +261,18 @@ const CalenderScreen = () => {
           }
         }}
         theme={{
-          textSectionTitleColor: 'black', // Changes the color of weekday names (Mon, Tue, etc.)
-          monthTextColor: 'black', // Changes the color of the month name
+          textSectionTitleColor: "grey", // Changes the color of weekday names (Mon, Tue, etc.) Doesn fucking work just staying with grey
+          dayTextColor: "black",
+          monthTextColor:"grey", // Changes the color of the month name dark mode Doesn fucking work just staying with grey
           textMonthFontWeight: 'bold',  // Makes month name bold
           textMonthFontSize: 16, // Makes month name font size larger
           arrowColor: 'gray',
           todayTextColor: '#7ecfd4', // Changes the color of the current day
         }}
+        
+        
       />
+    
       
       <Text style={styles.titleText}>Select a date:</Text>
 
@@ -272,7 +281,7 @@ const CalenderScreen = () => {
 
           onPress={selectViewExerciseRecord}
           style={styles.viewERButton}>
-        <FontAwesome style={styles.viewERButtonLogo}name="search" size={45} color="white"> </FontAwesome>
+        <FontAwesome style={styles.viewERButtonLogo}name="search" size={45} color={isDarkMode ? '#000' : '#fff'}> </FontAwesome>
         <Text style={ styles.calendarButtonTextTop }>View</Text>
         <Text style={ styles.calendarButtonTextBottom }>Exercise Records</Text>
         </TouchableOpacity>
@@ -280,7 +289,7 @@ const CalenderScreen = () => {
         <TouchableOpacity 
           onPress={selectInsertExerciseRecord}
           style={styles.insertERButton}> 
-           <AntDesign style={styles.insertERButtonLogo}name="pluscircleo" size={45} color="white" />
+           <AntDesign style={styles.insertERButtonLogo}name="pluscircleo" size={45} color={isDarkMode ? '#000' : '#fff'} />
           <Text style={ styles.calendarButtonTextTop }>Insert</Text>
           <Text style={ styles.calendarButtonTextBottom }>Exercise Record</Text>
         </TouchableOpacity>
@@ -294,7 +303,7 @@ const CalenderScreen = () => {
       >
         <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style = {{flex: 1}}
+        style = {{flex: 1, backgroundColor: isDarkMode ? "#000" : "#FFFFFF"}}
         >
 
        <ScrollView>
@@ -349,6 +358,7 @@ const CalenderScreen = () => {
          visible={showExerciseRecord} animationType="fade"
          style ={styles.exerciseLogModal} 
       >
+        <View style={{flex: 1,  backgroundColor:  isDarkMode ? '#000' : '#fff'}}> 
        <ScrollView>
        <View style={styles.returnButtonContainer}>
         <TouchableOpacity 
@@ -357,6 +367,7 @@ const CalenderScreen = () => {
           <FontAwesome name="calendar" size={35} color="white"> </FontAwesome>
         </TouchableOpacity>
        </View>
+       
        {
         recordDate && (<Text style={ styles.viewERTextTitle}>{recordDate}</Text>)
        }
@@ -409,6 +420,7 @@ const CalenderScreen = () => {
   )) : null}
 </View>
        </ScrollView>
+       </View>
       </Modal>
 
 
@@ -416,33 +428,18 @@ const CalenderScreen = () => {
 
   );
 }
-const styles = StyleSheet.create({
+const createThemedStyles = (isDarkMode) => StyleSheet.create({
   body: {
-    backgroundColor: 'white',
+    backgroundColor:  isDarkMode ? '#000' : '#fff',
   },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: isDarkMode ? '#fff' : '#000',
     alignItems: 'center',
     justifyContent: 'flex-start',
     margin: 20,
   },
-  button1: {
-    backgroundColor: 'tan', 
-    borderRadius: 10, 
-    margin: 40,
-    padding: 10,
-    width: 1000,
-    alignItems: 'center'
-  },
-  button2: {
-    backgroundColor: 'tan', 
-    borderRadius: 10, 
-    margin: 40,
-    padding: 10,
-    width: 100,
-    alignItems: 'center'
-  },
+ 
   returnButtonViewERmodal: {
     backgroundColor: '#6E7E85', 
     borderRadius: 10, 
@@ -476,19 +473,19 @@ const styles = StyleSheet.create({
     
   },
   buttonText: {
-    color: 'white', 
+    color: isDarkMode ? "#FFF" : "#000", 
     fontSize: 22,
   },
   
   calendarButtonTextBottom: {
-    color: 'white', 
+    color: isDarkMode ? "#000" : "#FFF", 
     fontSize: 18,
     marginTop: 5,
     marginRight: 130,
     paddingBottom: 6
   },
   calendarButtonTextTop: {
-    color: 'white', 
+    color: isDarkMode ? "#000" : "#FFF", 
     fontSize: 22,
     fontWeight: 700,
     marginRight: 200,
@@ -525,7 +522,7 @@ const styles = StyleSheet.create({
     fontWeight: 700,
     fontSize: 25,
     marginLeft: 25, // There were two marginLeft properties, I left the larger one
-    color: 'black',
+    color: isDarkMode ? '#fff' : '#000',
     marginTop: 30,
     marginBottom: 10,
   
@@ -536,7 +533,7 @@ const styles = StyleSheet.create({
   },
   exerciseLogModal: {
   flex: 1,
-   backgroundColor: 'black',
+  backgroundColor: isDarkMode ? "#000" : "#FFFFFF",
    alignItems: 'center',
    justifyContent: 'center',
   },
@@ -544,10 +541,10 @@ const styles = StyleSheet.create({
     height: 50,
     margin: 12,
     padding: 10,
-    borderColor: "black",
+    borderColor: isDarkMode ? "#FFF" : "#000",
     borderRadius: 10,
     borderWidth: 1,
-    
+    color: isDarkMode ? "#FFF" : "#000",
   },
   
   numberInput: {
@@ -561,11 +558,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     alignItems: "center",
     marginTop: 10,
+    backgroundColor: isDarkMode ? "#000" : "#FFF",
   },
   numberInputWeight: {
     height: 50,
     width: 70,
-    borderColor: '"#6E7E85"',
+    borderColor: "#6E7E85",
     paddingLeft: 10,
     borderRadius: 10,
     alignSelf: 'center',
@@ -584,7 +582,7 @@ const styles = StyleSheet.create({
   numberInputReps: {
     height: 50,
     width: 50,
-    borderColor: '"#6E7E85"',
+    borderColor: "#6E7E85",
     paddingLeft: 10,
     borderRadius: 10,
     alignSelf: 'center',
