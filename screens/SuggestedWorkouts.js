@@ -9,6 +9,7 @@ import {
 	FlatList,
 	TextInput,
 	Image,
+	Dimensions,
 } from "react-native";
 import axios from "axios";
 import { fetchExercises } from "../Util/exerciseAPI";
@@ -16,7 +17,7 @@ import { SearchBar } from "react-native-elements";
 const SuggestedWorkouts = ({ visible, onClose }) => {
 	const [workouts, setWorkouts] = useState([]);
 	const [search, setSearch] = useState("");
-
+	const screenWidth = Dimensions.get("window").width;
 	useEffect(() => {
 		if (visible) {
 			fetchExercises().then((data) => {
@@ -31,7 +32,7 @@ const SuggestedWorkouts = ({ visible, onClose }) => {
 		<Modal animationType="slide" transparent={true} visible={visible}>
 			<View style={styles.centeredView}>
 				<View style={styles.modalView}>
-					<Text style={styles.title}>Suggested Workouts</Text>
+					<Text style={styles.title}>Workouts</Text>
 					{/* <TextInput
 						style={styles.searchInput}
 						onChangeText={(text) => setSearch(text)}
@@ -86,7 +87,6 @@ const styles = StyleSheet.create({
 		backgroundColor: "white",
 		borderRadius: 20,
 		padding: 35,
-		alignItems: "center",
 		shadowColor: "#000",
 		shadowOffset: {
 			width: 0,
@@ -95,13 +95,15 @@ const styles = StyleSheet.create({
 		shadowOpacity: 0.25,
 		shadowRadius: 3.84,
 		elevation: 5,
-		width: 400,
-		height: 820,
+		width: 370,
+		height: 780,
 	},
+
 	title: {
 		fontSize: 24,
 		fontWeight: "bold",
 		marginBottom: 20,
+		alignSelf: "left",
 	},
 	searchInput: {
 		width: "100%",
@@ -115,15 +117,10 @@ const styles = StyleSheet.create({
 
 	workoutPosts: {
 		marginTop: 10,
-
-		left: -1,
-
-		flex: 1,
 		flexDirection: "row",
-
 		padding: 16,
 		borderRadius: 10,
-		width: 370,
+		width: 280, // Adjusted from fixed width to percentage of the screen width
 		backgroundColor: "#FFFFFF",
 		shadowColor: "#000",
 		shadowOffset: {
@@ -133,27 +130,33 @@ const styles = StyleSheet.create({
 		shadowOpacity: 0.11,
 		shadowRadius: 5,
 		elevation: 5,
-		minHeight: 110,
+		minHeight: 80,
+		alignSelf: "stretch", // This will make the item take up as much space as it can in the container
+		marginBottom: 15,
+		paddingVertical: 16,
+		paddingHorizontal: 8, // adjust this as necessary
 		alignSelf: "center",
-		marginBottom: 30, // Add margin bottom
 	},
+
 	workoutLeftContent: {
+		// flexDirection: "column",
+		// // flex: 1,
+		// left: 15,
+		// // position: "absolute",
 		flexDirection: "column",
 		flex: 1,
-		left: 15,
-		position: "absolute",
 	},
 
 	workoutSubtitle: {
 		fontSize: 15,
 		fontWeight: "bold",
-		top: 15,
+		top: 2,
 	},
 	workoutSubtitle2: {
 		fontSize: 13,
 		fontWeight: "bold",
 		color: "grey",
-		marginTop: 25,
+		marginTop: 18,
 	},
 	workoutSubtitle3: {
 		fontSize: 13,
@@ -162,17 +165,20 @@ const styles = StyleSheet.create({
 		marginTop: 15,
 	},
 	workoutRightContent: {
+		// // flex: 1,
+		// // position: "absolute",
+		// right: 10,
 		flex: 1,
-		position: "absolute",
-		right: 10,
+		justifyContent: "flex-end",
+		alignItems: "flex-end",
 	},
 	image3: {
 		width: 110,
 		height: 65,
-		marginRight: 58,
+		marginRight: 10,
 		position: "absolute",
 		right: 0,
-		top: 35,
+		top: 18,
 
 		borderRadius: 7,
 		// borderWidth: 0.5,
@@ -190,6 +196,7 @@ const styles = StyleSheet.create({
 	},
 	searchBarInput: {
 		color: "black",
+		borderColor: "gray",
 	},
 });
 

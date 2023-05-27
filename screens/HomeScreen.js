@@ -502,11 +502,22 @@ const HomeScreen = () => {
 				/>
 			</View>
 
-			<TouchableOpacity
+			{/* <TouchableOpacity
 				style={styles.button}
 				onPress={() => setModalVisible(true)}
 			>
 				<Text style={styles.buttonText}>Show Workouts</Text>
+			</TouchableOpacity> */}
+
+			<TouchableOpacity
+				style={[styles.bottomContent2, { height: itemHeight }]}
+				onPress={() => setModalVisible(true)}
+			>
+				<Image source={require("./images/search.png")} style={styles.image2} />
+				<View style={[styles.bottomMiddle]}>
+					<Text style={styles.subtitle4}>Search Workouts</Text>
+					<Text style={styles.heading2}>Click Here!</Text>
+				</View>
 			</TouchableOpacity>
 
 			<SuggestedWorkouts
@@ -554,7 +565,26 @@ const createThemedStyles = (isDarkMode) =>
 			maxHeight: 80,
 			alignSelf: "center",
 			position: "relative",
-			marginBottom: 22,
+			marginBottom: 15,
+		},
+
+		bottomContent2: {
+			width: 350, // add maxWidth property
+			padding: 16,
+			borderRadius: 10,
+			backgroundColor: isDarkMode ? "#333" : "#FFFFFF",
+			shadowColor: "#000",
+			shadowOffset: {
+				width: 2,
+				height: 2,
+			},
+			shadowOpacity: 0.11,
+			shadowRadius: 5,
+			elevation: 5,
+			maxHeight: 80,
+			alignSelf: "center",
+			position: "relative",
+			marginBottom: 8,
 		},
 		bottomMiddle: {
 			flexDirection: "column",
@@ -615,7 +645,7 @@ const createThemedStyles = (isDarkMode) =>
 			height: 58,
 
 			position: "absolute",
-			left: 0,
+			left: 10,
 			top: 15,
 		},
 
@@ -755,7 +785,7 @@ const createThemedStyles = (isDarkMode) =>
 			marginTop: 9,
 		},
 		flatListContainer: {
-			marginTop: 330,
+			marginTop: 300,
 			position: "absolute",
 			width: "100%",
 			alignSelf: "center",
@@ -779,7 +809,7 @@ const createThemedStyles = (isDarkMode) =>
 			width: "58%",
 			paddingLeft: 140,
 			justifyContent: "space-evenly",
-			maxHeight: 140,
+			maxHeight: 120,
 			borderRadius: 13,
 		},
 
