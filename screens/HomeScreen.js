@@ -11,7 +11,7 @@ import {
 	Modal,
 	Picker,
 } from "react-native";
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from "react";
 import { readData } from "../hooks/databaseQueries";
 import { auth } from "../configuration/firebaseConfig";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -21,16 +21,13 @@ import { ref, set } from "firebase/database";
 import database from "../configuration/firebaseConfig";
 import SuggestedWorkouts from "./SuggestedWorkouts";
 
-import RefreshContext, { RefreshProvider } from '../hooks/RefreshContext';
-
+import RefreshContext, { RefreshProvider } from "../hooks/RefreshContext";
 
 const HomeScreen = () => {
 	const { refreshKey } = useContext(RefreshContext);
 	const [userId, setUserId] = useState(null);
-	const [startingWeight, setStartingWeight] = useState('');
- 	const [currentWeight, setCurrentWeight] = useState('');
-	
-
+	const [startingWeight, setStartingWeight] = useState("");
+	const [currentWeight, setCurrentWeight] = useState("");
 
 	useEffect(() => {
 		const user = auth.currentUser;
@@ -40,50 +37,40 @@ const HomeScreen = () => {
 	}, []);
 
 	useEffect(() => {
+		// for the beginning weight input by the user
 		const fetchData = async () => {
 			try {
 				const userData = await readData(`users/${userId}`);
-				setCurrentWeight(userData.weight);
+				setStartingWeight(userData.weight);
 			} catch (error) {
 				console.error(error);
 			}
 		};
 
-
-  	useEffect(() => { // for the beginning weight input by the user 
-    	const fetchData = async () => {
-      	try {
-        	const userData = await readData(`users/${userId}`);
-        	setStartingWeight(userData.weight);
-      	} catch (error) {
-        	console.error(error);
-      	}
-    	};
-
-
-    	if (userId) {
-      	fetchData();
-    	}
-  	}, [userId]);
-
-	  useEffect(() => {
-		const fetchData = async () => {
-		  try {
-			const userData = await readData(`users/${userId}`);
-			if (userData.weightHistory) {
-			  const latestTimestamp = Object.keys(userData.weightHistory).sort().pop(); // we are sorting and poopping to just keep the latest one bcuz its an array
-			  setCurrentWeight(userData.weightHistory[latestTimestamp]);
-			}
-		  } catch (error) {
-			console.error(error);
-		  }
-		};
-	  
 		if (userId) {
-		  fetchData();
+			fetchData();
 		}
-	  }, [userId, refreshKey]);
+	}, [userId]);
 
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				const userData = await readData(`users/${userId}`);
+				if (userData.weightHistory) {
+					const latestTimestamp = Object.keys(userData.weightHistory)
+						.sort()
+						.pop(); // we are sorting and poopping to just keep the latest one bcuz its an array
+					setCurrentWeight(userData.weightHistory[latestTimestamp]);
+				}
+			} catch (error) {
+				console.error(error);
+			}
+		};
+
+		if (userId) {
+			fetchData();
+		}
+	}, [userId, refreshKey]);
 
 	const { isDarkMode, toggleTheme } = React.useContext(ThemeContext);
 	const styles = createThemedStyles(isDarkMode);
@@ -539,13 +526,6 @@ const HomeScreen = () => {
 					}}
 				/>
 			</View>
-
-			{/* <TouchableOpacity
-				style={styles.button}
-				onPress={() => setModalVisible(true)}
-			>
-				<Text style={styles.buttonText}>Show Workouts</Text>
-			</TouchableOpacity> */}
 
 			<TouchableOpacity
 				style={[styles.bottomContent2, { height: itemHeight }]}
