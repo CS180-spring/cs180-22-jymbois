@@ -204,37 +204,38 @@ export function writeIsPush(value) {
 }
 
 
-// Function to store user's weight
-export function writeUserWeight(uid, weight) {
+export function writeUserImageUri(uid, uri) {
   const db = getDatabase();
-  const path = `users/${uid}/weightHistory`;
-  const timestamp = Date.now();
-
-  let weightData = {
-    [timestamp]: weight,
+  let testData = {
+    imageUri: uri,
   }
-
-  return update(ref(db, path), weightData);
+  update(ref(db, `users/${uid}`), testData);
 }
-// Function to get the most recent user's weight
-export async function getCurrentWeight(uid) {
+
+export async function readUserImageUri(uid) {
   try {
     const dbRef = ref(getDatabase());
-    const snapshot = await get(child(dbRef, `users/${uid}/weightHistory`));
+    const snapshot = await get(child(dbRef, `users/${uid}`));
 
     if (snapshot.exists()) {
-      let weightHistory = snapshot.val();
-      let latestTimestamp = Math.max(...Object.keys(weightHistory));
-      return Promise.resolve(weightHistory[latestTimestamp]);
+      let object = snapshot.val();
+      if ('imageUri' in object) {
+        return Promise.resolve(object.imageUri);
+      } else {
+        console.log("No imageUri available for user");
+        return Promise.resolve("");
+      }
     } else {
-      console.log("No data available");
-      return Promise.resolve("Undefined");
+      console.log("No data available for user");
+      return Promise.resolve("");
     }
   } catch (error) {
     console.error(error);
     return Promise.reject(error);
   }
 }
+
+
 
 // writing queries for isDark
 
