@@ -8,13 +8,9 @@ import {
 	ScrollView,
 	Modal,
 	Button,
-	Linking,
-	Platform,
-	Alert,
   } from 'react-native';
-  import AsyncStorage from '@react-native-async-storage/async-storage';
   import React, { useState, useEffect } from 'react';
-  import { readData } from "../hooks/databaseQueries";
+  import { readData,writeUserImageUri,readUserImageUri } from "../hooks/databaseQueries";
   import { FontAwesome } from '@expo/vector-icons';
   import { useVacation } from '../hooks/useSwitch';
   import ThemeContext from '../hooks/ThemeContext';
@@ -104,47 +100,45 @@ import {
 			fetchData();
 		  }
 		}, [userId]);
+
+		useEffect(() => {
+			const fetchImageUri = async () => {
+			  try {
+				const uri = await readUserImageUri(auth.currentUser.uid);
+				setImage(uri);
+			  } catch (error) {
+				console.error(error);
+			  }
+			};
+			fetchImageUri();
+		  }, []);
+		  
   
   
 	  //for uploading images, image holding the uri  
 		const [image, setImage] = useState(null);
-		const openAppSettings = () => {
-			if (Platform.OS === 'ios') {
-			  Linking.openURL('app-settings:');
-			} else {
-			  Linking.openSettings();
+		const pickImage = async () => {
+		  if (Constants.platform.ios) {
+			const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+			if (status !== 'granted') {
+			  alert('Sorry, we need camera roll permissions to make this work!');
+			  return;
 			}
-		  };
-		  
-		  const pickImage = async () => {
-			if (Constants.platform.ios) {
-			  const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-			  if (status !== 'granted') {
-				Alert.alert(
-				  'Camera Roll Permission',
-				  'Sorry, we need camera roll permissions to make this work!',
-				  [
-					{ text: 'Cancel', style: 'cancel' },
-					{ text: 'Open Settings', onPress: openAppSettings },
-				  ]
-				);
-				return;
-			  }
-			}
-		  
-			let result = await ImagePicker.launchImageLibraryAsync({
-			  mediaTypes: ImagePicker.MediaTypeOptions.All,
-			  allowsEditing: true,
-			  aspect: [4, 3],
-			  quality: 1,
-			});
-		  
-			if (!result.cancelled) {
-			  const uri = result.assets[0].uri;  // replace 'uri' with 'assets[0].uri'
-			  setImage(result.uri);
-			  console.log("this is image".result.uri);
-			}
-		  };
+		  }
+		
+		  let result = await ImagePicker.launchImageLibraryAsync({
+			mediaTypes: ImagePicker.MediaTypeOptions.All,
+			allowsEditing: true,
+			aspect: [4, 3],
+			quality: 1,
+		  });
+		
+		  if (!result.canceled) {
+			const uri = result.assets[0].uri;
+			setImage(uri);
+			writeUserImageUri(auth.currentUser.uid, uri);
+		  }
+		};
 		
   
 	

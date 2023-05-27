@@ -1,16 +1,20 @@
-import React, { useState } from "react";
-import {
-	StyleSheet,
-	View,
-	Text,
-	TouchableOpacity,
-	TextInput,
-	Keyboard,
-	TouchableWithoutFeedback,
-	Modal,
-} from "react-native";
-import { BarChart, LineChart } from "react-native-chart-kit";
+import React, { useState, useContext } from 'react';
+import { 
+  StyleSheet, 
+  View,
+  Text, 
+  TouchableOpacity, 
+  TextInput,
+  Keyboard,
+  TouchableWithoutFeedback,
+  Modal,
+} from 'react-native';
+import {BarChart,LineChart} from 'react-native-chart-kit';
 import ThemeContext from "../hooks/ThemeContext";
+import { Ionicons } from '@expo/vector-icons';
+import { writeUserWeight } from "../hooks/databaseQueries";
+import { auth } from '../configuration/firebaseConfig';
+import RefreshContext, { RefreshProvider } from '../hooks/RefreshContext';
 
 //import CircularProgress from 'react-native-circular-progress-indicator';
 
@@ -23,9 +27,36 @@ const GraphScreen = ({ route }) => {
 	const styles = createThemedStyles(isDarkMode);
 	const [weightModalVisible, setWeightModalVisible] = useState(false); // to add weight to modal
 
-	const handleWeightSubmit = (weight) => {
-		setWeight(weight);
-	};
+  const GraphScreen = ({ route }) => {
+    const { refreshKey, setRefreshKey } = useContext(RefreshContext);
+    const user = auth.currentUser;
+    const uid = user ? user.uid : null;
+    const [goalWeight, setGoalWeight] = useState('');
+    const [modalVisible, setModalVisible] = useState(false);
+    const [progress, setProgress] = useState(0);
+    const [weight, setWeight] = useState(0); // Initialize weight to zero
+    const { isDarkMode } = React.useContext(ThemeContext);
+    const styles = createThemedStyles(isDarkMode);
+    const [weightModalVisible, setWeightModalVisible] = useState(false); // to add weight to modal
+    
+    const handleWeightSubmit = async (weight) => {
+      try {
+        const uid = auth.currentUser.uid;
+        if (uid) {
+          setRefreshKey(refreshKey + 1);
+          await writeUserWeight(uid, weight);
+          console.log("current weight added");
+          setWeight(weight);
+          setWeightModalVisible(false);
+        } else {
+          console.error("User not authenticated.");
+        }
+      } catch (error) {
+        console.error("Failed to store weight:", error);
+      }
+    };
+    
+    
 
 	const handleGoalWeightChange = (text) => {
 		setGoalWeight(text);
@@ -97,84 +128,86 @@ const GraphScreen = ({ route }) => {
 						<Text style={styles.subtitle2}>See How You Improve</Text>
 					</View>
 				</View>
-				<Modal
-					animationType="slide"
-					transparent={true}
-					visible={weightModalVisible}
-				>
-					<View style={styles.modalContainer}>
-						<View style={styles.modalContent}>
-							<Text style={styles.weightText}> Current Weight:</Text>
-							<TextInput
-								style={styles.input}
-								value={weight}
-								onChangeText={setWeight}
-								keyboardType="numeric"
-								placeholder="Enter your current weight in pounds"
-								placeholderTextColor="#BDBDBD"
-							/>
-							<TouchableOpacity
-								style={styles.button}
-								onPress={() => {
-									console.log("Weight button pressed. Weight:", weight);
-									setWeightModalVisible(false);
-								}}
-							>
-								<Text style={styles.buttonText}>Add Weight</Text>
-							</TouchableOpacity>
-							<TouchableOpacity
-								style={styles.closeButton}
-								onPress={() => setWeightModalVisible(false)}
-							>
-								<Text style={styles.closeButtonText}>Close</Text>
-							</TouchableOpacity>
-						</View>
-					</View>
-				</Modal>
 
-				<View style={[styles.contentContainer]}>
-					<View style={styles.activityContent}>
-						<Text style={styles.title2}>Weekly Activities</Text>
-						<Text style={styles.activityText}>
-							You have done <Text style={{ fontWeight: "bold" }}>5</Text>{" "}
-							activities this week. Keep it up.
-						</Text>
-						<View style={styles.bottomLeftContainer}>
-							<View style={styles.activityRow}>
-								<Text style={styles.bottomLeftText}>Push</Text>
-								<Text style={styles.bottomLeftNumber}>3</Text>
-							</View>
-							<View style={styles.activityRow}>
-								<Text style={styles.bottomLeftText}>Pull</Text>
-								<Text style={styles.bottomLeftNumber}>7</Text>
-							</View>
-							<View style={styles.activityRow}>
-								<Text style={styles.bottomLeftText}>Legs</Text>
-								<Text style={styles.bottomLeftNumber}>11</Text>
-							</View>
-						</View>
-						<View style={styles.bottomRightContainer}>
-							<View style={styles.activityRow}>
-								<Text style={styles.bottomRightText}>Total Time:</Text>
-								<Text style={styles.bottomRightNumber}>2h 30m</Text>
-							</View>
-						</View>
-					</View>
-					<View style={styles.barGraphContainer}>
-						<Text style={styles.title2}>Goal Progression</Text>
+			</View>
+      <Modal
+          animationType="slide"
+          transparent={true}
+          visible={weightModalVisible}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <Text style={styles.weightText}> Current Weight:</Text>
+              <TextInput
+                style={styles.input}
+                value={weight.toString()}
+                onChangeText={setWeight}
+                keyboardType="numeric"
+                placeholder="Enter your current weight in pounds"
+                placeholderTextColor="#BDBDBD"
+              />
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => {
+                handleWeightSubmit(weight);
+              }}
+              >
+            <Text style={styles.buttonText}>Add Weight</Text>
+            </TouchableOpacity>
 
-						<TouchableOpacity
-							style={styles.goalButtonContainer}
-							onPress={() => setModalVisible(true)}
-						>
-							<Text style={styles.goalButton}>Add Goal -{">"} </Text>
-						</TouchableOpacity>
-						<TouchableOpacity
-							style={styles.goalButtonContainer2}
-							onPress={() => setWeightModalVisible(true)}
-						>
-							<Text style={styles.goalButton}>Add Weight -{">"} </Text>
-						</TouchableOpacity>
+              <TouchableOpacity
+                style={styles.closeButton}
+                onPress={() => setWeightModalVisible(false)}
+              >
+                <Text style={styles.closeButtonText}>Close</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+      
+      <View style={[styles.contentContainer]}>
+      <View style={styles.activityContent}>
+      <Text style={styles.title2}>Weekly Activities</Text>
+      <   Text style={styles.activityText}>
+             You have done <Text style={{fontWeight: 'bold'}}>5</Text> activities this week. Keep it up.
+             </Text>
+      <View style={styles.bottomLeftContainer}>
+        <View style={styles.activityRow}>
+          <Text style={styles.bottomLeftText}>Push</Text>
+          <Text style={styles.bottomLeftNumber}>3</Text>
+        </View>
+        <View style={styles.activityRow}>
+          <Text style={styles.bottomLeftText}>Pull</Text>
+          <Text style={styles.bottomLeftNumber}>7</Text>
+        </View>
+        <View style={styles.activityRow}>
+          <Text style={styles.bottomLeftText}>Legs</Text>
+          <Text style={styles.bottomLeftNumber}>11</Text>
+        </View>
+      </View>
+      <View style={styles.bottomRightContainer}>
+      <View style={styles.activityRow}>
+        <Text style={styles.bottomRightText}>Total Time:</Text>
+        <Text style={styles.bottomRightNumber}>2h 30m</Text>
+      </View>
+      </View>
+			</View>
+      <View style={styles.barGraphContainer}>  
+       <Text style={styles.title2}>Goal Progression</Text>
+       
+       <TouchableOpacity
+       style={styles.goalButtonContainer}
+          onPress={() => setModalVisible(true)}
+        >
+          <Text style={styles.goalButton}>Add Goal -{">"} </Text>
+        </TouchableOpacity>
+        
+        <TouchableOpacity
+            style={styles.goalButtonContainer2}
+            onPress={() => setWeightModalVisible(true)}
+          >
+            <Text style={styles.goalButton}>Add Weight -{">"} </Text>
+        </TouchableOpacity>
 
 						<Modal
 							animationType="slide"
