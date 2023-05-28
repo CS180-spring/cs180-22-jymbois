@@ -2832,6 +2832,7 @@
   resolved "https://registry.npmjs.org/@types/range-parser/-/range-parser-1.2.4.tgz"
   integrity sha512-EEhsLsD6UsDM1yFhAvy0Cjr6VwmpMWqFBCb9w07wVugF7w9nfajxLuVmngTIpgS6svCnm6Vaw+MZhoDCKnOfsw==
 
+<<<<<<< HEAD
 "@types/react-native-vector-icons@^6.4.6":
   version "6.4.13"
   resolved "https://registry.npmjs.org/@types/react-native-vector-icons/-/react-native-vector-icons-6.4.13.tgz"
@@ -2840,6 +2841,8 @@
     "@types/react" "*"
     "@types/react-native" "^0.70"
 
+=======
+>>>>>>> main
 "@types/react-native@*":
   version "0.71.6"
   resolved "https://registry.npmjs.org/@types/react-native/-/react-native-0.71.6.tgz"
@@ -2847,6 +2850,7 @@
   dependencies:
     "@types/react" "*"
 
+<<<<<<< HEAD
 "@types/react-native@^0.70":
   version "0.70.14"
   resolved "https://registry.npmjs.org/@types/react-native/-/react-native-0.70.14.tgz"
@@ -2854,6 +2858,8 @@
   dependencies:
     "@types/react" "*"
 
+=======
+>>>>>>> main
 "@types/react@*":
   version "18.2.0"
   resolved "https://registry.npmjs.org/@types/react/-/react-18.2.0.tgz"
@@ -9293,6 +9299,7 @@ react-native-countdown-component@^2.7.1:
     prop-types "^15.5.8"
     sprintf-js "^1.1.1"
 
+<<<<<<< HEAD
 react-native-elements@^3.4.3:
   version "3.4.3"
   resolved "https://registry.npmjs.org/react-native-elements/-/react-native-elements-3.4.3.tgz"
@@ -9307,6 +9314,8 @@ react-native-elements@^3.4.3:
     react-native-ratings "8.0.4"
     react-native-size-matters "^0.3.1"
 
+=======
+>>>>>>> main
 react-native-gesture-handler@*, "react-native-gesture-handler@>= 1.0.0", react-native-gesture-handler@~2.9.0:
   version "2.9.0"
   resolved "https://registry.npmjs.org/react-native-gesture-handler/-/react-native-gesture-handler-2.9.0.tgz"
@@ -9343,6 +9352,7 @@ react-native-picker-select@^8.0.4:
     "@react-native-picker/picker" "^1.8.3"
     lodash.isequal "^4.5.0"
 
+<<<<<<< HEAD
 react-native-ratings@8.0.4:
   version "8.0.4"
   resolved "https://registry.npmjs.org/react-native-ratings/-/react-native-ratings-8.0.4.tgz"
@@ -9350,6 +9360,8 @@ react-native-ratings@8.0.4:
   dependencies:
     lodash "^4.17.15"
 
+=======
+>>>>>>> main
 react-native-reanimated@>=2.0.0, react-native-reanimated@>=2.2.0, react-native-reanimated@~2.14.4:
   version "2.14.4"
   resolved "https://registry.npmjs.org/react-native-reanimated/-/react-native-reanimated-2.14.4.tgz"
