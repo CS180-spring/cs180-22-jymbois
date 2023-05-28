@@ -20,7 +20,6 @@ import { ThemeProvider, useNavigation } from "@react-navigation/native";
 import { ref, set } from "firebase/database";
 import database from "../configuration/firebaseConfig";
 import SuggestedWorkouts from "./SuggestedWorkouts";
-
 import RefreshContext, { RefreshProvider } from "../hooks/RefreshContext";
 
 const HomeScreen = () => {
@@ -526,11 +525,11 @@ const HomeScreen = () => {
 					}}
 				/>
 			</View>
-
 			<TouchableOpacity
 				style={[styles.bottomContent2, { height: itemHeight }]}
 				onPress={() => setModalVisible(true)}
 			>
+				
 				<Image source={require("./images/search.png")} style={styles.image2} />
 				<View style={[styles.bottomMiddle]}>
 					<Text style={styles.subtitle4}>Search Workouts</Text>
@@ -553,6 +552,8 @@ const HomeScreen = () => {
 				</View>
 			</TouchableOpacity>
 		</View>
+		
+		
 	);
 };
 

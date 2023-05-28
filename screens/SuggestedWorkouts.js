@@ -10,6 +10,8 @@ import {
 	TextInput,
 	Image,
 	Dimensions,
+	TouchableWithoutFeedback,
+	Keyboard,
 } from "react-native";
 import axios from "axios";
 import { fetchExercises } from "../Util/exerciseAPI";
@@ -30,6 +32,7 @@ const SuggestedWorkouts = ({ visible, onClose }) => {
 	);
 	return (
 		<Modal animationType="slide" transparent={true} visible={visible}>
+			<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 			<View style={styles.centeredView}>
 				<View style={styles.modalView}>
 					<Text style={styles.title}>Workouts</Text>
@@ -71,7 +74,9 @@ const SuggestedWorkouts = ({ visible, onClose }) => {
 					<Button title="Close" onPress={onClose} />
 				</View>
 			</View>
+			</TouchableWithoutFeedback>
 		</Modal>
+		
 	);
 };
 
