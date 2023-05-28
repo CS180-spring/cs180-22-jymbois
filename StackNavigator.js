@@ -9,6 +9,7 @@ import WeightScreen from "./screens/WeightScreen";
 //import GraphScreen from "./screens/GraphScreen";
 import PageDots from "./screens/PageDots";
 import BottomTabNavigator from "./BottomTabNavigator";
+import SuggestedWorkouts from "./screens/SuggestedWorkouts";
 
 const Stack = createNativeStackNavigator();
 
@@ -20,50 +21,52 @@ const StackNavigator = () => {
 				headerStyle: { backgroundColor: "white" },
 			}}
 		>
-				<>
-					<Stack.Screen
-						name="Login"
-						component={LoginScreen}
-						options={{
-							headerTintColor: "grey",
-						}}
-					/>
-					<Stack.Screen
-						name="Register"
-						component={RegisterScreen}
-						options={{
-							headerTintColor: "grey",
-						}}
-					/>
-					<Stack.Screen
-						name="Gender"
-						component={GenderScreen}
-						options={{
-							headerTintColor: "#grey",
-						}}
-					/>
-					<Stack.Screen
-						name="Age"
-						component={AgeScreen}
-						options={{
-							headerTintColor: "grey",
-						}}
-					/>
-					<Stack.Screen
-						name="Height"
-						component={HeightScreen}
-						options={{
-							headerTintColor: "grey",
-						}}
-					/>
-					<Stack.Screen
-						name="Weight"
-						component={WeightScreen}
-						options={{
-							headerTintColor: "grey",
-						}}
-					/>
-				</>
+			<>
+				<Stack.Screen
+					name="Login"
+					component={LoginScreen}
+					options={{
+						headerTintColor: "grey",
+					}}
+				/>
+				<Stack.Screen
+					name="Register"
+					component={RegisterScreen}
+					options={{
+						headerTintColor: "grey",
+					}}
+				/>
+				<Stack.Screen
+					name="Gender"
+					component={GenderScreen}
+					options={{
+						headerTintColor: "#grey",
+					}}
+				/>
+				<Stack.Screen
+					name="Age"
+					component={AgeScreen}
+					options={{
+						headerTintColor: "grey",
+					}}
+				/>
+				<Stack.Screen
+					name="Height"
+					component={HeightScreen}
+					options={{
+						headerTintColor: "grey",
+					}}
+				/>
+				<Stack.Screen
+					name="Weight"
+					component={WeightScreen}
+					options={{
+						headerTintColor: "grey",
+					}}
+				/>
+
+				<Stack.Screen name="SuggestedWorkouts" component={SuggestedWorkouts} />
+			</>
 		</Stack.Navigator>
 	);
 };
