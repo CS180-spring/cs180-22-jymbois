@@ -11,48 +11,70 @@ import {
 	Modal,
 	Picker,
 } from "react-native";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from "react";
 import { readData } from "../hooks/databaseQueries";
-import { auth } from '../configuration/firebaseConfig';
+import { auth } from "../configuration/firebaseConfig";
 import { MaterialIcons } from "@expo/vector-icons";
 import ThemeContext from "../hooks/ThemeContext";
 import { ThemeProvider, useNavigation } from "@react-navigation/native";
 import { ref, set } from "firebase/database";
 import database from "../configuration/firebaseConfig";
+import SuggestedWorkouts from "./SuggestedWorkouts";
+import RefreshContext, { RefreshProvider } from "../hooks/RefreshContext";
 
 const HomeScreen = () => {
-
+	const { refreshKey } = useContext(RefreshContext);
 	const [userId, setUserId] = useState(null);
- 	const [currentWeight, setCurrentWeight] = useState('');
+	const [startingWeight, setStartingWeight] = useState("");
+	const [currentWeight, setCurrentWeight] = useState("");
 
-
-	 useEffect(() => {
-   		const user = auth.currentUser;
-    	if (user) {
-      	setUserId(user.uid);
-    	}
+	useEffect(() => {
+		const user = auth.currentUser;
+		if (user) {
+			setUserId(user.uid);
+		}
 	}, []);
 
+	useEffect(() => {
+		// for the beginning weight input by the user
+		const fetchData = async () => {
+			try {
+				const userData = await readData(`users/${userId}`);
+				setStartingWeight(userData.weight);
+			} catch (error) {
+				console.error(error);
+			}
+		};
 
-  	useEffect(() => {
-    	const fetchData = async () => {
-      	try {
-        	const userData = await readData(`users/${userId}`);
-        	setCurrentWeight(userData.weight);
-      	} catch (error) {
-        	console.error(error);
-      	}
-    	};
+		if (userId) {
+			fetchData();
+		}
+	}, [userId]);
 
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				const userData = await readData(`users/${userId}`);
+				if (userData.weightHistory) {
+					const latestTimestamp = Object.keys(userData.weightHistory)
+						.sort()
+						.pop(); // we are sorting and poopping to just keep the latest one bcuz its an array
+					setCurrentWeight(userData.weightHistory[latestTimestamp]);
+				}
+			} catch (error) {
+				console.error(error);
+			}
+		};
 
-    	if (userId) {
-      	fetchData();
-    	}
-  	}, [userId]);
+		if (userId) {
+			fetchData();
+		}
+	}, [userId, refreshKey]);
 
 	const { isDarkMode, toggleTheme } = React.useContext(ThemeContext);
 	const styles = createThemedStyles(isDarkMode);
 	const navigation = useNavigation();
+	const [workoutModalVisible, setModalVisible] = useState(false);
 	const [showTimerModal, setShowTimerModal] = React.useState(false);
 	const [mode, setMode] = React.useState("stopwatch"); // Add mode state variable
 	const [timer, setTimer] = React.useState({ min: 0, sec: 0 });
@@ -468,24 +490,22 @@ const HomeScreen = () => {
 				<View style={[styles.leftContent]}>
 					<Text style={styles.subtitle}>Finished:</Text>
 					<Text style={styles.workoutsDone}>5 </Text>
-					<Text style={(styles.workoutText)}>
-						Workouts Completed
-					</Text>
+					<Text style={styles.workoutText}>Workouts Completed</Text>
 				</View>
 				<View style={styles.rightContainer}>
 					<View style={[styles.rightContent, { marginBottom: 16 }]}>
-						<Text style={styles.subtitle}>Current Weight:</Text>
+						<Text style={styles.subtitle}>Weight Start:</Text>
 						<View style={[styles.smallContent]}>
-							<Text style={styles.goalWeight}>{currentWeight}</Text>
+							<Text style={styles.goalWeight}>{startingWeight}</Text>
 							<Text style={styles.pounds}>lbs</Text>
 						</View>
 					</View>
 					<View style={[styles.rightContent2, { marginTop: 16 }]}>
-						<Text style={styles.subtitle}>Time Spent:</Text>
+						<Text style={styles.subtitle}>Current Weight:</Text>
 
 						<View style={[styles.smallContent]}>
-							<Text style={styles.goalWeight}>60</Text>
-							<Text style={styles.pounds}>Minutes</Text>
+							<Text style={styles.goalWeight}>{currentWeight}</Text>
+							<Text style={styles.pounds}>lbs</Text>
 						</View>
 					</View>
 				</View>
@@ -506,6 +526,22 @@ const HomeScreen = () => {
 				/>
 			</View>
 			<TouchableOpacity
+				style={[styles.bottomContent2, { height: itemHeight }]}
+				onPress={() => setModalVisible(true)}
+			>
+				
+				<Image source={require("./images/search.png")} style={styles.image2} />
+				<View style={[styles.bottomMiddle]}>
+					<Text style={styles.subtitle4}>Search Workouts</Text>
+					<Text style={styles.heading2}>Click Here!</Text>
+				</View>
+			</TouchableOpacity>
+
+			<SuggestedWorkouts
+				visible={workoutModalVisible}
+				onClose={() => setModalVisible(false)}
+			/>
+			<TouchableOpacity
 				style={[styles.bottomContent, { height: itemHeight }]}
 				onPress={() => setShowTimerModal(true)}
 			>
@@ -516,481 +552,503 @@ const HomeScreen = () => {
 				</View>
 			</TouchableOpacity>
 		</View>
+		
+		
 	);
 };
 
-const createThemedStyles = (isDarkMode) => StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: isDarkMode ? "#000" : "#FFFFFF",
-		height: "auto",
-	},
-	smallContent: {
-		flex: 1,
-		flexDirection: "row",
-	},
-	bottomContent: {
-		width: 350, // add maxWidth property
-		padding: 16,
-		borderRadius: 10,
-		backgroundColor: isDarkMode ? "#333" : "#FFFFFF",
-		shadowColor: "#000",
-		shadowOffset: {
-			width: 2,
-			height: 2,
+const createThemedStyles = (isDarkMode) =>
+	StyleSheet.create({
+		container: {
+			flex: 1,
+			backgroundColor: isDarkMode ? "#000" : "#FFFFFF",
+			height: "auto",
 		},
-		shadowOpacity: 0.11,
-		shadowRadius: 5,
-		elevation: 5,
-		maxHeight: 80,
-		alignSelf: "center",
-		position: "relative",
-		marginBottom: 22,
-	},
-	bottomMiddle: {
-		flexDirection: "column",
-		left: 70,
-	},
-	smallContentTitle: {
-		flex: 1,
-		flexDirection: "column",
-	},
-	pounds: {
-		fontSize: 16,
-		marginLeft: 8,
-		marginTop: 2,
-		color: isDarkMode ? "#CDCDCD" : "#000000",
-	},
-
-	titleContainer: {
-		flex: 1,
-		justifyContent: "flex-start",
-		flexDirection: "row",
-		marginTop: 15,
-	},
-	title2Container: {
-		flexDirection: "column",
-		justifyContent: "center",
-		alignItems: "center",
-	},
-	title2: {
-		marginBottom: 16,
-		fontSize: 21,
-		fontWeight: "bold",
-		left: 20,
-		flex: 1,
-		color: isDarkMode ? "#FFFFFF" : "#4A4A4A",
-	},
-	leftContent2: {
-		flexDirection: "column",
-		right: 115,
-	},
-	title: {
-		fontSize: 26,
-		fontWeight: "bold",
-		color: isDarkMode ? "#FFFFFF" : "#4A4A4A",
-		marginLeft: 15,
-	},
-	image: {
-		width: 65,
-		height: 65,
-		marginRight: 10,
-		position: "absolute",
-		right: 0,
-		borderRadius: 45,
-		borderWidth: 2,
-		borderColor: "#013220",
-		
-	},
-	image2: {
-		width: 58,
-		height: 58,
-
-		position: "absolute",
-		left: 0,
-		top: 15,
-	},
-
-	image3: {
-		width: 160,
-		height: 116,
-		marginRight: 4,
-		position: "absolute",
-		right: 0,
-		top: 13,
-
-		borderRadius: 7,
-		borderWidth: 0.5,
-		borderColor: "#013220",
-	},
-	contentContainer: {
-		flex: 6.3,
-		flexDirection: "row",
-		justifyContent: "space-between",
-		paddingHorizontal: 16,
-		paddingVertical: 16,
-	},
-	leftContent: {
-		flex: 1,
-		padding: 16,
-		borderRadius: 10,
-		maxWidth: 140,
-		backgroundColor: isDarkMode ? "#333" : "#FFFFFF",
-		shadowColor: "#000",
-		shadowOffset: {
-			width: 2,
-			height: 2,
+		smallContent: {
+			flex: 1,
+			flexDirection: "row",
 		},
-		shadowOpacity: 0.11,
-		shadowRadius: 5,
-		elevation: 5,
-		height: 193,
-		alignItems: "center",
-		marginLeft: 10,
-	},
-	rightContainer: {
-		flex: 1,
-		flexDirection: "column",
-		justifyContent: "space-between",
-		alignItems: "center",
-		marginRight: -20,
-		marginBottom: "auto",
-	},
-	rightContent: {
-		flex: 1,
-		width: 170,
-		padding: 16,
-		borderRadius: 10,
-		backgroundColor: isDarkMode ? "#333" : "#FFFFFF",
-		shadowColor: isDarkMode ? "#FFFFFF" : "#000",
-		shadowOffset: {
-		width: 2,
-		height: 2,
+		bottomContent: {
+			width: 350, // add maxWidth property
+			padding: 16,
+			borderRadius: 10,
+			backgroundColor: isDarkMode ? "#333" : "#FFFFFF",
+			shadowColor: "#000",
+			shadowOffset: {
+				width: 2,
+				height: 2,
+			},
+			shadowOpacity: 0.11,
+			shadowRadius: 5,
+			elevation: 5,
+			maxHeight: 80,
+			alignSelf: "center",
+			position: "relative",
+			marginBottom: 15,
 		},
-		shadowOpacity: 0.11,
-		shadowRadius: 5,
-		elevation: 5,
-		maxHeight: 80,
-		marginTop: "auto",
-		},
-	rightContent2: {
-		flex: 1,
-		flexDirection: "column",
-		width: 170,
-		padding: 16,
-		borderRadius: 10,
-		backgroundColor: isDarkMode ? "#333" : "#FFFFFF",
-		shadowColor: isDarkMode ? "#FFFFFF" : "#000",
-		shadowOffset: {
-		width: 2,
-		height: 2,
-		},
-		shadowOpacity: 0.11,
-		shadowRadius: 5,
-		elevation: 5,
-		maxHeight: 80,
-	},
-	subtitle: {
-		fontSize: 15,
-		fontWeight: "bold",
-		color: isDarkMode ? "#FFFFFF" : "#4A4A4A",
-		marginBottom: 9,
-	},
-	subtitle2: {
-		fontSize: 20,
-		color: isDarkMode ? "#FFFFFF" : "#4A4A4A",
-		marginBottom: 10,
-		marginLeft: 17,
-		marginTop: 5,
-	},
-	subtitle3: {
-		fontSize: 15,
-		color: "#ffff",
-		top: 35,
-		fontFamily: "AppleSDGothicNeo-SemiBold",
-	},
-	subtitle4: {
-		fontSize: 18,
-		color: isDarkMode ? "#FFFFFF" : "#4A4A4A",
-		fontWeight: "bold",
-		top: 2,
-	},
-	heading2: {
-		fontFamily: "AppleSDGothicNeo-SemiBold",
-		color: isDarkMode ? "#FFFFFF" : "#4A4A4A",
-		fontSize: 16,
-		top: 10,
-	},
-	listItem: {
-		fontSize: 10,
-		color: isDarkMode ? "#FFFFFF" : "#4A4A4A",
-		marginVertical: 4,
-	},
-	goalWeight: {
-		fontSize: 20,
-		fontWeight: "bold",
-		color: isDarkMode ? "#FFFFFF" : "#4A4A4A",
-		marginTop: -2,
-	},
 
-	workoutsDone: {
-		fontSize: 60,
-		fontWeight: "bold",
-		color: isDarkMode ? "#FFFFFF" : "#4A4A4A",
-		marginTop: 10,
-	},
-	workoutText: { //IDK WHYY THIS PART IS NOT TURNING WHITE
-		fontSize: 16,
-		//color: "red", // not even turning red so idk
-		color: isDarkMode ? "#CDCDCD" : "#000000",
-		marginTop: 9,
-	},
-	flatListContainer: {
-		marginTop: 330,
-		position: "absolute",
-		width: "100%",
-		alignSelf: "center",
-	},
-	workoutListContainer: {
-		flexDirection: "row",
-	},
-	workoutContainer: {
-		backgroundColor: isDarkMode ? "#000000" : "#FFFFFF",
-		shadowColor: isDarkMode ? "#FFFFFF" : "#000",
-		shadowOffset: {
-		width: 2,
-		height: 2,
+		bottomContent2: {
+			width: 350, // add maxWidth property
+			padding: 16,
+			borderRadius: 10,
+			backgroundColor: isDarkMode ? "#333" : "#FFFFFF",
+			shadowColor: "#000",
+			shadowOffset: {
+				width: 2,
+				height: 2,
+			},
+			shadowOpacity: 0.11,
+			shadowRadius: 5,
+			elevation: 5,
+			maxHeight: 80,
+			alignSelf: "center",
+			position: "relative",
+			marginBottom: 8,
 		},
-		shadowOpacity: 0.11,
-		shadowRadius: 5,
-		elevation: 5,
-		paddingVertical: 16,
-		paddingHorizontal: 16,
-		marginBottom: 20,
-		width: "58%",
-		paddingLeft: 140,
-		justifyContent: "space-evenly",
-		maxHeight: 140,
-		borderRadius: 13,
-	},
-		
-	workoutName: {
-        fontSize: 20,
-        fontWeight: "bold",
-        color: isDarkMode ? "#FFFFFF" : "#FFFFFF",
-        position: "absolute",
-        // top: 20,
-        // left: 10,
-    },
-    workoutImage: {
-        width: 80,
-        height: 80,
-        top: 5,
-        right: -13,
-    },
-    timerModal: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: isDarkMode ? "#000000" : "#FFFFFF",
-        padding: 20,
-    },
-    timerContainer: {
-        alignItems: "center",
-        justifyContent: "center",
-        width: 250,
-        height: 250,
-        borderRadius: 250 / 2,
-        backgroundColor: isDarkMode ? "#222222" : "#E8E8E8",
-    },
-    timerCircle: {
-        alignItems: "center",
-        justifyContent: "center",
-        width: 220,
-        height: 220,
-        borderRadius: 220 / 2,
-        backgroundColor: isDarkMode ? "#333333" : "#FFFFFF",
-        borderWidth: 2,
-        borderColor: isDarkMode ? "#FFFFFF" : "#7F7F7F",
-    },
-    timerText: {
-        fontSize: 48,
-        fontWeight: "bold",
-        color: isDarkMode ? "#FFFFFF" : "#000000",
-    },
-    closeModalText: {
-        fontSize: 16,
-        color: isDarkMode ? "#FFFFFF" : "blue",
-        bottom: -100,
-        left: 0,
-        marginBottom: 60,
-    },
-    startBtn: {
-        backgroundColor: isDarkMode ? "#008000" : "#4CAF50",
-        color: isDarkMode ? "#FFFFFF" : "#FFFFFF",
-        paddingHorizontal: 32,
-        paddingVertical: 16,
-        borderRadius: 20,
-        fontSize: 24,
-        fontWeight: "bold",
-        margin: 16,
-        shadowColor: isDarkMode ? "#008000" : "#4CAF50",
-        shadowOpacity: 0.4,
-        shadowOffset: { width: 0, height: 4 },
-        shadowRadius: 8,
-        elevation: 4,
-    },
-    pauseBtn: {
-        backgroundColor: isDarkMode ? "#FFA500" : "#FF9800",
-        color: isDarkMode ? "#FFFFFF" : "#FFFFFF",
-        paddingHorizontal: 32,
-        paddingVertical: 16,
-        borderRadius: 20,
-        fontSize: 24,
-        fontWeight: "bold",
-        margin: 16,
-        shadowColor: isDarkMode ? "#FFA500" : "#FF9800",
-        shadowOpacity: 0.4,
-        shadowOffset: { width: 0, height: 4 },
-        shadowRadius: 8,
-        elevation: 4,
-    },
-	resetBtn: {
-		backgroundColor: isDarkMode ? "#f1707a" : "#F44336",
-		color: isDarkMode ? "#000" : "white",
-		paddingHorizontal: 32,
-		paddingVertical: 16,
-		borderRadius: 20,
-		fontSize: 24,
-		fontWeight: "bold",
-		margin: 16,
-		shadowColor: isDarkMode ? "#f1707a" : "#F44336",
-		shadowOpacity: 0.4,
-		shadowOffset: { width: 0, height: 4 },
-		shadowRadius: 8,
-		elevation: 4,
-	},
-	timerModeButton: {
-		color: "white",
-		paddingHorizontal: 32,
-		paddingVertical: 16,
-		borderRadius: 120 / 2,
-		height: 120,
-		width: 120,
-		fontWeight: "bold",
-		margin: 16,
-		justifyContent: "center",
-		alignItems: "center",
-		shadowOpacity: 0.4,
-		shadowOffset: { width: 0, height: 4 },
-		shadowRadius: 8,
-		elevation: 4,
-		backgroundColor: isDarkMode ? "#a5d6a7" : "#4CAF50",
-	},
-	timerModeText: {
-		fontSize: 17,
-		fontWeight: "bold",
-		color: "white",
-	},
-	timerControl: {
-		marginTop: 32,
-		flexDirection: "row",
-		alignItems: "center",
-	},
-	timerControlButton: {
-		backgroundColor: isDarkMode ? "#a5d6a7" : "#4CAF50",
-		borderRadius: 50,
-		paddingVertical: 5,
-		paddingHorizontal: 5,
-		marginHorizontal: 8,
-		flexDirection: "row",
-		alignItems: "center",
-	},
-	timerControlButtonText: {
-		color: "white",
-		fontWeight: "bold",
-		fontSize: 20,
-	},
-	modalContainer1: {
-		flex: 1,
-		height: "auto",
-		width: "100%",
-		padding: 20,
-		backgroundColor: "#F2F6F9",
-	},
-
-	WorkoutTitle: {
-		fontWeight: "bold",
-		top: 60,
-		fontSize: 27,
-		left: 15,
-	},
-	closeModalTextWorkout: {
-		fontSize: 15,
-		fontWeight: 700,
-		top: -573,
-		left: 140,
-		alignSelf: "center",
-	},
-	workoutList: {
-		top: 76,
-		flexDirection: "column",
-	},
-	workoutPosts: {
-		flex: 1,
-		flexDirection: "row",
-
-		padding: 16,
-		borderRadius: 10,
-		width: "100%",
-		backgroundColor: "#FFFFFF",
-		shadowColor: "#000",
-		shadowOffset: {
-			width: 2,
-			height: 2,
+		bottomMiddle: {
+			flexDirection: "column",
+			left: 70,
 		},
-		shadowOpacity: 0.11,
-		shadowRadius: 5,
-		elevation: 5,
-		minHeight: 140,
-		alignSelf: "center",
-		marginBottom: 12, // Add margin bottom
-	},
-	workoutLeftContent: {
-		flexDirection: "column",
-		flex: 1,
-		left: 15,
-		position: "absolute",
-	},
-	workoutSubtitle: {
-		fontSize: 17,
-		fontWeight: "bold",
-		top: 15,
-	},
-	workoutSubtitle2: {
-		fontSize: 15,
-		fontWeight: "bold",
-		color: "grey",
-		marginTop: 25,
-	},
-	workoutSubtitle3: {
-		fontSize: 15,
-		fontWeight: "bold",
-		color: "grey",
-		marginTop: 15,
-	},
+		smallContentTitle: {
+			flex: 1,
+			flexDirection: "column",
+		},
+		pounds: {
+			fontSize: 16,
+			marginLeft: 8,
+			marginTop: 2,
+			color: isDarkMode ? "#CDCDCD" : "#000000",
+		},
 
-	workoutSubtitle4: {
-		fontSize: 15,
-		fontWeight: "bold",
-		color: "grey",
-		marginTop: 15,
-	},
-	workoutRightContent: {
-		flex: 1,
-		position: "absolute",
-		right: 10,
-	},
-});
+		titleContainer: {
+			flex: 1,
+			justifyContent: "flex-start",
+			flexDirection: "row",
+			marginTop: 15,
+		},
+		title2Container: {
+			flexDirection: "column",
+			justifyContent: "center",
+			alignItems: "center",
+		},
+		title2: {
+			marginBottom: 16,
+			fontSize: 21,
+			fontWeight: "bold",
+			left: 20,
+			flex: 1,
+			color: isDarkMode ? "#FFFFFF" : "#4A4A4A",
+		},
+		leftContent2: {
+			flexDirection: "column",
+			right: 115,
+		},
+		title: {
+			fontSize: 26,
+			fontWeight: "bold",
+			color: isDarkMode ? "#FFFFFF" : "#4A4A4A",
+			marginLeft: 15,
+		},
+		image: {
+			width: 65,
+			height: 65,
+			marginRight: 10,
+			position: "absolute",
+			right: 0,
+			borderRadius: 45,
+			borderWidth: 2,
+			borderColor: "#013220",
+		},
+		image2: {
+			width: 58,
+			height: 58,
+
+			position: "absolute",
+			left: 10,
+			top: 15,
+		},
+
+		image3: {
+			width: 160,
+			height: 116,
+			marginRight: 4,
+			position: "absolute",
+			right: 0,
+			top: 13,
+
+			borderRadius: 7,
+			borderWidth: 0.5,
+			borderColor: "#013220",
+		},
+		contentContainer: {
+			flex: 6.3,
+			flexDirection: "row",
+			justifyContent: "space-between",
+			paddingHorizontal: 16,
+			paddingVertical: 16,
+		},
+		leftContent: {
+			flex: 1,
+			padding: 16,
+			borderRadius: 10,
+			maxWidth: 140,
+			backgroundColor: isDarkMode ? "#333" : "#FFFFFF",
+			shadowColor: "#000",
+			shadowOffset: {
+				width: 2,
+				height: 2,
+			},
+			shadowOpacity: 0.11,
+			shadowRadius: 5,
+			elevation: 5,
+			height: 193,
+			alignItems: "center",
+			marginLeft: 10,
+		},
+		rightContainer: {
+			flex: 1,
+			flexDirection: "column",
+			justifyContent: "space-between",
+			alignItems: "center",
+			marginRight: -20,
+			marginBottom: "auto",
+		},
+		rightContent: {
+			flex: 1,
+			width: 170,
+			padding: 16,
+			borderRadius: 10,
+			backgroundColor: isDarkMode ? "#333" : "#FFFFFF",
+			shadowColor: isDarkMode ? "#FFFFFF" : "#000",
+			shadowOffset: {
+				width: 2,
+				height: 2,
+			},
+			shadowOpacity: 0.11,
+			shadowRadius: 5,
+			elevation: 5,
+			maxHeight: 80,
+			marginTop: "auto",
+		},
+		rightContent2: {
+			flex: 1,
+			flexDirection: "column",
+			width: 170,
+			padding: 16,
+			borderRadius: 10,
+			backgroundColor: isDarkMode ? "#333" : "#FFFFFF",
+			shadowColor: isDarkMode ? "#FFFFFF" : "#000",
+			shadowOffset: {
+				width: 2,
+				height: 2,
+			},
+			shadowOpacity: 0.11,
+			shadowRadius: 5,
+			elevation: 5,
+			maxHeight: 80,
+		},
+		subtitle: {
+			fontSize: 15,
+			fontWeight: "bold",
+			color: isDarkMode ? "#FFFFFF" : "#4A4A4A",
+			marginBottom: 9,
+		},
+		subtitle2: {
+			fontSize: 20,
+			color: isDarkMode ? "#FFFFFF" : "#4A4A4A",
+			marginBottom: 10,
+			marginLeft: 17,
+			marginTop: 5,
+		},
+		subtitle3: {
+			fontSize: 15,
+			color: "#ffff",
+			top: 35,
+			fontFamily: "AppleSDGothicNeo-SemiBold",
+		},
+		subtitle4: {
+			fontSize: 18,
+			color: isDarkMode ? "#FFFFFF" : "#4A4A4A",
+			fontWeight: "bold",
+			top: 2,
+		},
+		heading2: {
+			fontFamily: "AppleSDGothicNeo-SemiBold",
+			color: isDarkMode ? "#FFFFFF" : "#4A4A4A",
+			fontSize: 16,
+			top: 10,
+		},
+		listItem: {
+			fontSize: 10,
+			color: isDarkMode ? "#FFFFFF" : "#4A4A4A",
+			marginVertical: 4,
+		},
+		goalWeight: {
+			fontSize: 20,
+			fontWeight: "bold",
+			color: isDarkMode ? "#FFFFFF" : "#4A4A4A",
+			marginTop: -2,
+		},
+
+		workoutsDone: {
+			fontSize: 60,
+			fontWeight: "bold",
+			color: isDarkMode ? "#FFFFFF" : "#4A4A4A",
+			marginTop: 10,
+		},
+		workoutText: {
+			//IDK WHYY THIS PART IS NOT TURNING WHITE
+			fontSize: 16,
+			//color: "red", // not even turning red so idk
+			color: isDarkMode ? "#CDCDCD" : "#000000",
+			marginTop: 9,
+		},
+		flatListContainer: {
+			marginTop: 300,
+			position: "absolute",
+			width: "100%",
+			alignSelf: "center",
+		},
+		workoutListContainer: {
+			flexDirection: "row",
+		},
+		workoutContainer: {
+			backgroundColor: isDarkMode ? "#000000" : "#FFFFFF",
+			shadowColor: isDarkMode ? "#FFFFFF" : "#000",
+			shadowOffset: {
+				width: 2,
+				height: 2,
+			},
+			shadowOpacity: 0.11,
+			shadowRadius: 5,
+			elevation: 5,
+			paddingVertical: 16,
+			paddingHorizontal: 16,
+			marginBottom: 20,
+			width: "58%",
+			paddingLeft: 140,
+			justifyContent: "space-evenly",
+			maxHeight: 120,
+			borderRadius: 13,
+		},
+
+		workoutName: {
+			fontSize: 20,
+			fontWeight: "bold",
+			color: isDarkMode ? "#FFFFFF" : "#FFFFFF",
+			position: "absolute",
+			// top: 20,
+			// left: 10,
+		},
+		workoutImage: {
+			width: 80,
+			height: 80,
+			top: 5,
+			right: -13,
+		},
+		timerModal: {
+			flex: 1,
+			justifyContent: "center",
+			alignItems: "center",
+			backgroundColor: isDarkMode ? "#000000" : "#FFFFFF",
+			padding: 20,
+		},
+		timerContainer: {
+			alignItems: "center",
+			justifyContent: "center",
+			width: 250,
+			height: 250,
+			borderRadius: 250 / 2,
+			backgroundColor: isDarkMode ? "#222222" : "#E8E8E8",
+		},
+		timerCircle: {
+			alignItems: "center",
+			justifyContent: "center",
+			width: 220,
+			height: 220,
+			borderRadius: 220 / 2,
+			backgroundColor: isDarkMode ? "#333333" : "#FFFFFF",
+			borderWidth: 2,
+			borderColor: isDarkMode ? "#FFFFFF" : "#7F7F7F",
+		},
+		timerText: {
+			fontSize: 48,
+			fontWeight: "bold",
+			color: isDarkMode ? "#FFFFFF" : "#000000",
+		},
+		closeModalText: {
+			fontSize: 16,
+			color: isDarkMode ? "#FFFFFF" : "blue",
+			bottom: -100,
+			left: 0,
+			marginBottom: 60,
+		},
+		startBtn: {
+			backgroundColor: isDarkMode ? "#008000" : "#4CAF50",
+			color: isDarkMode ? "#FFFFFF" : "#FFFFFF",
+			paddingHorizontal: 32,
+			paddingVertical: 16,
+			borderRadius: 20,
+			fontSize: 24,
+			fontWeight: "bold",
+			margin: 16,
+			shadowColor: isDarkMode ? "#008000" : "#4CAF50",
+			shadowOpacity: 0.4,
+			shadowOffset: { width: 0, height: 4 },
+			shadowRadius: 8,
+			elevation: 4,
+		},
+		pauseBtn: {
+			backgroundColor: isDarkMode ? "#FFA500" : "#FF9800",
+			color: isDarkMode ? "#FFFFFF" : "#FFFFFF",
+			paddingHorizontal: 32,
+			paddingVertical: 16,
+			borderRadius: 20,
+			fontSize: 24,
+			fontWeight: "bold",
+			margin: 16,
+			shadowColor: isDarkMode ? "#FFA500" : "#FF9800",
+			shadowOpacity: 0.4,
+			shadowOffset: { width: 0, height: 4 },
+			shadowRadius: 8,
+			elevation: 4,
+		},
+		resetBtn: {
+			backgroundColor: isDarkMode ? "#f1707a" : "#F44336",
+			color: isDarkMode ? "#000" : "white",
+			paddingHorizontal: 32,
+			paddingVertical: 16,
+			borderRadius: 20,
+			fontSize: 24,
+			fontWeight: "bold",
+			margin: 16,
+			shadowColor: isDarkMode ? "#f1707a" : "#F44336",
+			shadowOpacity: 0.4,
+			shadowOffset: { width: 0, height: 4 },
+			shadowRadius: 8,
+			elevation: 4,
+		},
+		timerModeButton: {
+			color: "white",
+			paddingHorizontal: 32,
+			paddingVertical: 16,
+			borderRadius: 120 / 2,
+			height: 120,
+			width: 120,
+			fontWeight: "bold",
+			margin: 16,
+			justifyContent: "center",
+			alignItems: "center",
+			shadowOpacity: 0.4,
+			shadowOffset: { width: 0, height: 4 },
+			shadowRadius: 8,
+			elevation: 4,
+			backgroundColor: isDarkMode ? "#a5d6a7" : "#4CAF50",
+		},
+		timerModeText: {
+			fontSize: 17,
+			fontWeight: "bold",
+			color: "white",
+		},
+		timerControl: {
+			marginTop: 32,
+			flexDirection: "row",
+			alignItems: "center",
+		},
+		timerControlButton: {
+			backgroundColor: isDarkMode ? "#a5d6a7" : "#4CAF50",
+			borderRadius: 50,
+			paddingVertical: 5,
+			paddingHorizontal: 5,
+			marginHorizontal: 8,
+			flexDirection: "row",
+			alignItems: "center",
+		},
+		timerControlButtonText: {
+			color: "white",
+			fontWeight: "bold",
+			fontSize: 20,
+		},
+		modalContainer1: {
+			flex: 1,
+			height: "auto",
+			width: "100%",
+			padding: 20,
+			backgroundColor: "#F2F6F9",
+		},
+
+		WorkoutTitle: {
+			fontWeight: "bold",
+			top: 60,
+			fontSize: 27,
+			left: 15,
+		},
+		closeModalTextWorkout: {
+			fontSize: 15,
+			fontWeight: 700,
+			top: -573,
+			left: 140,
+			alignSelf: "center",
+		},
+		workoutList: {
+			top: 76,
+			flexDirection: "column",
+		},
+		workoutPosts: {
+			flex: 1,
+			flexDirection: "row",
+
+			padding: 16,
+			borderRadius: 10,
+			width: "100%",
+			backgroundColor: "#FFFFFF",
+			shadowColor: "#000",
+			shadowOffset: {
+				width: 2,
+				height: 2,
+			},
+			shadowOpacity: 0.11,
+			shadowRadius: 5,
+			elevation: 5,
+			minHeight: 140,
+			alignSelf: "center",
+			marginBottom: 12, // Add margin bottom
+		},
+		workoutLeftContent: {
+			flexDirection: "column",
+			flex: 1,
+			left: 15,
+			position: "absolute",
+		},
+		workoutSubtitle: {
+			fontSize: 17,
+			fontWeight: "bold",
+			top: 15,
+		},
+		workoutSubtitle2: {
+			fontSize: 15,
+			fontWeight: "bold",
+			color: "grey",
+			marginTop: 25,
+		},
+		workoutSubtitle3: {
+			fontSize: 15,
+			fontWeight: "bold",
+			color: "grey",
+			marginTop: 15,
+		},
+
+		workoutSubtitle4: {
+			fontSize: 15,
+			fontWeight: "bold",
+			color: "grey",
+			marginTop: 15,
+		},
+		workoutRightContent: {
+			flex: 1,
+			position: "absolute",
+			right: 10,
+		},
+	});
 
 export default HomeScreen;

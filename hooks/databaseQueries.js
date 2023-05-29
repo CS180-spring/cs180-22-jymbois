@@ -203,6 +203,70 @@ export function writeIsPush(value) {
   return set(ref(db, path), value);
 }
 
+
+export function writeUserImageUri(uid, uri) {
+  const db = getDatabase();
+  let testData = {
+    imageUri: uri,
+  }
+  update(ref(db, `users/${uid}`), testData);
+}
+
+export async function readUserImageUri(uid) {
+  try {
+    const dbRef = ref(getDatabase());
+    const snapshot = await get(child(dbRef, `users/${uid}`));
+
+    if (snapshot.exists()) {
+      let object = snapshot.val();
+      if ('imageUri' in object) {
+        return Promise.resolve(object.imageUri);
+      } else {
+        console.log("No imageUri available for user");
+        return Promise.resolve("");
+      }
+    } else {
+      console.log("No data available for user");
+      return Promise.resolve("");
+    }
+  } catch (error) {
+    console.error(error);
+    return Promise.reject(error);
+  }
+}
+
+// Function to store user's weight
+export function writeUserWeight(uid, weight) {
+  const db = getDatabase();
+  const path = `users/${uid}/weightHistory`;
+  const timestamp = Date.now();
+
+  let weightData = {
+    [timestamp]: weight,
+  }
+
+  return update(ref(db, path), weightData);
+}
+// Function to get the most recent user's weight
+export async function getCurrentWeight(uid) {
+  try {
+    const dbRef = ref(getDatabase());
+    const snapshot = await get(child(dbRef, `users/${uid}/weightHistory`));
+
+    if (snapshot.exists()) {
+      let weightHistory = snapshot.val();
+      let latestTimestamp = Math.max(...Object.keys(weightHistory));
+      return Promise.resolve(weightHistory[latestTimestamp]);
+    } else {
+      console.log("No data available");
+      return Promise.resolve("Undefined");
+    }
+  } catch (error) {
+    console.error(error);
+    return Promise.reject(error);
+  }
+}
+
 // writing queries for isDark
 
 export async function retrieveIsDark(){
