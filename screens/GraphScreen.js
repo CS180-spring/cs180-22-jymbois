@@ -242,22 +242,14 @@ const GraphScreen = ({ route }) => {
 						</Text>
 						<View style={styles.bottomLeftContainer}>
 							<View style={styles.activityRow}>
-								<Text style={styles.bottomLeftText}>Push</Text>
-								<Text style={styles.bottomLeftNumber}>3</Text>
-							</View>
-							<View style={styles.activityRow}>
-								<Text style={styles.bottomLeftText}>Pull</Text>
-								<Text style={styles.bottomLeftNumber}>7</Text>
-							</View>
-							<View style={styles.activityRow}>
-								<Text style={styles.bottomLeftText}>Legs</Text>
-								<Text style={styles.bottomLeftNumber}>11</Text>
+								<Text style={styles.bottomLeftText}>Goal Weight:</Text>
+								<Text style={styles.bottomLeftNumber}>{goalWeight}</Text>
 							</View>
 						</View>
 						<View style={styles.bottomRightContainer}>
 							<View style={styles.activityRow}>
-								<Text style={styles.bottomRightText}>Goal Weight:</Text>
-								<Text style={styles.bottomRightNumber}>{goalWeight}</Text>
+								<Text style={styles.bottomRightText}>Progress:</Text>
+								<Text style={styles.bottomRightNumber}>{progress}</Text>
 							</View>
 						</View>
 					</View>
