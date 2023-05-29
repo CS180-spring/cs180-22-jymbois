@@ -8,6 +8,8 @@ import {
 	ScrollView,
 	Modal,
 	Button,
+	Linking,
+	Alert,
   } from 'react-native';
   import React, { useState, useEffect } from 'react';
   import { readData,writeUserImageUri,readUserImageUri } from "../hooks/databaseQueries";
@@ -116,12 +118,27 @@ import {
   
   
 	  //for uploading images, image holding the uri  
-		const [image, setImage] = useState(null);
+	  const [image, setImage] = useState(null);
+	  const openAppSettings = () => {
+		  if (Platform.OS === 'ios') {
+			Linking.openURL('app-settings:');
+		  } else {
+			Linking.openSettings();
+		  }
+		};
+		
 		const pickImage = async () => {
 		  if (Constants.platform.ios) {
 			const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 			if (status !== 'granted') {
-			  alert('Sorry, we need camera roll permissions to make this work!');
+			  Alert.alert(
+				'Camera Roll Permission',
+				'Sorry, we need camera roll permissions to make this work!',
+				[
+				  { text: 'Cancel', style: 'cancel' },
+				  { text: 'Open Settings', onPress: openAppSettings },
+				]
+			  );
 			  return;
 			}
 		  }
@@ -133,10 +150,10 @@ import {
 			quality: 1,
 		  });
 		
-		  if (!result.canceled) {
-			const uri = result.assets[0].uri;
-			setImage(uri);
-			writeUserImageUri(auth.currentUser.uid, uri);
+		  if (!result.cancelled) {
+			const uri = result.assets[0].uri;  // replace 'uri' with 'assets[0].uri'
+			setImage(result.uri);
+			console.log("this is image".result.uri);
 		  }
 		};
 		

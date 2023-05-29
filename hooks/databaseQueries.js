@@ -267,6 +267,26 @@ export async function getCurrentWeight(uid) {
   }
 }
 
+// this for the  graph screen so we can store all the weight history stored in there to the graph
+// Function to get all weights for a user
+export async function getWeightHistory(uid) {
+  try {
+    const dbRef = ref(getDatabase());
+    const snapshot = await get(child(dbRef, `users/${uid}/weightHistory`));
+
+    if (snapshot.exists()) {
+      return Promise.resolve(snapshot.val());
+    } else {
+      console.log("No data available");
+      return Promise.resolve({});
+    }
+  } catch (error) {
+    console.error(error);
+    return Promise.reject(error);
+  }
+}
+
+
 // writing queries for isDark
 
 export async function retrieveIsDark(){
@@ -290,12 +310,34 @@ export function writeIsDark(value){
   return set(ref(db, path), value);
 }
 
-export function updateWeight(value){
-  const user = auth.currentUser.uid;
-  const db = getDatabase();
-  const path = "users/" + user + "/weight";
-  return set(ref(db,path), value);
-}
+//function to store goal weight 
+//export function writeGoalWeight(uid, goalWeight){
+ // const db = getDatabase();
+  //const path = `users/${uid}/goalWeight`;
+ // const timestamp = Date.now();
+ // let goalData = {
+  //  [timestamp]: goalWeight,
+  //}
+ /// return set(ref(db, path), goalData);
+//}
 
+
+//export async function getGoalWeight(uid){
+  //try{
+    //const dbRef = ref(getDatabase());
+    //const snapshot = await get(child(dbRef, `users/${uid}/goalWeight`));
+    //if(snapshot.exists()){
+    //  return Promise.resolve(snapshot.val());
+    //}
+    //else {
+      //console.log("No data available");
+      //return Promise.resolve({});
+   // }
+  //} catch (error) {
+    //console.error(error);
+    //return Promise.reject(error);
+  //}
+//}
+  
 generateUIs1("2023-05-08","KXJjbxWERaggJmj5tcszDGbXxe22");
 
