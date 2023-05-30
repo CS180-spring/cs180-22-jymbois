@@ -376,7 +376,7 @@ const CalenderScreen = () => {
   { hasWorkout ? Object.entries(exercises).map(([exercise, sets], index) => (
     <View key={exercise} style = {styles.exerciseBoxes}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Text style={[styles.exerciseTitleText, {color: "#6E7E85"}]}>{exercise}</Text>
+        <Text style={[styles.exerciseTitleText, {color: "#4A4A4A"}]}>{exercise}</Text>
         <TouchableOpacity onPress={ () =>  deleteExerciseRecord(exercise, recordDate ,auth.currentUser.uid) }>
           <FontAwesome name="times-circle" size={30} color="#900" />
         </TouchableOpacity>
@@ -384,7 +384,7 @@ const CalenderScreen = () => {
       <View style={{ borderBottomColor: '#6E7E85', borderBottomWidth: 1, marginVertical: 5 }} />
       {Object.entries(sets).map(([setName, setDetails], index) => (
         <View key={index} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-          <Text style={{fontSize: 18, color: "#6E7E85", fontWeight: 'bold'}}>
+          <Text style={{fontSize: 18, color: "#4A4A4A", fontWeight: 'bold'}}>
             {setName}:
           </Text>
           <View style={{alignItems: 'center'}}>
@@ -432,16 +432,8 @@ const createThemedStyles = (isDarkMode) => StyleSheet.create({
   body: {
     backgroundColor:  isDarkMode ? '#000' : '#fff',
   },
-  container: {
-    flex: 1,
-    backgroundColor: isDarkMode ? '#fff' : '#000',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    margin: 20,
-  },
- 
   returnButtonViewERmodal: {
-    backgroundColor: '#6E7E85', 
+    backgroundColor: '#4A4A4A', 
     borderRadius: 10, 
     marginTop: '15%',
     marginLeft: '-70%',
@@ -481,14 +473,14 @@ const createThemedStyles = (isDarkMode) => StyleSheet.create({
     color: isDarkMode ? "#000" : "#FFF", 
     fontSize: 18,
     marginTop: 5,
-    marginRight: 130,
+    marginRight: 30,
     paddingBottom: 6
   },
   calendarButtonTextTop: {
     color: isDarkMode ? "#000" : "#FFF", 
     fontSize: 22,
     fontWeight: 700,
-    marginRight: 200,
+    marginRight: 100,
   },
   calendarModal: {
    flex: 1,
@@ -731,14 +723,14 @@ insertERButton: {
     position: "relative",
     marginTop: 5,
     marginBottom: 5,
-    color: '#6E7E85',
-    fontWeight: '700', // this might not work with custom fonts, you'd need a font file that represents the weight you want
+    color: '#4A4A4A', // Black color
+    fontWeight: '700', 
     fontSize: 50,
     textAlign: "center",
-    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowColor: 'rgba(128, 128, 128, 0.75)', // Gray shadow with 75% opacity
     textShadowOffset: { width: -1, height: 1 },
     textShadowRadius: 1,
-  },
+},
   repsText:{
     color: "#6E7E85", 
     fontWeight:800, 
@@ -747,18 +739,19 @@ insertERButton: {
   },
   insertERButtonLogo: {
     position: "absolute",
-    left: "85%",
+    left: "7%",
   },
   viewERButtonLogo:{
     position: "absolute",
-    left: "85%",
+    left: "7%",
   },
   exerciseTitleText: {
     fontWeight: 'bold', 
     fontSize: 23, 
     color: "#6E7E85", 
     marginBottom: 5,
-  }
+  },
+  
 });
 
 export default CalenderScreen;
