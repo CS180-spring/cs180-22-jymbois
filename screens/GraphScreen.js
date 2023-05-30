@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext,useEffect } from "react";
 import {
 	StyleSheet,
 	View,
@@ -8,12 +8,14 @@ import {
 	Keyboard,
 	TouchableWithoutFeedback,
 	Modal,
+  ScrollView,
 } from "react-native";
 import { BarChart, LineChart } from "react-native-chart-kit";
 import ThemeContext from "../hooks/ThemeContext";
 import { Ionicons } from "@expo/vector-icons";
-import { writeUserWeight } from "../hooks/databaseQueries";
+import { writeUserWeight, getCurrentWeight, getWeightHistory,writeGoalWeight,getGoalWeight } from "../hooks/databaseQueries";
 import { auth } from "../configuration/firebaseConfig";
+import { readData } from "../hooks/databaseQueries";
 import RefreshContext, { RefreshProvider } from "../hooks/RefreshContext";
 
 //import CircularProgress from 'react-native-circular-progress-indicator';
@@ -22,13 +24,25 @@ const GraphScreen = ({ route }) => {
 	const { refreshKey, setRefreshKey } = useContext(RefreshContext);
 	const user = auth.currentUser;
 	const uid = user ? user.uid : null;
-	const [goalWeight, setGoalWeight] = useState("");
+	const [goalWeight, setGoalWeight] = useState('');
 	const [modalVisible, setModalVisible] = useState(false);
+  const [progressModalVisible, setProgressModalVisible] = useState(false);
 	const [progress, setProgress] = useState(0);
 	const [weight, setWeight] = useState(0); // Initialize weight to zero
 	const { isDarkMode } = React.useContext(ThemeContext);
 	const styles = createThemedStyles(isDarkMode);
 	const [weightModalVisible, setWeightModalVisible] = useState(false); // to add weight to modal
+	const [weightHistory, setWeightHistory] = useState({});
+//Get the user goalWeight
+  
+
+	useEffect(() => {
+		getWeightHistory(uid).then(data => {
+		  setWeightHistory(data);
+		}).catch(err => {
+		  console.error(err);
+		});
+	  }, [uid, refreshKey]);
 
 	const handleWeightSubmit = async (weight) => {
 		try {
@@ -46,7 +60,52 @@ const GraphScreen = ({ route }) => {
 			console.error("Failed to store weight:", error);
 		}
 	};
+	const formatDate = (timestamp) => {
+		const date = new Date(parseInt(timestamp));
+		return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+	  };
 
+    const max_xaxis= 4;
+    const weightHistoryKeys = Object.keys(weightHistory);
+    const weightHistoryValues = Object.values(weightHistory);
+    const startIndex = Math.max(weightHistoryKeys.length - max_xaxis, 0);
+    const endIndex = weightHistoryKeys.length;
+
+	  const barData = {
+		labels: weightHistoryKeys.map(formatDate).slice(startIndex, endIndex),
+		datasets: [
+		  {
+			data: weightHistoryValues.map(Number).slice(startIndex, endIndex),
+		  },
+		],
+	  };
+
+	  const lineData = {
+		labels: weightHistoryKeys.map(formatDate).slice(startIndex, endIndex),
+		datasets: [
+		  {
+			data: weightHistoryValues.map(Number).slice(startIndex, endIndex),
+		  },
+		],
+	  };
+
+    const progressBarData = {
+      labels: Object.keys(weightHistory).map(formatDate),
+      datasets: [
+        {
+        data: Object.values(weightHistory).map(Number),
+        },
+      ],
+      };
+
+      const progressLineData = {
+        labels: Object.keys(weightHistory).map(formatDate),
+        datasets: [
+          {
+          data: Object.values(weightHistory).map(Number),
+          },
+        ],
+        };
 	const handleGoalWeightChange = (text) => {
 		setGoalWeight(text);
 	};
@@ -62,51 +121,31 @@ const GraphScreen = ({ route }) => {
 		}
 		return 100 - answer;
 	};
-
-	const barData = {
-		labels: ["Today", "Goal", "June", "July"],
-		datasets: [
-			{
-				data: [weight, goalWeight, 146, 220],
-			},
-		],
-	};
-
-	const lineData = {
-		labels: ["Today", "Goal", "June", "July"],
-		datasets: [
-			{
-				data: [weight, goalWeight, 146, 220],
-			},
-		],
-	};
+//*
+	
 	const BarChartConfig = {
-		backgroundGradientFrom: isDarkMode ? "#333" : "white",
-		backgroundGradientTo: isDarkMode ? "#333" : "white",
-		decimalPlaces: 1,
-		color: (opacity = 1) =>
-			isDarkMode
-				? `rgba(255, 255, 255, ${opacity})`
-				: `rgba(0, 61, 128, ${opacity})`,
-		style: {
-			borderRadius: 10,
-		},
-		fillShadowGradient: "#fff",
-	};
+    backgroundGradientFrom: isDarkMode ? '#333': 'white',
+    backgroundGradientTo: isDarkMode ? '#333': 'white',
+    decimalPlaces: 1,
+    color: (opacity = 1) => isDarkMode ? `rgba(255, 255, 255, ${opacity})` : `rgba(0, 61, 128, ${opacity})`,
+    style: {
+      borderRadius: 10,
+    },
+    fillShadowGradient: '#fff',
+  };
 
-	const lineChartConfig = {
-		backgroundColor: "#ffffff",
-		backgroundGradientFrom: "#ffffff",
-		backgroundGradientFromOpacity: 0,
-		backgroundGradientTo: "#ffffff",
-		backgroundGradientToOpacity: 0,
-		color: (opacity = 1) =>
-			isDarkMode
-				? `rgba(255, 255, 255, ${opacity})`
-				: `rgba(0, 61, 128, ${opacity})`,
-		labelColor: (opacity = 1) => `transparent`,
-		fillShadowGradient: "#fff",
-	};
+  const lineChartConfig = {
+    backgroundColor: '#ffffff',
+    backgroundGradientFrom: '#ffffff',
+    backgroundGradientFromOpacity: 0,
+    backgroundGradientTo: '#ffffff',
+    backgroundGradientToOpacity: 0,
+    color: (opacity = 1) => isDarkMode ? `rgba(255, 255, 255, ${opacity})` : `rgba(0, 61, 128, ${opacity})`,
+    labelColor: (opacity = 1) => `transparent`,
+    fillShadowGradient: '#fff',
+  };
+
+
 
 	return (
 		<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -155,49 +194,13 @@ const GraphScreen = ({ route }) => {
 				<View style={[styles.contentContainer]}>
 					<View style={styles.activityContent}>
 						<Text style={styles.title2}>Weekly Activities</Text>
-						<Text style={styles.activityText}>
-							You have done <Text style={{ fontWeight: "bold" }}>5</Text>{" "}
-							activities this week. Keep it up.
-						</Text>
-						<View style={styles.bottomLeftContainer}>
-							<View style={styles.activityRow}>
-								<Text style={styles.bottomLeftText}>Push</Text>
-								<Text style={styles.bottomLeftNumber}>3</Text>
-							</View>
-							<View style={styles.activityRow}>
-								<Text style={styles.bottomLeftText}>Pull</Text>
-								<Text style={styles.bottomLeftNumber}>7</Text>
-							</View>
-							<View style={styles.activityRow}>
-								<Text style={styles.bottomLeftText}>Legs</Text>
-								<Text style={styles.bottomLeftNumber}>11</Text>
-							</View>
-						</View>
-						<View style={styles.bottomRightContainer}>
-							<View style={styles.activityRow}>
-								<Text style={styles.bottomRightText}>Total Time:</Text>
-								<Text style={styles.bottomRightNumber}>2h 30m</Text>
-							</View>
-						</View>
-					</View>
-					<View style={styles.barGraphContainer}>
-						<Text style={styles.title2}>Goal Progression</Text>
-
-						<TouchableOpacity
+            <TouchableOpacity
 							style={styles.goalButtonContainer}
 							onPress={() => setModalVisible(true)}
 						>
 							<Text style={styles.goalButton}>Add Goal -{">"} </Text>
 						</TouchableOpacity>
-
-						<TouchableOpacity
-							style={styles.goalButtonContainer2}
-							onPress={() => setWeightModalVisible(true)}
-						>
-							<Text style={styles.goalButton}>Add Weight -{">"} </Text>
-						</TouchableOpacity>
-
-						<Modal
+            <Modal
 							animationType="slide"
 							transparent={true}
 							visible={modalVisible}
@@ -213,17 +216,15 @@ const GraphScreen = ({ route }) => {
 										placeholder="Enter your goal weight in pounds"
 										placeholderTextColor="#BDBDBD"
 									/>
-									<TouchableOpacity
-										style={styles.button}
-										onPress={() => {
-											console.log(
-												"Goal weight button pressed. Goal weight:",
-												goalWeight,
-											);
-											setProgress(calculateProgress());
-											setModalVisible(false);
-										}}
-									>
+								<TouchableOpacity
+								style={styles.button}
+								onPress={() => {
+								
+                console.log('Goal weight button pressed. Goal weight:', goalWeight);
+                setProgress(calculateProgress());
+                setModalVisible(false);
+								}}
+							>
 										<Text style={styles.buttonText}>Set Goal Weight</Text>
 									</TouchableOpacity>
 									<TouchableOpacity
@@ -235,11 +236,94 @@ const GraphScreen = ({ route }) => {
 								</View>
 							</View>
 						</Modal>
+						<Text style={styles.activityText}>
+							You have done <Text style={{ fontWeight: "bold" }}>5</Text>{" "}
+							activities this week. Keep it up.
+						</Text>
+						<View style={styles.bottomLeftContainer}>
+							<View style={styles.activityRow}>
+								<Text style={styles.bottomLeftText}>Goal Weight:</Text>
+								<Text style={styles.bottomLeftNumber}>{goalWeight}</Text>
+							</View>
+						</View>
+						<View style={styles.bottomRightContainer}>
+							<View style={styles.activityRow}>
+								<Text style={styles.bottomRightText}>Progress:</Text>
+								<Text style={styles.bottomRightNumber}>{progress}</Text>
+							</View>
+						</View>
+					</View>
+					<View style={styles.barGraphContainer}>
+						<Text style={styles.title2}>Goal Progression</Text>
+
+						<TouchableOpacity
+							style={styles.goalButtonContainer2}
+							onPress={() => setWeightModalVisible(true)}
+						>
+							<Text style={styles.weightButton}>Add Weight -{">"} </Text>
+						</TouchableOpacity>
+            <TouchableOpacity
+							style={styles.progressContainer}
+							onPress={() => setProgressModalVisible(true)}
+						>
+							<Text style={styles.progressButton}>Total Progression </Text>
+						</TouchableOpacity>
+            <Modal
+							animationType="slide"
+							transparent={true}
+							visible={progressModalVisible}
+						>         
+            <View style={styles.modalContainer}>
+              <View style={styles.progressContent}>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}> 
+              <BarChart
+              	style={{
+                  flex: 1,
+                  alignContent: "center",
+                  marginTop: 45,
+                  borderRadius: 10,
+                }}
+                data={progressBarData}
+                width={70 * progressBarData.labels.length}
+                height={300}
+                yAxisLabel={"lbs"}
+                chartConfig={BarChartConfig}
+                fromNumber={400}
+                fromZero={true}
+                showValuesOnTopOfBars={true}
+              />
+              <LineChart
+              style={{
+                position: "absolute",
+								marginLeft: 31,
+                top: 47,
+							}}
+							data={progressLineData}
+							width={70 * progressLineData.labels.length}
+							height={300}
+							yAxisLabel={"lbs"}
+							chartConfig={lineChartConfig}
+							withHorizontalLines={false}
+							fromNumber={400}
+							fromZero={true}
+							bezier
+						/>
+              </ScrollView>
+              <TouchableOpacity
+										style={styles.closeButton}
+										onPress={() => setProgressModalVisible(false)}
+									>
+										<Text style={styles.closeButtonText}>Close</Text>
+									</TouchableOpacity>
+            </View>
+            </View>
+          
+          </Modal>
 						<BarChart
 							style={{
 								flex: 1,
 								alignContent: "center",
-								marginTop: 60,
+								marginTop: 45,
 								borderRadius: 10,
 							}}
 							data={barData}
@@ -454,7 +538,19 @@ const createThemedStyles = (isDarkMode) => {
 			shadowRadius: 2,
 			elevation: 2,
 		},
-
+    progressContent:{
+      width: "100%",
+			backgroundColor: isDarkMode ? "#333" : "#FFFFFF",
+			padding: 20,
+			borderRadius: 10,
+			alignItems: "center",
+			justifyContent: "center",
+			shadowColor: "#000",
+			shadowOffset: { width: 0, height: 2 },
+			shadowOpacity: 0.2,
+			shadowRadius: 2,
+			elevation: 2,
+    },
 		title2Container: {
 			flexDirection: "column",
 			justifyContent: "center",
@@ -492,21 +588,42 @@ const createThemedStyles = (isDarkMode) => {
 			fontWeight: "bold",
 			color: isDarkMode ? "#8BC34A" : "#1363DF",
 			position: "absolute",
+			marginRight: 50,
+		},
+    weightButton: {
+			fontSize: 15,
+			fontWeight: "bold",
+			color: isDarkMode ? "#8BC34A" : "#1363DF",
+			position: "absolute",
 			top: 15,
 			marginRight: 40,
+		},
+    progressButton: {
+			fontSize: 15,
+			fontWeight: "bold",
+			color: isDarkMode ? "#8BC34A" : "#1363DF",
+			alignContent: "center",
+      left: 125,
+			bottom: 15,
 		},
 		goalButtonContainer: {
 			flexDirection: "column",
 			position: "absolute",
-			right: 100,
-			margin: 15,
-			marginTop: 20,
+			right: 80,
+			marginRight: 15,
+			marginTop: 15,
 		},
 		goalButtonContainer2: {
 			flexDirection: "column",
 			position: "absolute",
 			right: 115,
 		},
+    progressContainer: {
+      position: "absolute",
+      bottom: 0,
+      justifyContent: "center",
+      alignItems: "center",   
+    },
 	});
 };
 
