@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "943556470766",
+    "firebase_url": "https://cs180-db-default-rtdb.firebaseio.com",
+    "project_id": "cs180-db",
+    "storage_bucket": "cs180-db.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:943556470766:android:7ffd0fc63d9b18999ed0ff",
+        "android_client_info": {
+          "package_name": "host.exp.exponent"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTmCxmbUYj-8OO2zNqYmNdOepaIZJHhJY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "943556470766-h28njogtg43aulfh42v7k1t87bf6t5vu.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "943556470766-7rosssrctscblvb5tsnssqg7an1tp2tb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.gloza.GymBois"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

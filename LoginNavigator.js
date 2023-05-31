@@ -6,6 +6,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { NavigationContainer } from "@react-navigation/native";
 import { auth } from './configuration/firebaseConfig';
 import { ThemeProvider } from './hooks/ThemeContext'; 
+import VerifyScreen from './screens/VerifyScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -32,11 +33,24 @@ function LoginNavigator() {
     }
     else
     {
-      return (
-        <ThemeProvider>
-            <BottomTabNavigator/>
-        </ThemeProvider>
-    );
+
+      console.log("Signed In")
+      //  If user has verified their email, they will get the normal stack
+      if(auth.currentUser.emailVerified)
+      {
+        console.log("Verified")
+        return (
+          <ThemeProvider>
+              <BottomTabNavigator/>
+          </ThemeProvider>
+        );
+      }
+      else
+      {
+        console.log("Not Verifed")
+        //  Otherwise return a message saying the user must verify their pw
+        return (<VerifyScreen/>)
+      }
     }
 }
 
