@@ -311,33 +311,43 @@ export function writeIsDark(value){
 }
 
 //function to store goal weight 
-//export function writeGoalWeight(uid, goalWeight){
- // const db = getDatabase();
-  //const path = `users/${uid}/goalWeight`;
- // const timestamp = Date.now();
- // let goalData = {
-  //  [timestamp]: goalWeight,
-  //}
- /// return set(ref(db, path), goalData);
-//}
+
+export function writeGoalWeight(uid, goalWeight){
+ const db = getDatabase();
+  const path = `users/${uid}/goalWeight`;
+  const timestamp = Date.now();
+
+  let goalWeightData = {
+    [timestamp]: goalWeight,
+  }
+  return update(ref(db, path), goalWeightData);
+}
 
 
-//export async function getGoalWeight(uid){
-  //try{
-    //const dbRef = ref(getDatabase());
-    //const snapshot = await get(child(dbRef, `users/${uid}/goalWeight`));
-    //if(snapshot.exists()){
-    //  return Promise.resolve(snapshot.val());
-    //}
-    //else {
-      //console.log("No data available");
-      //return Promise.resolve({});
-   // }
-  //} catch (error) {
-    //console.error(error);
-    //return Promise.reject(error);
-  //}
-//}
+export async function getGoalWeight(uid){
+  try{
+    const dbRef = ref(getDatabase());
+    const snapshot = await get(child(dbRef, `users/${uid}/goalWeight`));
+    if(snapshot.exists()){
+      console.log("This is goal weight: ", snapshot.val());
+      return Promise.resolve(snapshot.val());
+    }
+    else {
+      console.log("No data available");
+      return Promise.resolve({});
+    }
+  } catch (error) {
+    console.error(error);
+    return Promise.reject(error);
+  }
+}
+
+export function updateWeight(value){
+  const user = auth.currentUser.uid;
+  const db = getDatabase();
+  const path = "users/" + user + "/weight";
+  return set(ref(db,path), value);
+}
   
 generateUIs1("2023-05-08","KXJjbxWERaggJmj5tcszDGbXxe22");
 
