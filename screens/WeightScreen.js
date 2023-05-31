@@ -32,9 +32,19 @@ const WeightScreen = ({ route }) => {
 				const userCredential = await auth.createUserWithEmailAndPassword(
 					email,
 					pw,
-				).then(async ({user}) => {
-					await auth.currentUser.sendEmailVerification()	//	Code for adding email verification
-				});
+				).then(() => {
+					auth.currentUser.sendEmailVerification({
+						handleCodeInApp: true,
+						url: 'https://cs180-db.firebaseapp.com',
+					}).then(() => {
+						alert('Verification Email Sent')
+					}).catch((error) => {
+						alert(error)
+					})
+					
+				})
+				console.log("Email veri")
+
 				const user = userCredential.user;
 				dbRef = ref(database, "users/" + user.uid + "/email"); // Reference to email section of user
 				await set(dbRef, email);
