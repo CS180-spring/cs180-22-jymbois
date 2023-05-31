@@ -12,10 +12,8 @@ import {
 } from "react-native";
 import { BarChart, LineChart } from "react-native-chart-kit";
 import ThemeContext from "../hooks/ThemeContext";
-import { Ionicons } from "@expo/vector-icons";
-import { writeUserWeight, getCurrentWeight, getWeightHistory,writeGoalWeight,getGoalWeight } from "../hooks/databaseQueries";
+import { writeUserWeight, getCurrentWeight, getWeightHistory,writeGoalWeight,getGoalWeight, updateGoalWeight } from "../hooks/databaseQueries";
 import { auth } from "../configuration/firebaseConfig";
-import { readData } from "../hooks/databaseQueries";
 import RefreshContext, { RefreshProvider } from "../hooks/RefreshContext";
 
 //import CircularProgress from 'react-native-circular-progress-indicator';
@@ -24,7 +22,7 @@ const GraphScreen = ({ route }) => {
 	const { refreshKey, setRefreshKey } = useContext(RefreshContext);
 	const user = auth.currentUser;
 	const uid = user ? user.uid : null;
-	const [goalWeight, setGoalWeight] = useState('');
+	const [goalWeight, setGoalWeight] = useState(0);
 	const [modalVisible, setModalVisible] = useState(false);
   const [progressModalVisible, setProgressModalVisible] = useState(false);
 	const [progress, setProgress] = useState(0);
@@ -32,9 +30,34 @@ const GraphScreen = ({ route }) => {
 	const { isDarkMode } = React.useContext(ThemeContext);
 	const styles = createThemedStyles(isDarkMode);
 	const [weightModalVisible, setWeightModalVisible] = useState(false); // to add weight to modal
+  const [ setGoalWeightHistory] = useState({});
 	const [weightHistory, setWeightHistory] = useState({});
-//Get the user goalWeight
-  
+
+useEffect(() => {
+	const fetchGoalWeight = async () => {
+		try{
+			const goal_weight = await getGoalWeight();
+			setGoalWeight(goal_weight)
+		} catch(error){
+			console.log(error)
+		}
+	};
+
+	fetchGoalWeight()
+  }, [refreshKey]);
+
+
+
+ 	const handleGoalWeightChange = async (goalWeight)=> {
+		try {
+			updateGoalWeight(goalWeight)
+			console.log(`goalWeight updated to ${goalWeight}`);
+			setGoalWeight(goalWeight);
+			setModalVisible(false);
+		} catch (error) {
+			console.error("Failed to store weight:", error);
+		}
+	}; 
 
 	useEffect(() => {
 		getWeightHistory(uid).then(data => {
@@ -106,9 +129,7 @@ const GraphScreen = ({ route }) => {
           },
         ],
         };
-	const handleGoalWeightChange = (text) => {
-		setGoalWeight(text);
-	};
+
 
 	// it works!!! lets goooooooo, just need to this will give the percent how close you are the goal, idid the todayys weight and u gotta add the goal weight
 	const calculateProgress = () => {
@@ -210,8 +231,8 @@ const GraphScreen = ({ route }) => {
 									<Text style={styles.goalWeightText}>Goal Weight:</Text>
 									<TextInput
 										style={styles.input}
-										value={goalWeight}
-										onChangeText={handleGoalWeightChange}
+										value={goalWeight.toString()}
+										onChangeText={setGoalWeight}
 										keyboardType="numeric"
 										placeholder="Enter your goal weight in pounds"
 										placeholderTextColor="#BDBDBD"
@@ -220,9 +241,10 @@ const GraphScreen = ({ route }) => {
 								style={styles.button}
 								onPress={() => {
 								
-                console.log('Goal weight button pressed. Goal weight:', goalWeight);
+                //console.log('Goal weight button pressed. Goal weight:', goalWeight);
                 setProgress(calculateProgress());
-                setModalVisible(false);
+               // setModalVisible(false);
+               handleGoalWeightChange(goalWeight);
 								}}
 							>
 										<Text style={styles.buttonText}>Set Goal Weight</Text>
