@@ -12,10 +12,8 @@ import {
 } from "react-native";
 import { BarChart, LineChart } from "react-native-chart-kit";
 import ThemeContext from "../hooks/ThemeContext";
-import { Ionicons } from "@expo/vector-icons";
-import { writeUserWeight, getCurrentWeight, getWeightHistory,writeGoalWeight,getGoalWeight } from "../hooks/databaseQueries";
+import { writeUserWeight, getCurrentWeight, getWeightHistory,writeGoalWeight,getGoalWeight, updateGoalWeight } from "../hooks/databaseQueries";
 import { auth } from "../configuration/firebaseConfig";
-import { readData } from "../hooks/databaseQueries";
 import RefreshContext, { RefreshProvider } from "../hooks/RefreshContext";
 
 //import CircularProgress from 'react-native-circular-progress-indicator';
@@ -35,29 +33,27 @@ const GraphScreen = ({ route }) => {
   const [ setGoalWeightHistory] = useState({});
 	const [weightHistory, setWeightHistory] = useState({});
 
-//Get the user goalWeight
 useEffect(() => {
-  getGoalWeight(uid).then(data =>{
-    setGoalWeightHistory(data);
-  }) .catch(err => {
-    console.error(err);
-  });
-}, [uid, refreshKey]);
+	const fetchGoalWeight = async () => {
+		try{
+			const goal_weight = await getGoalWeight();
+			setGoalWeight(goal_weight)
+		} catch(error){
+			console.log(error)
+		}
+	};
+
+	fetchGoalWeight()
+  }, [refreshKey]);
 
 
 
  	const handleGoalWeightChange = async (goalWeight)=> {
 		try {
-			const uid = auth.currentUser.uid;
-			if (uid) {
-				setRefreshKey(refreshKey + 1);
-				await writeGoalWeight(uid, goalWeight);
-				console.log("current weight added");
-				setGoalWeight(goalWeight);
-				setModalVisible(false);
-			} else {
-				console.error("User not authenticated.");
-			}
+			updateGoalWeight(goalWeight)
+			console.log(`goalWeight updated to ${goalWeight}`);
+			setGoalWeight(goalWeight);
+			setModalVisible(false);
 		} catch (error) {
 			console.error("Failed to store weight:", error);
 		}
