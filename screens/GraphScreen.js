@@ -275,7 +275,7 @@ useEffect(() => {
 						<View style={styles.bottomRightContainer}>
 							<View style={styles.activityRow}>
 								<Text style={styles.bottomRightText}>Progress:</Text>
-								<Text style={styles.bottomRightNumber}>{progress}</Text>
+								<Text style={styles.bottomRightNumber}>{progress}%</Text>
 							</View>
 						</View>
 					</View>
