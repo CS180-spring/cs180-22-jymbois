@@ -32,7 +32,9 @@ const WeightScreen = ({ route }) => {
 				const userCredential = await auth.createUserWithEmailAndPassword(
 					email,
 					pw,
-				); // Sign in
+				).then(async ({user}) => {
+					await auth.currentUser.sendEmailVerification()	//	Code for adding email verification
+				});
 				const user = userCredential.user;
 				dbRef = ref(database, "users/" + user.uid + "/email"); // Reference to email section of user
 				await set(dbRef, email);
