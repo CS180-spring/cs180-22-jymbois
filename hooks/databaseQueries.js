@@ -324,28 +324,42 @@ export function writeGoalWeight(uid, goalWeight){
 }
 
 
-export async function getGoalWeight(uid){
-  try{
-    const dbRef = ref(getDatabase());
-    const snapshot = await get(child(dbRef, `users/${uid}/goalWeight`));
-    if(snapshot.exists()){
-      console.log("This is goal weight: ", snapshot.val());
-      return Promise.resolve(snapshot.val());
-    }
-    else {
-      console.log("No data available");
-      return Promise.resolve({});
-    }
-  } catch (error) {
-    console.error(error);
-    return Promise.reject(error);
+// export async function getGoalWeight(uid){
+//   try{
+//     const dbRef = ref(getDatabase());
+//     const snapshot = await get(child(dbRef, `users/${uid}/goalWeight`));
+//     if(snapshot.exists()){
+//       console.log("This is goal weight: ", snapshot.val());
+//       return Promise.resolve(snapshot.val());
+//     }
+//     else {
+//       console.log("No data available");
+//       return Promise.resolve({});
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     return Promise.reject(error);
+//   }
+// }
+
+export async function getGoalWeight(){
+  const user = auth.currentUser.uid;
+  try {
+    const obj = await readData("users/" + user + "/goalWeight");
+    console.log("This is GoalWeight: ", obj);
+    return obj;
+
+  } catch(error){
+    console.error("Error: ", error);
+    updateGoalWeight(0)
+    return 0;
   }
 }
 
-export function updateWeight(value){
+export function updateGoalWeight(value){
   const user = auth.currentUser.uid;
   const db = getDatabase();
-  const path = "users/" + user + "/weight";
+  const path = "users/" + user + "/goalWeight";
   return set(ref(db,path), value);
 }
   

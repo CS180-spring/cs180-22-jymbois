@@ -20,13 +20,18 @@ const SuggestedWorkouts = ({ visible, onClose }) => {
 	const [workouts, setWorkouts] = useState([]);
 	const [search, setSearch] = useState("");
 	const screenWidth = Dimensions.get("window").width;
+	// useEffect(() => {
+	// 	if (visible) {
+	// 		fetchExercises().then((data) => {
+	// 			setWorkouts(data);
+	// 		});
+	// 	}
+	// }, [visible]);
 	useEffect(() => {
-		if (visible) {
-			fetchExercises().then((data) => {
-				setWorkouts(data);
-			});
-		}
-	}, [visible]);
+		fetchExercises().then((data) => {
+			setWorkouts(data);
+		});
+	}, []);
 	const filteredWorkouts = workouts.filter((workout) =>
 		workout.name.toLowerCase().includes(search.toLowerCase()),
 	);
@@ -108,7 +113,7 @@ const styles = StyleSheet.create({
 		fontSize: 24,
 		fontWeight: "bold",
 		marginBottom: 20,
-		alignSelf: "left",
+		//alignSelf: "left",
 	},
 	searchInput: {
 		width: "100%",
