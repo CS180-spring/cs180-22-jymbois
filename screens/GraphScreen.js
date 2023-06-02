@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { BarChart, LineChart } from "react-native-chart-kit";
 import ThemeContext from "../hooks/ThemeContext";
-import { writeUserWeight, getCurrentWeight, getWeightHistory,writeGoalWeight,getGoalWeight, updateGoalWeight } from "../hooks/databaseQueries";
+import { writeUserWeight, getCurrentWeight, getWeightHistory,writeGoalWeight,getGoalWeight, updateGoalWeight, readData } from "../hooks/databaseQueries";
 import { auth } from "../configuration/firebaseConfig";
 import RefreshContext, { RefreshProvider } from "../hooks/RefreshContext";
 
@@ -30,8 +30,18 @@ const GraphScreen = ({ route }) => {
 	const { isDarkMode } = React.useContext(ThemeContext);
 	const styles = createThemedStyles(isDarkMode);
 	const [weightModalVisible, setWeightModalVisible] = useState(false); // to add weight to modal
-  const [ setGoalWeightHistory] = useState({});
 	const [weightHistory, setWeightHistory] = useState({});
+  const [currentWeight, setCurrentWeight] = useState("");
+  const [userId, setUserId] = useState(null);
+
+  //set the user id (used for progress)
+  useEffect(() => {
+		const user = auth.currentUser;
+		if (user) {
+			setUserId(user.uid);
+		}
+	}, []);
+
 
 useEffect(() => {
 	const fetchGoalWeight = async () => {
@@ -132,17 +142,39 @@ useEffect(() => {
 
 
 	// it works!!! lets goooooooo, just need to this will give the percent how close you are the goal, idid the todayys weight and u gotta add the goal weight
-	const calculateProgress = () => {
+	 useEffect(() => {
+		const fetchData = async () => {
+			try {
+				const userData = await readData(`users/${userId}`);
+				if (userData.weightHistory) {
+					const latestTimestamp = Object.keys(userData.weightHistory)
+						.sort()
+						.pop(); // we are sorting and poopping to just keep the latest one bcuz its an array
+					setCurrentWeight(userData.weightHistory[latestTimestamp]);
+				}
+			} catch (error) {
+				console.error(error);
+			}
+		};
+
+		if (userId) {
+			fetchData();
+		}
+	}, [userId, refreshKey]);
+  
+  const calculateProgress = () => {
 		const goal = parseFloat(goalWeight);
-		const current = parseFloat(weight);
-		const answer = (((current - goal) / goal) * 100).toFixed(2);
+		const current = parseFloat(currentWeight);
+		const answer = Math.ceil(((current - goal) / goal) * 100);
 		const perfect = 100 - answer;
 		if (perfect >= 100) {
 			return 100;
 		}
 		return 100 - answer;
 	};
-//*
+
+ 
+
 	
 	const BarChartConfig = {
     backgroundGradientFrom: isDarkMode ? '#333': 'white',
@@ -271,7 +303,7 @@ useEffect(() => {
 						<View style={styles.bottomRightContainer}>
 							<View style={styles.activityRow}>
 								<Text style={styles.bottomRightText}>Progress:</Text>
-								<Text style={styles.bottomRightNumber}>{progress}</Text>
+								<Text style={styles.bottomRightNumber}>{progress}%</Text>
 							</View>
 						</View>
 					</View>
