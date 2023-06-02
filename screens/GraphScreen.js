@@ -170,6 +170,9 @@ useEffect(() => {
 		if (perfect >= 100) {
 			return 100;
 		}
+		else if (perfect <= 0) {
+			return 0;
+		}
 		return 100 - answer;
 	};
 
