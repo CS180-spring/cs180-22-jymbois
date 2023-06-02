@@ -282,7 +282,7 @@ const CalenderScreen = () => {
           onPress={selectViewExerciseRecord}
           style={styles.viewERButton}>
         <FontAwesome style={styles.viewERButtonLogo}name="search" size={45} color={isDarkMode ? '#000' : '#fff'}> </FontAwesome>
-        <Text style={ styles.calendarButtonTextTop }>View</Text>
+        <Text style={ styles.calendarButtonTextTopView }>View</Text>
         <Text style={ styles.calendarButtonTextBottom }>Exercise Records</Text>
         </TouchableOpacity>
 
@@ -481,6 +481,12 @@ const createThemedStyles = (isDarkMode) => StyleSheet.create({
     fontSize: 22,
     fontWeight: 700,
     marginRight: 100,
+  },
+  calendarButtonTextTopView: {
+    color: isDarkMode ? "#000" : "#FFF", 
+    fontSize: 22,
+    fontWeight: 700,
+    marginRight: 110,
   },
   calendarModal: {
    flex: 1,
