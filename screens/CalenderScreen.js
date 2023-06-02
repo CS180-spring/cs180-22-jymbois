@@ -177,7 +177,7 @@ const CalenderScreen = () => {
   for(let i = 1; i <= setNumbers; i++){
     set.push(
       <View style={styles.exerciseLogs} key={i}>
-        <Text style={{color: "#6E7E85", fontWeight: 800,}}>Set {i}</Text>
+        <Text style={{color: "#4A4A4A", fontWeight: 800,}}>Set {i}</Text>
           <View styles={styles.log}>
             
             <TextInput
@@ -189,7 +189,7 @@ const CalenderScreen = () => {
             />
             </View >
 
-            <View style={{color: "#6E7E85", fontWeight:800, marginLeft:0}}>
+            <View style={{color: "#4A4A4A", fontWeight:800, marginLeft:0}}>
             <TextInput
               style={styles.numberInputReps}
               value={reps[i]}
@@ -323,7 +323,7 @@ const CalenderScreen = () => {
        <InputSpinner style={styles.numberInput}
          max={10}
          min={0}
-         color={"#6E7E85"}
+         color={"#4A4A4A"}
          onChange={handleNumberChange}
          skin={"modern"}
          shadow={false}
@@ -375,22 +375,22 @@ const CalenderScreen = () => {
 <View style={styles.exercisesBox}>
   { hasWorkout ? Object.entries(exercises).map(([exercise, sets], index) => (
     <View key={exercise} style = {styles.exerciseBoxes}>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Text style={[styles.exerciseTitleText, {color: "#6E7E85"}]}>{exercise}</Text>
+      <View style={styles.setBoxes}>
+        <Text style={[styles.exerciseTitleText, {color: "#4A4A4A"}]}>{exercise}</Text>
         <TouchableOpacity onPress={ () =>  deleteExerciseRecord(exercise, recordDate ,auth.currentUser.uid) }>
           <FontAwesome name="times-circle" size={30} color="#900" />
         </TouchableOpacity>
       </View>
-      <View style={{ borderBottomColor: '#6E7E85', borderBottomWidth: 1, marginVertical: 5 }} />
+      <View style={styles.line} />
       {Object.entries(sets).map(([setName, setDetails], index) => (
-        <View key={index} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-          <Text style={{fontSize: 18, color: "#6E7E85", fontWeight: 'bold'}}>
+        <View key={index} style={styles.exerciseLogBox}>
+          <Text style={styles.setTextStyle}>
             {setName}:
           </Text>
           <View style={{alignItems: 'center'}}>
-            <Text style={{ marginBottom: 6, color: "black", fontWeight: 'bold'}}>Reps</Text>
+            <Text style={styles.repsnWeightsText}>Reps</Text>
             <TextInput
-              style={{height: 40, width: 40, borderRadius: 20, borderColor: 'black', borderWidth: 1, marginHorizontal: 5, textAlign: 'center', color: "black"}}
+              style={styles.weightTextInput}
               placeholder='Reps'
               value={tempSets[setName]?.reps || String(setDetails.reps)}
               keyboardType='numeric'
@@ -400,9 +400,9 @@ const CalenderScreen = () => {
             />
           </View>
           <View style={{alignItems: 'center'}}>
-            <Text style={{ marginBottom: 6, color: "black", fontWeight: 'bold'}}>Weight</Text>
+            <Text style={styles.repsnWeightsText}>Weight</Text>
             <TextInput
-              style={{height: 40, width: 40, borderRadius: 20, borderColor: 'black', borderWidth: 1, marginHorizontal: 5, textAlign: 'center', color: "black"}}
+              style={styles.weightTextInput}
               placeholder='Weight'
               keyboardType='numeric'
               value={tempSets[setName]?.weight || String(setDetails.weight)}
@@ -432,16 +432,8 @@ const createThemedStyles = (isDarkMode) => StyleSheet.create({
   body: {
     backgroundColor:  isDarkMode ? '#000' : '#fff',
   },
-  container: {
-    flex: 1,
-    backgroundColor: isDarkMode ? '#fff' : '#000',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    margin: 20,
-  },
- 
   returnButtonViewERmodal: {
-    backgroundColor: '#6E7E85', 
+    backgroundColor: '#4A4A4A', 
     borderRadius: 10, 
     marginTop: '15%',
     marginLeft: '-70%',
@@ -451,7 +443,7 @@ const createThemedStyles = (isDarkMode) => StyleSheet.create({
     justifyContent: 'center',
   },
   insertModalButtons: {
-    backgroundColor: '#6E7E85', 
+    backgroundColor: '#4A4A4A', 
     borderRadius: 10, 
     margin: 40,
     padding: 10,
@@ -473,7 +465,7 @@ const createThemedStyles = (isDarkMode) => StyleSheet.create({
     
   },
   buttonText: {
-    color: isDarkMode ? "#FFF" : "#000", 
+    color: isDarkMode ? "#000" : "#FFF", 
     fontSize: 22,
   },
   
@@ -481,14 +473,14 @@ const createThemedStyles = (isDarkMode) => StyleSheet.create({
     color: isDarkMode ? "#000" : "#FFF", 
     fontSize: 18,
     marginTop: 5,
-    marginRight: 130,
+    marginRight: 30,
     paddingBottom: 6
   },
   calendarButtonTextTop: {
     color: isDarkMode ? "#000" : "#FFF", 
     fontSize: 22,
     fontWeight: 700,
-    marginRight: 200,
+    marginRight: 100,
   },
   calendarModal: {
    flex: 1,
@@ -719,7 +711,7 @@ insertERButton: {
     position: "relative",
     marginTop: 70,
     marginBottom: 20,
-    color: '#6E7E85',
+    color: '#4A4A4A',
     fontWeight: '700', // this might not work with custom fonts, you'd need a font file that represents the weight you want
     fontSize: 50,
     textAlign: "center",
@@ -731,34 +723,70 @@ insertERButton: {
     position: "relative",
     marginTop: 5,
     marginBottom: 5,
-    color: '#6E7E85',
-    fontWeight: '700', // this might not work with custom fonts, you'd need a font file that represents the weight you want
+    color: '#4A4A4A', // Black color
+    fontWeight: '700', 
     fontSize: 50,
     textAlign: "center",
-    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowColor: 'rgba(128, 128, 128, 0.75)', // Gray shadow with 75% opacity
     textShadowOffset: { width: -1, height: 1 },
     textShadowRadius: 1,
-  },
+},
   repsText:{
-    color: "#6E7E85", 
+    color: "#4A4A4A", 
     fontWeight:800, 
     marginLeft: 23,
     fontSize: 23,
   },
   insertERButtonLogo: {
     position: "absolute",
-    left: "85%",
+    left: "7%",
   },
   viewERButtonLogo:{
     position: "absolute",
-    left: "85%",
+    left: "7%",
   },
   exerciseTitleText: {
     fontWeight: 'bold', 
     fontSize: 23, 
     color: "#6E7E85", 
     marginBottom: 5,
-  }
+  },
+  repsnWeightsText: { 
+    marginBottom: 6, 
+    color: "#4A4A4A", 
+    fontWeight: 'bold'
+  },
+  weightTextInput: {
+    height: 40,
+    width: 40, 
+    borderRadius: 20,
+    borderColor: 'black',
+    borderWidth: 1, 
+    marginHorizontal: 5, 
+    textAlign: 'center', 
+    color: "black"
+  },
+  setTextStyle:{
+    fontSize: 18,
+    color: "#4A4A4A", 
+    fontWeight: 'bold'
+  },
+  line: {
+     borderBottomColor: '#6E7E85', 
+     borderBottomWidth: 1, 
+     marginVertical: 5,
+  },
+  setBoxes:{
+  flexDirection: 'row', 
+  alignItems: 'center', 
+  justifyContent: 'space-between'
+  },
+  exerciseLogBox:{
+  flexDirection: 'row', 
+  alignItems: 'center',
+  justifyContent: 'space-between'
+}
+
 });
 
 export default CalenderScreen;
