@@ -486,7 +486,7 @@ const createThemedStyles = (isDarkMode) => StyleSheet.create({
     color: isDarkMode ? "#000" : "#FFF", 
     fontSize: 22,
     fontWeight: 700,
-    marginRight: 110,
+    marginRight: 115,
   },
   calendarModal: {
    flex: 1,
