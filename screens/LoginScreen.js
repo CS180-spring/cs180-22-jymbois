@@ -42,9 +42,7 @@ const LoginScreen = () => {
 		console.log(userInfo);
 
 		if (userInfo) {
-			if (auth.fetchSignInMethodsForEmail(userInfo.email).length > 0) {
-				auth
-					.signInWithEmailAndPassword(userInfo.email, userInfo.id)
+			auth.signInWithEmailAndPassword(userInfo.email, userInfo.id)
 					.then((userCredential) => {
 						//  Successful sign in
 						const user = userCredential.user;
@@ -52,21 +50,13 @@ const LoginScreen = () => {
 						navigation.navigate("Home"); //	Navigate to User Home Page :)
 					})
 					.catch((error) => {
-						//  Error, set to send alert when error occurs
-
-						//	Maybe set up message here instead of just an alert window?
-						const errorCode = error.code;
-						const errorMessage = error.message;
-						alert(error.message);
-					});
-			} else {
-				console.log(userInfo); //	For debugging
-				navigation.navigate("Gender", {
-					email: userInfo.email,
-					username: userInfo.given_name,
-					pw: userInfo.id, //	Not sure what else to use here, we need a pw to sign in :/
+						console.log(userInfo); //	For debugging
+						navigation.navigate("Gender", {
+						email: userInfo.email,
+						username: userInfo.given_name,
+						pw: userInfo.id, //	Not sure what else to use here, we need a pw to sign in :/
 				});
-			}
+					});
 		}
 	}, [response]);
 
