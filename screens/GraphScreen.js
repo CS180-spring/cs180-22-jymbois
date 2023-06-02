@@ -31,16 +31,9 @@ const GraphScreen = ({ route }) => {
 	const styles = createThemedStyles(isDarkMode);
 	const [weightModalVisible, setWeightModalVisible] = useState(false); // to add weight to modal
 	const [weightHistory, setWeightHistory] = useState({});
-  const [currentWeight, setCurrentWeight] = useState("");
-  const [userId, setUserId] = useState(null);
 
   //set the user id (used for progress)
-  useEffect(() => {
-		const user = auth.currentUser;
-		if (user) {
-			setUserId(user.uid);
-		}
-	}, []);
+ 
 
 
 useEffect(() => {
@@ -85,6 +78,7 @@ useEffect(() => {
 				await writeUserWeight(uid, weight);
 				console.log("current weight added");
 				setWeight(weight);
+				setProgress(calculateProgress());
 				setWeightModalVisible(false);
 			} else {
 				console.error("User not authenticated.");
@@ -142,29 +136,11 @@ useEffect(() => {
 
 
 	// it works!!! lets goooooooo, just need to this will give the percent how close you are the goal, idid the todayys weight and u gotta add the goal weight
-	 useEffect(() => {
-		const fetchData = async () => {
-			try {
-				const userData = await readData(`users/${userId}`);
-				if (userData.weightHistory) {
-					const latestTimestamp = Object.keys(userData.weightHistory)
-						.sort()
-						.pop(); // we are sorting and poopping to just keep the latest one bcuz its an array
-					setCurrentWeight(userData.weightHistory[latestTimestamp]);
-				}
-			} catch (error) {
-				console.error(error);
-			}
-		};
-
-		if (userId) {
-			fetchData();
-		}
-	}, [userId, refreshKey]);
+	
   
   const calculateProgress = () => {
 		const goal = parseFloat(goalWeight);
-		const current = parseFloat(currentWeight);
+		const current = parseFloat(weight);
 		const answer = Math.ceil(((current - goal) / goal) * 100);
 		const perfect = 100 - answer;
 		if (perfect >= 100) {
@@ -173,7 +149,7 @@ useEffect(() => {
 		else if (perfect <= 0) {
 			return 0;
 		}
-		return 100 - answer;
+		return perfect;
 	};
 
  
