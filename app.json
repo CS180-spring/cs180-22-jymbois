@@ -1,0 +1,36 @@
+{
+	"expo": {
+		"name": "GymBois",
+		"slug": "GymBois",
+		"version": "1.0.0",
+		"orientation": "portrait",
+		"icon": "./assets/icon.png",
+		"userInterfaceStyle": "light",
+		"splash": {
+			"image": "./assets/splash.png",
+			"resizeMode": "contain",
+			"backgroundColor": "#ffffff"
+		},
+		"assetBundlePatterns": ["**/*"],
+		"ios": {
+			"supportsTablet": true,
+			"bundleIdentifier": "com.gloza.GymBois"
+		},
+		"android": {
+			"adaptiveIcon": {
+				"foregroundImage": "./assets/adaptive-icon.png",
+				"backgroundColor": "#ffffff"
+			},
+			"package": "com.gloza.GymBois"
+		},
+		"web": {
+			"favicon": "./assets/favicon.png"
+		},
+		"scheme": "gymbois",
+		"extra": {
+			"eas": {
+				"projectId": "26af9e75-6d71-4dc5-9eaa-70189713c81d"
+			}
+		}
+	}
+}
