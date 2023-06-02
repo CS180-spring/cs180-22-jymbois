@@ -289,7 +289,7 @@ const CalenderScreen = () => {
         <TouchableOpacity 
           onPress={selectInsertExerciseRecord}
           style={styles.insertERButton}> 
-           <AntDesign style={styles.insertERButtonLogo}name="pluscircleo" size={45} color={isDarkMode ? '#000' : '#fff'} />
+          <AntDesign style={styles.insertERButtonLogo}name="pluscircleo" size={45} color={isDarkMode ? '#000' : '#fff'} />
           <Text style={ styles.calendarButtonTextTop }>Insert</Text>
           <Text style={ styles.calendarButtonTextBottom }>Exercise Record</Text>
         </TouchableOpacity>
